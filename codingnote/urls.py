@@ -15,9 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.urls.conf import include
 import appCodingNote.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', appCodingNote.views.index, name='index'),
+    path('notes/', include('appCodingNote.urls')),
 ]

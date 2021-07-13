@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     'appCodingNote',
 ]
 
+SASS_PROCESSOR_ENABLED =  True
+SASS_PROCESSOR_ROOT =  os.path.join(BASE_DIR, 'appCodingNote', 'static')
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

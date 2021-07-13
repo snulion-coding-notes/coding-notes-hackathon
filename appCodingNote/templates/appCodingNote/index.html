@@ -1,5 +1,38 @@
 {% extends 'base.html' %}
 
+{% load static %}
+{% load sass_tags %}
+{% block style %}
+  <link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/index.scss' %}">
+{% endblock style %}
+
 {% block content %}
-    <h1> 인덱스 페이지 입니다. </h1>
+<script src="{% static 'appCodingNote/js/index.js' %}"></script>
+  <header>
+    <a href="#">
+      <img src="{% static 'img/logo-black.png' %}" alt="Coding Notes Logo">
+    </a>
+    <div class="header-button-container">
+      <button onclick="openTab('signin')">Sign In</button>
+      <button onclick="openTab('signup')">Sign Up</button>
+    </div>
+  </header>
+  <div id="signin-section" class="right-container">
+      <!-- close 버튼 클릭시 탭 닫히도록 -->
+      <button class="tab-close" onClick="closeTab('signin')"><img src="{% static 'img/close.png' %}"></button>
+      <section>
+        <p>Sign In</p>
+        <form>
+          <input type="text" placeholder="Username">
+          <input type="password" placeholder="Password">
+          <button type="submit">Sign In</button>
+        </form>
+        <div class="signin-button-container">
+          <button>Forgot PW</button>
+          <button>Sign Up</button>
+        </div>
+      </section>
+    </div>
+    <div id="tab-shadow" class="hide"></div>
+
 {% endblock content %}

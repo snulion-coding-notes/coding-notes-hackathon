@@ -1,3 +1,9 @@
+$black-gray: #282828;
+$dark-gray: #464646;
+$medium-gray: #9b9898;
+$light-gray: #eaeaea;
+$yellow: #ffdd29;
+
 header {
   width: 100%;
   min-width: 700px;
@@ -31,7 +37,7 @@ header {
   width: 30%;
   min-width: 500px;
   height: 100%;
-  background: #eaeaea;
+  background: $light-gray;
   box-shadow: -5px 0 20px rgba(0, 0, 0, 0.25);
   z-index: 1;
   transition: 0.3s;
@@ -67,32 +73,24 @@ header {
       font-size: 15px;
       color: #a0a0a0;
     }
-
-    button {
-      background-color: #464646;
-      color: #fff;
-      height: 60px;
-      border: none;
-      border-radius: 10px;
-      font-size: 18px;
-      margin: 5px 0 15px 0;
-    }
   }
 }
 
-// .right-container-contents {
-//   display: flex;
-//   flex-direction: column;
-//   position: fixed;
-//   top: 0;
-//   right: 0;
-//   width: 30%;
-//   min-width: 500px;
-//   height: 100%;
-//   background: #eaeaea;
-//   box-shadow: -5px 0 20px rgba(0, 0, 0, 0.25);
-//   z-index: 1;
-// }
+.submit-button {
+  background-color: $dark-gray;
+  color: #fff;
+  height: 60px;
+  border: none;
+  border-radius: 10px;
+  font-size: 18px;
+  margin: 5px 0 25px 0;
+}
+
+.submit-button:hover {
+  background-color: $yellow;
+  color: $black-gray;
+  transition: 0.2s;
+}
 
 .tab-close {
   position: relative;
@@ -105,7 +103,7 @@ header {
   }
 }
 
-.signin-button-container {
+.tab-button-container {
   display: flex;
   justify-content: space-around;
 

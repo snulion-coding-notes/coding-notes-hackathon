@@ -1,9 +1,26 @@
 const openTab = (tabName) => {
-  document.getElementById(`${tabName}-section`).style.right = "0";
+  const hiddenTab = tabName === 'signin' ? 'signup' : 'signin';
+  const rightContainers = document.getElementsByClassName("right-container");
+  [...rightContainers].forEach((tab) => {
+    tab.style.right = "0";
+  })
+  document.getElementById(`${hiddenTab}-section`).classList.add("hide");
   document.getElementById("tab-shadow").classList.remove("hide");
 }
 
 const closeTab = (tabName) => {
-  document.getElementById(`${tabName}-section`).style.right = "-50%";
+  const hiddenTab = tabName === 'signin' ? 'signup' : 'signin';
+  const rightContainers = document.getElementsByClassName("right-container");
+  [...rightContainers].forEach((tab) => {
+    tab.style.right = "-50%";
+  })
+  document.getElementById(`${hiddenTab}-section`).classList.remove("hide");
   document.getElementById("tab-shadow").classList.add("hide");
+
+}
+
+const switchTab = (tabName) => {
+  const hiddenTab = tabName === 'signin' ? 'signup' : 'signin';
+  document.getElementById(`${tabName}-section`).classList.remove("hide");
+  document.getElementById(`${hiddenTab}-section`).classList.add("hide");
 }

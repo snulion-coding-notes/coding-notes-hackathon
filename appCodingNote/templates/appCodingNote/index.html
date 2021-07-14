@@ -5,9 +5,11 @@
 {% block style %}
   <link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/index.scss' %}">
 {% endblock style %}
+{% block js %}
+  <script src="{% static 'appCodingNote/js/index.js' %}"></script>
+{% endblock js %}
 
 {% block content %}
-<script src="{% static 'appCodingNote/js/index.js' %}"></script>
   <header>
     <a href="#">
       <img src="{% static 'img/logo-black.png' %}" alt="Coding Notes Logo">
@@ -17,22 +19,44 @@
       <button onclick="openTab('signup')">Sign Up</button>
     </div>
   </header>
+
+  <!-- Signin Tab -->
   <div id="signin-section" class="right-container">
-      <!-- close 버튼 클릭시 탭 닫히도록 -->
-      <button class="tab-close" onClick="closeTab('signin')"><img src="{% static 'img/close.png' %}"></button>
-      <section>
-        <p>Sign In</p>
-        <form>
-          <input type="text" placeholder="Username">
-          <input type="password" placeholder="Password">
-          <button type="submit">Sign In</button>
-        </form>
-        <div class="signin-button-container">
-          <button>Forgot PW</button>
-          <button>Sign Up</button>
-        </div>
-      </section>
-    </div>
-    <div id="tab-shadow" class="hide"></div>
+    <button class="tab-close" onClick="closeTab('signin')"><img src="{% static 'img/close.png' %}"></button>
+    <section>
+      <p>Sign In</p>
+      <form method="POST" action="{% url 'signin' %}">
+        {% csrf_token %}
+        <input name="username" type="text" placeholder="Username">
+        <input name="password" type="password" placeholder="Password">
+        <button class="submit-button" type="submit">Sign In</button>
+      </form>
+      <div class="tab-button-container">
+        <button>Forgot PW</button>
+        <button onclick="switchTab('signup')">Sign Up</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- Signup Tab -->
+  <div id="signup-section" class="right-container">
+    <button class="tab-close" onClick="closeTab('signup')"><img src="{% static 'img/close.png' %}"></button>
+    <section>
+      <p>Sign Up</p>
+      <form method="POST" action="{% url 'signup' %}">
+        {% csrf_token %}
+        <input name="email" type="text" placeholder="Email">
+        <input name="username" ype="text" placeholder="Username">
+        <input name="password1" type="password" placeholder="Password">
+        <input name="password2" type="password" placeholder="Password">
+        <button class="submit-button" type="submit">Sign Up</button>
+      </form>
+      <div class="tab-button-container">
+        <button onclick="switchTab('signin')">Sign In</button>
+      </div>
+    </section>
+  </div>
+
+  <div id="tab-shadow" class="hide"></div>
 
 {% endblock content %}

@@ -1,3 +1,6 @@
+{% load static %}
+{% load sass_tags %}
+
 <!DOCTYPE html>
 <html lang="ko">
   <head>
@@ -5,10 +8,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coding Notes</title>
-
+    <link rel="icon" href="{% static 'img/favicon.png' %}">
+    <link rel="shortcut icon" href="{% static 'img/favicon.png' %}">
+    
     <!-- scss 적용 -->
-    {% load static %}
-    {% load sass_tags %}
     <link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/style.scss' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

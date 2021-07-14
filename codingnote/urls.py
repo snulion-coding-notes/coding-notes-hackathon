@@ -17,9 +17,13 @@ from django.contrib import admin
 from django.urls import path
 from django.urls.conf import include
 import appCodingNote.views
+import accounts.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', appCodingNote.views.index, name='index'),
-    path('notes/', include('appCodingNote.urls')),
+    path('codingnote/', include('appCodingNote.urls')),
+    path('accounts/', include('accounts.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),             ### 확인 필요
+    path('accounts/signup/', accounts.views.signup, name='signup'),     ### 확인 필요
 ]

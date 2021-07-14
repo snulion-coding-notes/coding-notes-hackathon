@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'sass_processor',
     'appCodingNote',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -130,3 +131,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SASS_PROCESSOR_ENABLED =  True
 SASS_PROCESSOR_ROOT =  os.path.join(BASE_DIR, 'appCodingNote', 'static')
+
+LOGIN_REDIRECT_URL = "/codingnote/dashboard/"           ### 확인 필요  
+LOGOUT_REDIRECT_URL = "/codingnote/"                    ### 확인 필요

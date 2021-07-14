@@ -40,8 +40,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'sass_processor',
+<<<<<<< HEAD
     'appCodingNote',
     'accounts',
+=======
+    'appCodingNote'
+>>>>>>> b90e905c8c273f74c51275b157d088ebfc0bb8b6
 ]
 
 MIDDLEWARE = [
@@ -123,6 +127,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'appCodingNote', 'static'),
+)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

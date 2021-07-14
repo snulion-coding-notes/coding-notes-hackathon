@@ -5,7 +5,6 @@ from .models import Folder
 def index(request):
     return render(request, 'appCodingNote/index.html')
 
-
 def dashboard(request):
     folders = Folder.objects.all()
     ### tags ### 
@@ -32,5 +31,3 @@ def delete_folder(request, id):
     folder = Folder.objects.get(id=id)
     folder.delete()
     return redirect('appCodingNote:dashboard')
-
-

@@ -40,12 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'sass_processor',
-<<<<<<< HEAD
     'appCodingNote',
     'accounts',
-=======
-    'appCodingNote'
->>>>>>> b90e905c8c273f74c51275b157d088ebfc0bb8b6
 ]
 
 MIDDLEWARE = [

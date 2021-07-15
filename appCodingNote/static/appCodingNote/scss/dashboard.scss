@@ -1,4 +1,3 @@
-/* Add a black background color to the top navigation bar */
 $black-gray: #282828;
 $dark-gray: #464646;
 $medium-gray: #9b9898;
@@ -46,10 +45,13 @@ $yellow: #ffdd29;
   margin:auto;
 }
 
-.main{
-  margin-left:50px;
+main {
+  margin-left:250px;
 }
 
+.main-folder-content, .main-tag-content{
+  padding: 0px 20px;
+}
 .folder-container {
   background-color:$light-gray;
   display:inline-flex;
@@ -111,8 +113,6 @@ $yellow: #ffdd29;
 .tag-btn:hover{
   background-color:$yellow;
 }
-
-
 
 .tag-new-input{
   border:none;

@@ -1,0 +1,56 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% load sass_tags %} 
+{% block side_style %}
+<link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/sidebar.scss' %}"/>
+{% endblock side_style%} 
+{% block content %}
+<div id="mySidenav" class="sidenav">
+  {% comment %}
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  {% endcomment %}
+	<div class ="menu-item-logo">
+	LOGO 삽입
+	</div>
+  <div class="menu-item-user">
+    {% comment %} {{user.get_username}}님 {% endcomment %} userInfo님
+  </div>
+  <div class="menu-item">
+    <a href="/posts/">Dashboard</a>
+  </div>
+  <div class="menu-item">
+    <button class="dropdown-btn">
+      Folders
+      <i class="fa fa-caret-down"></i>
+    </button>
+			<div class="dropdown-container">
+      {% for folder in folders %}
+			
+      <a href="#">{{folder.folder_name}}</a>
+			
+      {% endfor %}
+			</div>
+  </div>
+  <div class="menu-item">
+    <button class="dropdown-btn">
+      Tags
+      <i class="fa fa-caret-down"></i>
+    </button>
+    <div class="dropdown-container">
+      {% comment %} {% for tag in tags %}
+      <a href="#">{{tag.tag_name}}</a>
+      {% endfor %} {% endcomment %}
+      <a href="#">tag1</a>
+    </div>
+  </div>
+  <div class="menu-item">
+    <a href="#Bookmarks">Bookmarks</a>
+  </div>
+  <div class="menu-item">
+    <a href="{% url 'logout'%}">로그아웃</a>
+  </div>
+</div>
+
+{% block content_dashboard %}{%endblock content_dashboard%}
+<script src="{% static 'appCodingNote/js/sidebar.js' %}"></script>
+{% endblock %}

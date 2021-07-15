@@ -14,3 +14,8 @@
 
 2. signup/in/out 구현
 - 구현 사항 : signup/in/out 직접 합수 작성
+
+
+# 20210715
+1. 모델 생성 완료 
+- 모델 클래스명 : Note, Bookmark

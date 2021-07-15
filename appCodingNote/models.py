@@ -4,8 +4,6 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
-
-### Folder Class 생성 ###
 class Folder(models.Model):
     author = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     folder_name = models.CharField(max_length=256)
@@ -38,7 +36,13 @@ class Note(models.Model):
     def __str__(self):
         return self.note_name
 
+
 class Bookmark(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     note = models.ForeignKey(Note, on_delete=models.CASCADE)
-    
+
+
+class Tag(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    note = models.ForeignKey(Note, on_delete=models.CASCADE)
+    tag_name = models.CharField(max_length=30)

@@ -19,7 +19,7 @@ def signin(request):
         if user :
             if user.check_password(request.POST['password']) :
                 auth.login(request, user)
-                return render(request, 'appCodingNote/dashboard.html')
+                return redirect('/codingnote/dashboard')
             else :
                 message = "패스워드가 올바르지 않습니다."
                 return render(request, {'message': message})

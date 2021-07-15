@@ -15,4 +15,7 @@ urlpatterns = [
     path('dashboard/<int:fid>/<int:nid>/updatenote/', views.NoteCRUD.update_note, name='update_note'),
     path('dashboard/<int:fid>/<int:nid>/deletenote/', views.NoteCRUD.delete_note, name='delete_note'),
     path('dashboard/<int:fid>/<int:nid>/', views.Bookmarking.create_bookmark, name='create_bookmark'),
+    path('dashboard/<int:fid>/<int:nid>/createtag/', views.Taging.create_tag, name='create_tag'),
+    path('dashboard/<int:fid>/<int:nid>/<int:tid>/updatetag/', views.Taging.update_tag, name='update_tag'),
+    path('dashboard/<int:fid>/<int:nid>/<int:tid>/deletetag/', views.Taging.delete_tag, name='delete_tag'),
 ]

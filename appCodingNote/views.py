@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Folder, Note, Bookmark
+from .models import Folder, Note, Bookmark, Tag
 
 # Create your views here.
 def index(request):
@@ -7,16 +7,18 @@ def index(request):
 
 
 def dashboard(request):
-    folders = Folder.objects.all()
-    ### tags ### 
-    return render(request, 'appCodingNote/dashboard.html', {'folders': folders})
-    
+    all_notes = Note.objects.all()
+    all_tags = Tag.objects.all() 
+    my_folders = Folder.objects.filter(user=request.user)
+    my_tags = Tag.objects.filter(user=request.user)
+    return render(request, 'appCodingNote/dashboard.html', {'all_notes': all_notes, 'all_tags': all_tags, 'my_folders': my_folders, 'my_tags': my_tags})
+
 
 class FolderCRUD:
     def create_folder(request):
         folder_name = request.POST['folderName']
         Folder.objects.create(folder_name=folder_name)
-        return redirect('appCodingNote:dashboard')
+        return redirect(f'/dashboard/')
 
     def read_folder(request, fid):
         folder = Folder.objects.get(id=fid)
@@ -25,12 +27,12 @@ class FolderCRUD:
     def update_folder(request, fid):
         folder = Folder.objects.get(id=fid)
         folder.update(folder_name = request.POST['folderName'])
-        return redirect('appCodingNote:dashboard')
+        return redirect(f'/dashboard/{fid}/readfolder/')
 
     def delete_folder(request, fid):
         folder = Folder.objects.get(id=fid)
         folder.delete()
-        return redirect('appCodingNote:dashboard')
+        return redirect(f'/dashboard/')
 
 
 class NoteCRUD:
@@ -42,9 +44,10 @@ class NoteCRUD:
         Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_comment=note_comment, author=request.user)
         return redirect(f'/dashboard/{fid}/readfolder/')
     
-    def read_note(request, nid):
+    def read_note(request, fid, nid):
+        folder = Folder.objects.get(id=fid)
         note = Note.objects.get(id=nid)
-        return render(request, 'appCodingNote/note.html', {'note': note})
+        return render(request, 'appCodingNote/note.html', {'folder': folder, 'note': note})
 
     def update_note(request, fid, nid):
         note = Note.objects.get(id=nid)
@@ -65,8 +68,21 @@ class Bookmarking:
             note.bookmark_set.get(user=request.user).delete()
         else:
             Bookmark.objects.create(user=request.user, note=note)
-        return redirect(f'/dashboard/{fid}/readfolder/')
+        return redirect(f'/dashboard/{fid}/{nid}/readnote/')
 
 
+class Taging:
+    def create_tag(request, fid, nid):
+        note = Note.objects.get(id=nid)
+        Tag.objects.create(user=request.user, note=note, tag_name=request.POST['tagName'])
+        return redirect(f'/dashboard/{fid}/{nid}/readnote/')
 
+    def update_tag(request, fid, nid, tid):
+        tag = Tag.objects.get(id=tid)
+        tag.update(tag_name=request.POST['tagName'])
+        return redirect(f'/dashboard/{fid}/{nid}/readnote/')
 
+    def delete_tag(request, fid, nid, tid):
+        tag = Tag.objects.get(id=tid)
+        tag.delete()
+        return redirect(f'/dashboard/{fid}/{nid}/readnote/')

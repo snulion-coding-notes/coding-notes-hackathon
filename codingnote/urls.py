@@ -22,7 +22,7 @@ import accounts.views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', appCodingNote.views.index, name='index'),
-    path('codingnote/', include('appCodingNote.urls')),
+    path('codingnote/', include('appCodingNote.urls', namespace='appCodingNote')),
     path('accounts/', include('accounts.urls')),
     path('accounts/', include('django.contrib.auth.urls')),             ### 확인 필요
     path('accounts/signup/', accounts.views.signup, name='signup'),     ### 확인 필요

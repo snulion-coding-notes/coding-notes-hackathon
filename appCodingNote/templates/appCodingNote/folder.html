@@ -1,5 +1,23 @@
-{% extends 'base.html' %}
-
-{% block content %}
-    <h1> 폴더 페이지 입니다. </h1>
-{% endblock content %}
+{% extends 'sidebar.html' %}
+{% load sass_tags %}
+{% block style %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/folder.scss' %}">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+  <script defer="defer" src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+{% endblock style %}
+{% block content_dashboard %}
+<main>
+  <div class="topnav">
+    <div class="search-container">
+      <form action="#">
+        <input type='text' placeholder="제목, 태그로 검색"/>
+        <button type="submit">
+          <i class="fa fa-search"></i>
+        </button>
+      </form>
+    </div>
+  </div>  
+</main>
+{%endblock%}

@@ -12,7 +12,7 @@ const closeTab = (tabName) => {
   const hiddenTab = tabName === 'signin' ? 'signup' : 'signin';
   const rightContainers = document.getElementsByClassName("right-container");
   [...rightContainers].forEach((tab) => {
-    tab.style.right = "-50%";
+    tab.style.right = "-550px";
   })
   document.getElementById(`${hiddenTab}-section`).classList.remove("hide");
   document.getElementById("tab-shadow").classList.add("hide");

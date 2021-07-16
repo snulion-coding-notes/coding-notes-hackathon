@@ -10,20 +10,67 @@
     <title>Coding Notes</title>
     <link rel="icon" href="{% static 'img/favicon.png' %}">
     <link rel="shortcut icon" href="{% static 'img/favicon.png' %}">
-    
-    <!-- scss 적용 -->
-    <link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/style.scss' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+
+    <!-- scss 적용 -->
+    <link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/style.scss' %}">
+    <link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/index-header.scss' %}">
     {% block style %}
     {% endblock style %}
+
     <!-- js 적용 -->
+    <script src="{% static 'appCodingNote/js/index.js' %}"></script>
     {% block js %}
     {% endblock js %}
   </head>
 
   <body>
+    <!-- 로그인 하지 않았을 시 헤더 -->
+    <header>
+      <a href="#">
+        <img src="{% static 'img/logo-black.png' %}" alt="Coding Notes Logo">
+      </a>
+      <div class="header-button-container">
+        <button onclick="openTab('signin')">Sign In</button>
+        <button onclick="openTab('signup')">Sign Up</button>
+      </div>
+    </header>
+    <div id="signin-section" class="right-container">
+      <button class="tab-close" onClick="closeTab('signin')"><img src="{% static 'img/close.png' %}"></button>
+      <section>
+        <p>Sign In</p>
+        <form method="POST" action="{% url 'signin' %}">
+          {% csrf_token %}
+          <input name="username" type="text" placeholder="Username" autocomplete="on">
+          <input name="password" type="password" placeholder="Password" autocomplete="on">
+          <button class="submit-button" type="submit">Sign In</button>
+        </form>
+        <div class="tab-button-container">
+          <button>Forgot PW</button>
+          <button onclick="switchTab('signup')">Sign Up</button>
+        </div>
+      </section>
+    </div>
+    <div id="signup-section" class="right-container">
+      <button class="tab-close" onClick="closeTab('signup')"><img src="{% static 'img/close.png' %}" alt="close button"></button>
+      <section>
+        <p>Sign Up</p>
+        <form method="POST" action="{% url 'signup' %}">
+          {% csrf_token %}
+          <input name="email" type="text" placeholder="Email" autocomplete="on">
+          <input name="username" ype="text" placeholder="Username" autocomplete="on">
+          <input name="password1" type="password" placeholder="Password" autocomplete="on">
+          <input name="password2" type="password" placeholder="Password" autocomplete="on">
+          <button class="submit-button" type="submit">Sign Up</button>
+        </form>
+        <div class="tab-button-container">
+          <button onclick="switchTab('signin')">Sign In</button>
+        </div>
+      </section>
+    </div>
+    <div id="tab-shadow" class="hide"></div>
     {% block content %}
     {% endblock %}
   </body>

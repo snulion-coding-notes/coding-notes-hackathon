@@ -5,8 +5,6 @@
 {% block style %}
   <link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/index.scss' %}">
 {% endblock style %}
-{% block js %}
-{% endblock js %}
 
 {% block content %}
   <section class="main-section">
@@ -17,12 +15,10 @@
     <div class="search-container">
       <div class="search-bar">
         <input type="text" placeholder="이름, 태그 등으로 검색">
-        <button>
+        <button onclick="location.href='codingnote/result'">
           <img src="{% static 'img/search.png' %}" alt="search icon">
         </button>
       </div>
     </div>
   </section>
-
-
 {% endblock content %}

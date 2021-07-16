@@ -2,15 +2,21 @@ from django.shortcuts import render, redirect
 from .models import Folder, Note, Bookmark
 
 # Create your views here.
+
+
 def index(request):
     return render(request, 'appCodingNote/index.html')
 
 
+def result(request):
+    return render(request, 'appCodingNote/index-search.html')
+
+
 def dashboard(request):
     folders = Folder.objects.all()
-    ### tags ### 
+    ### tags ###
     return render(request, 'appCodingNote/dashboard.html', {'folders': folders})
-    
+
 
 class FolderCRUD:
     def create_folder(request):
@@ -24,7 +30,7 @@ class FolderCRUD:
 
     def update_folder(request, fid):
         folder = Folder.objects.get(id=fid)
-        folder.update(folder_name = request.POST['folderName'])
+        folder.update(folder_name=request.POST['folderName'])
         return redirect('appCodingNote:dashboard')
 
     def delete_folder(request, fid):
@@ -39,16 +45,18 @@ class NoteCRUD:
         note_link = request.POST['noteLink']
         note_link_title = request.POST['noteLinkTitle']
         note_comment = request.POST['noteComment']
-        Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_comment=note_comment, author=request.user)
+        Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link,
+                            note_link_title=note_link_title, note_comment=note_comment, author=request.user)
         return redirect(f'/dashboard/{fid}/readfolder/')
-    
+
     def read_note(request, nid):
         note = Note.objects.get(id=nid)
         return render(request, 'appCodingNote/note.html', {'note': note})
 
     def update_note(request, fid, nid):
         note = Note.objects.get(id=nid)
-        note.update(note_name=request.POST['noteName'], note_link=request.POST['noteLink'], note_link_title=request.POST['noteLinkTitle'], note_comment=request.POST['noteComment'])
+        note.update(note_name=request.POST['noteName'], note_link=request.POST['noteLink'],
+                    note_link_title=request.POST['noteLinkTitle'], note_comment=request.POST['noteComment'])
         return redirect(f'/dashboard/{fid}/readfolder/')
 
     def delete_note(request, fid, nid):
@@ -66,7 +74,3 @@ class Bookmarking:
         else:
             Bookmark.objects.create(user=request.user, note=note)
         return redirect(f'/dashboard/{fid}/readfolder/')
-
-
-
-

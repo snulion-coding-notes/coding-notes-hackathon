@@ -21,9 +21,10 @@ def dashboard(request):
 
 class FolderCRUD:
     def create_folder(request):
-        folder_name = request.POST['folderName']
-        Folder.objects.create(folder_name=folder_name)
-        return redirect(f'/dashboard/')
+        if request.method=='POST':
+            folder_name = request.POST['folderName']
+            Folder.objects.create(folder_name=folder_name, author=request.user)
+        return redirect('appCodingNote:dashboard')
 
     def read_folder(request, fid):
         folder = Folder.objects.get(id=fid)

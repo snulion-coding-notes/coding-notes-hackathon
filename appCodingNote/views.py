@@ -14,7 +14,7 @@ def result(request):
 def dashboard(request):
     all_notes = Note.objects.all()
     all_tags = Tag.objects.all()
-    my_folders = Folder.objects.filter(user=request.user)
+    my_folders = Folder.objects.filter(author=request.user)
     my_tags = Tag.objects.filter(user=request.user)
     return render(request, 'appCodingNote/dashboard.html', {'all_notes': all_notes, 'all_tags': all_tags, 'my_folders': my_folders, 'my_tags': my_tags})
 

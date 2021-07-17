@@ -48,3 +48,109 @@ $yellow: #ffdd29;
 main {
   margin-left:250px;
 }
+
+.content-title-container{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.card-view{
+  margin-right:20px;
+  width:30px;
+  height:30px;
+  background-color: $light-gray;
+  float:right;
+}
+
+.table-view{
+  margin-right:0px;
+  width:30px;
+  height:30px;
+  background-color: $dark-gray;
+  float:right;
+}
+
+.table{
+  width: 90%;
+  margin:auto;
+  thead{
+    th{
+      margin:0px;
+      padding: 10px 10px;
+      background: none;
+      font-size: 20px;
+      vertical-align: middle;
+      color: $black-gray;
+      font-weight: bold;
+      text-align: center;
+      border-top:solid 2px $black-gray;
+      border-bottom:solid 2px $black-gray;
+    }
+    td{
+      border:0px;
+    }
+  }
+  tbody{
+    tr{
+      td{
+        border:0px;
+        padding: 5px 0px 5px 10px;
+        background: none;
+        font-size: 14px;
+        vertical-align:middle;
+      }
+    }
+  }
+}
+
+
+.add{
+  padding: 10px;
+  border-radius:10px;
+  height:30px;
+  line-height:75%;
+  background:none;
+  color:$black-gray;
+  border:2px solid $black-gray;
+
+  &:hover{
+    background-color:$yellow
+  }
+}
+
+
+// .add{
+//   float: right;
+//   background: transparent;
+//   border: 1px solid #ffffff;
+//   color: #ffffff;
+//   font-size: 13px;
+//   padding: 0;
+//   padding: 3px 5px;
+//   cursor: pointer;
+  
+//   &:hover{
+//     background: #ffffff;
+//     color: #00adee;
+//   }
+// }
+
+.save{
+  display: none;
+  background: #32AD60;
+  color: #ffffff;
+  
+  &:hover{
+    background: darken(#32AD60, 10%);
+  }
+}
+
+.edit, .delete, .update{
+  background: $medium-gray;
+  color: $black-gray;
+  font-size:10px;
+  
+  &.hide{
+    display:none;
+  }
+}

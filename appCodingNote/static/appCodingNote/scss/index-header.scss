@@ -1,0 +1,122 @@
+@import "./colors.scss";
+
+header {
+  width: 100%;
+  min-width: 700px;
+  height: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  img {
+    width: 150px;
+    margin-left: 60px;
+  }
+}
+
+.header-button-container {
+  margin-right: 40px;
+
+  button {
+    padding: 10px;
+    font-size: 20px;
+    margin: 0 20px;
+  }
+}
+
+.right-container {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  right: -550px;
+  min-width: 500px;
+  height: 100%;
+  background: $light-gray;
+  box-shadow: -5px 0 20px rgba(0, 0, 0, 0.25);
+  z-index: 10;
+  transition: 0.3s;
+
+  section {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    padding-bottom: 150px;
+    width: 60%;
+
+    p {
+      font-size: 35px;
+      margin-bottom: 20px;
+    }
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    input {
+      height: 60px;
+      border: none;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      padding-left: 20px;
+      font-size: 15px;
+    }
+
+    input::placeholder {
+      font-size: 15px;
+      color: #a0a0a0;
+    }
+  }
+}
+
+.submit-button {
+  background-color: $dark-gray;
+  color: #fff;
+  height: 60px;
+  border: none;
+  border-radius: 10px;
+  font-size: 18px;
+  margin: 5px 0 25px 0;
+}
+
+.submit-button:hover {
+  background-color: $yellow;
+  color: $black-gray;
+  transition: 0.2s;
+}
+
+.tab-close {
+  position: relative;
+  left: 0;
+  margin: 10px auto 10px 10px;
+  padding: 10px;
+
+  img {
+    width: 25px;
+  }
+}
+
+.tab-button-container {
+  display: flex;
+  justify-content: space-around;
+
+  button {
+    text-decoration: underline;
+    font-size: 15px;
+  }
+}
+
+.hide {
+  display: none;
+}
+
+#tab-shadow {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: 8;
+}

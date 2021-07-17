@@ -24,3 +24,8 @@ for (i = 0; i < dropdown.length; i++) {
     }
   });
 }
+
+const rotateButton=(element)=>{
+  const buttonElement=document.getElementById(`${element}-dropdown-btn`);
+  buttonElement.classList.toggle('rotate');
+}

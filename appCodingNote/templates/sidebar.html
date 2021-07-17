@@ -21,7 +21,7 @@
   <div class="menu-item">
     <button class="dropdown-btn">
       Folders
-      <i class="fa fa-caret-down"></i>
+      <img id="folder-dropdown-btn" src="{% static 'img/toggle-switch.png' %}" onclick="rotateButton('folder')">
     </button>
 			<div class="dropdown-container">
       {% for folder in folders %}
@@ -34,7 +34,7 @@
   <div class="menu-item">
     <button class="dropdown-btn">
       Tags
-      <i class="fa fa-caret-down"></i>
+      <img id="tag-dropdown-btn" src="{% static 'img/toggle-switch.png' %}" onclick="rotateButton('tag')">
     </button>
     <div class="dropdown-container">
       {% comment %} {% for tag in tags %}

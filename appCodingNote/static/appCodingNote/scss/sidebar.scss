@@ -32,6 +32,7 @@ $yellow: #ffdd29;
   text-align: left;
   cursor: pointer;
   outline: none;
+  line-height:200%;
 }
 
 // .sidenav input{
@@ -114,6 +115,18 @@ $yellow: #ffdd29;
   color: $black-gray;
   font-weight:bold;
   
+}
+
+#folder-dropdown-btn, #tag-dropdown-btn{
+  float:right;
+  margin-right:10px;
+  height:15px;
+  vertical-align: middle;
+}
+
+.rotate{
+  transform: rotate(180deg);
+  transition: 0.2s;
 }
 
 /* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */

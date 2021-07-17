@@ -18,8 +18,7 @@ const onClickAddButton = (folderId) =>{
   newTableSaveButton.setAttribute("class","save");
   newTableSaveButton.setAttribute("id",`${folderId}-save-btn`);
   newTableSaveButton.setAttribute("onclick",`onClickSaveButton(${folderId})`);
-  // newTableSaveButton.style.display='block';
-  newTableSaveButton.innerHTML='SAVE';
+  newTableSaveButton.innerHTML='save';
 
   newTableAction.append(newTableSaveButton);
   noteElement.appendChild(newTabletr);
@@ -44,9 +43,8 @@ const onClickSaveButton = async folderId => {
   document.getElementById("new-tag-row").innerHTML=newTagElement.value;
   const noteNum = document.getElementById('content-note-num');
   noteNum.innerHtml=`${response.data.noteNum}개`;
-  let tableSaveButton=document.getElementById(`{folderId}-save-btn`);
-  // tableSaveButton.style.display='';
-  // hidden을 줘서 바꾸기로
+  // let tableSaveButton=document.getElementById(`{folderId}-save-btn`);
+  document.getElementById(`${folderId}-save-btn`).classList.add('hide');
 
 }
 

@@ -98,6 +98,7 @@ main {
         background: none;
         font-size: 14px;
         vertical-align:middle;
+        overflow: hidden;
       }
     }
   }
@@ -135,20 +136,19 @@ main {
 //   }
 // }
 
-.save{
-  display: none;
-  background: #32AD60;
-  color: #ffffff;
+// .save{
+//   background: #32AD60;
+//   color: #ffffff;
   
-  &:hover{
-    background: darken(#32AD60, 10%);
-  }
-}
+//   &:hover{
+//     background: darken(#32AD60, 10%);
+//   }
+// }
 
-.edit, .delete, .update{
+.save, .edit, .delete, .update{
   background: $medium-gray;
   color: $black-gray;
-  font-size:10px;
+  font-size:20px;
   
   &.hide{
     display:none;

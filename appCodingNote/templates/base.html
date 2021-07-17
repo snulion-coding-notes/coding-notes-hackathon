@@ -29,8 +29,6 @@
   </head>
 
   <body>
-    {% if user.is_authenticated%}
-    {%else%}
     <header>
       <a href="#">
         <img src="{% static 'img/logo-black.png' %}" alt="Coding Notes Logo">
@@ -74,7 +72,6 @@
       </section>
     </div>
     <div id="tab-shadow" class="hide"></div>
-    {% endif %}
     {% block content %}
     {% endblock %}
     

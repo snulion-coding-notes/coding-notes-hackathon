@@ -5,7 +5,11 @@ from .models import Folder, Note, Bookmark, Tag
 def index(request):
     return render(request, 'appCodingNote/index.html')
 
+# 인덱스 - 검색 결과 템플릿 위해 추가
+def result(request):
+    return render(request, 'appCodingNote/index-search.html')
 
+  
 def dashboard(request):
     all_notes = Note.objects.all()
     all_tags = Tag.objects.all() 
@@ -13,7 +17,7 @@ def dashboard(request):
     my_tags = Tag.objects.filter(user=request.user)
     return render(request, 'appCodingNote/dashboard.html', {'all_notes': all_notes, 'all_tags': all_tags, 'my_folders': my_folders, 'my_tags': my_tags})
 
-
+  
 class FolderCRUD:
     def create_folder(request):
         folder_name = request.POST['folderName']

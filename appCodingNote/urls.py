@@ -5,6 +5,7 @@ from appCodingNote import views
 app_name = 'appCodingNote'
 urlpatterns = [
     path('', views.index, name='index'),
+    path('result/', views.result, name='result'), # 인덱스 - 검색 결과 템플릿 위해 추가
     path('dashboard/', views.dashboard, name='dashboard'),
     path('dashboard/createfolder/', views.FolderCRUD.create_folder, name='create_folder'),
     path('dashboard/<int:fid>/readfolder/', views.FolderCRUD.read_folder, name='read_folder'),

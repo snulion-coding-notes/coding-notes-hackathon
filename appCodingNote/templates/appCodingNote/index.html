@@ -7,32 +7,18 @@
 {% endblock style %}
 
 {% block content %}
-<script src="{% static 'appCodingNote/js/index.js' %}"></script>
-  <header>
-    <a href="#">
-      <img src="{% static 'img/logo-black.png' %}" alt="Coding Notes Logo">
-    </a>
-    <div class="header-button-container">
-      <button onclick="openTab('signin')">Sign In</button>
-      <button onclick="openTab('signup')">Sign Up</button>
+  <section class="main-section">
+    <div class="title-container">
+      <p class="main-title">Hey, developer!</p>
+      <p class="sub-title">개발자를 위한 최고의 지식 저장소</p>
     </div>
-  </header>
-  <div id="signin-section" class="right-container">
-      <!-- close 버튼 클릭시 탭 닫히도록 -->
-      <button class="tab-close" onClick="closeTab('signin')"><img src="{% static 'img/close.png' %}"></button>
-      <section>
-        <p>Sign In</p>
-        <form>
-          <input type="text" placeholder="Username">
-          <input type="password" placeholder="Password">
-          <button type="submit">Sign In</button>
-        </form>
-        <div class="signin-button-container">
-          <button>Forgot PW</button>
-          <button>Sign Up</button>
-        </div>
-      </section>
+    <div class="search-container">
+      <div class="search-bar">
+        <input type="text" placeholder="이름, 태그 등으로 검색">
+        <button onclick="location.href='codingnote/result'">
+          <img src="{% static 'img/search.png' %}" alt="search icon">
+        </button>
+      </div>
     </div>
-    <div id="tab-shadow" class="hide"></div>
-
+  </section>
 {% endblock content %}

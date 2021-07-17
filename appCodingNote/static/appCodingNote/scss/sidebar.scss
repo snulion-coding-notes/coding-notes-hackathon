@@ -59,8 +59,7 @@ $yellow: #ffdd29;
 // }
 
 
-/* When you mouse over the navigation links, change their color */
-.menu-item-logo, .menu-item-user{
+.menu-item-user{
   border: 1px solid white;
   width:90%;
   margin:auto;
@@ -72,6 +71,7 @@ $yellow: #ffdd29;
 
 .menu-item-logo{
   height:80px;
+  text-align:center;
 }
 
 .menu-item-user{

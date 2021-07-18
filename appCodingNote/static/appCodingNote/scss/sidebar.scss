@@ -1,9 +1,19 @@
 @import "./colors.scss";
-// $black-gray: #282828;
-// $dark-gray: #464646;
-// $medium-gray: #9b9898;
-// $light-gray: #eaeaea;
-// $yellow: #ffdd29;
+
+.dashboard-header {
+  position: fixed;
+  left: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: calc(100% - 250px);
+  height: 100px;
+}
+
+.greeting {
+  font-size: 18px;
+  margin-right: 40px;
+}
 
 .sidenav {
   display: flex;
@@ -104,136 +114,45 @@
   background-color: $hover-gray;
 }
 
-/* The navigation menu links */
-// .sidenav a,
-// .dropdown-btn {
-//   padding: 6px 8px 6px 16px;
-//   text-decoration: none;
-//   font-size: 18px;
-//   font-weight: 400;
-//   color: $light-gray;
-//   display: block;
-//   border: none;
-//   background: none;
-//   width: 100%;
-//   text-align: left;
-//   cursor: pointer;
-//   outline: none;
-//   line-height: 200%;
-// }
+.search-container {
+  margin-left: 40px;
 
-// .sidenav input{
-//   padding: 6px 8px 6px 16px;
-//   text-decoration: none;
-//   font-size: 20px;
-//   color: #818181;
-//   display: inline;
-//   border: none;
-//   background: none;
-//   width:50%;
-//   text-align: left;
-//   cursor: pointer;
-//   outline: none;
-// }
-// .sidenav .search-container button {
-//   float: right;
-//   padding: 6px 10px;
-//   margin-top: 0px;
-//   margin-right: 16px;
-//   background: #ddd;
-//   font-size: 17px;
-//   border: none;
-//   cursor: pointer;
-// }
+  .search-bar {
+    display: flex;
+    justify-content: space-between;
+    width: 25vw;
+    min-width: 270px;
+    height: 60px;
+    margin: auto;
+    padding-left: 25px;
+    border: none;
+    border-radius: 10px;
+    background-color: #f2f2f2;
+  }
 
-// .menu-item-user {
-//   border: 1px solid white;
-//   width: 90%;
-//   margin: auto;
-//   text-align: center;
-//   color: white;
-//   font-size: 18px;
-//   line-height: 200%;
-// }
+  input {
+    font-size: 18px;
+    width: 90%;
+    border: none;
+    background: none;
+  }
 
-// .menu-item-logo {
-//   height: 80px;
-//   text-align: center;
-// }
+  input::placeholder {
+    color: $medium-gray;
+  }
 
-// .menu-item-user {
-//   height: 40px;
-// }
-// .menu-item {
-//   margin: 15px 0px;
+  button {
+    margin-right: 10px;
 
-//   &:hover {
-//     background-color: $yellow;
-//   }
-// }
+    img {
+      width: 25px;
+      margin: 10px;
+    }
+  }
+}
 
-// .sidenav a:hover,
-// .dropdown-btn:hover {
-//   color: $black-gray;
-//   width: 100%;
-//   font-weight: bold;
-// }
-
-// /* Position and style the close button (top right corner) */
-// .sidenav .closebtn {
-//   position: absolute;
-//   top: 0;
-//   right: 25px;
-//   font-size: 36px;
-//   margin-left: 50px;
-// }
-
-// /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
-// @media screen and (max-height: 450px) {
-//   .sidenav {
-//     padding-top: 15px;
-//   }
-//   .sidenav a {
-//     font-size: 18px;
-//   }
-// }
-// /* Add an active class to the active dropdown button */
-// .active {
-//   background-color: $yellow;
-//   color: $black-gray;
-//   font-weight: bold;
-// }
-
-// #folder-dropdown-btn,
-// #tag-dropdown-btn {
-//   float: right;
-//   margin-right: 10px;
-//   height: 15px;
-//   vertical-align: middle;
-// }
-
-// .rotate {
-//   transform: rotate(180deg);
-//   transition: 0.2s;
-// }
-
-// /* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
-// .dropdown-container {
-//   display: none;
-//   background-color: $dark-gray;
-//   padding-left: 8px;
-
-//   a:hover {
-//     color: $yellow;
-//   }
-// }
-
-// /* Optional: Style the caret down icon */
-// .fa-caret-down {
-//   float: right;
-//   padding-right: 8px;
-// }
-
-// .mdl-layout__content {
-//   padding: 16px;
-// }
+@media (max-width: 900px) {
+  .search-container {
+    display: none;
+  }
+}

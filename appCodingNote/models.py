@@ -2,6 +2,8 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 
+
+
 # Create your models here.
 
 class Folder(models.Model):
@@ -25,7 +27,8 @@ class Note(models.Model):
     folder = models.ForeignKey(Folder, on_delete=models.CASCADE, related_name='notes')
     note_name = models.CharField(max_length=256)
     note_link = models.URLField()
-    note_link_title =models.CharField(max_length=256)
+    note_link_title = models.CharField(max_length=256, blank=True, null=True) 
+    note_link_image = models.ImageField(blank=True, null=True) 
     note_comment = models.TextField()
     note_created_at = models.DateTimeField(default=timezone.now)
     note_updated_at = models.DateTimeField(blank=True, null=True) 

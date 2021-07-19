@@ -3,6 +3,8 @@ from django.http.response import JsonResponse
 from django.shortcuts import render, redirect
 from .models import Folder, Note, Bookmark, Tag
 from django.views.decorators.csrf import csrf_exempt
+import requests
+from bs4 import BeautifulSoup
 
 
 
@@ -49,12 +51,31 @@ class NoteCRUD:
     def create_note(request, fid):
         if request.method=='POST':
             note_name = request.POST['noteName']
-            # note_link = request.POST['noteLink']
-            note_link_title = request.POST['noteLinkTitle']
+            note_link = request.POST['noteLink']
+            
+            # note_link로 부터 데이터 쌓기
+            headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
+            data = requests.get(note_link, headers=headers)
+            soup = BeautifulSoup(data.text, 'html.parser')
+            
+            if soup.select_one('meta[property="og:title"]') is not None :
+                og_title = soup.select_one('meta[property="og:title"]')
+                note_link_title = og_title['content']   # note_link_title 얻기
+            else :
+                note_link_title = ""                    # note_link_title 정보를 가져 올 수 없을 경우 처리
+            
+            if soup.select_one('meta[property="og:image"]') is not None :
+                og_image = soup.select_one('meta[property="og:image"]')
+                note_link_image = og_image['content']   # note_link_image 얻기
+            else :
+                note_link_image = None                  # note_link_image 정보를 가져 올 수 없을 경우 처리, 디폴트 이미지 필요
+
             note_comment = request.POST['noteComment']
-            # Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_comment=note_comment, author=request.user)
-            Note.objects.create(folder_id=fid, note_name=note_name, note_link_title=note_link_title, note_comment=note_comment)
+            
+            Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user)
+            # Note.objects.create(folder_id=fid, note_name=note_name, note_link_title=note_link_title, note_comment=note_comment)
             notes=Note.objects.filter(folder__id=fid)
+            
             return JsonResponse({'noteNum':notes.count()})
         else:
             return redirect(f'/dashboard/{fid}/readfolder/')

@@ -2,6 +2,9 @@ import json
 from django.http.response import JsonResponse
 from django.shortcuts import render, redirect
 from .models import Folder, Note, Bookmark, Tag
+from django.views.decorators.csrf import csrf_exempt
+
+
 
 def index(request):
     return render(request, 'appCodingNote/index.html')
@@ -100,3 +103,19 @@ class Taging:
         tag = Tag.objects.get(id=tid)
         tag.delete()
         return redirect(f'/dashboard/{fid}/{nid}/readnote/')
+
+class chromeExtension:
+    @csrf_exempt
+    def create_note(request):
+        note_name = request.POST['noteName']
+        note_link_title = request.POST['noteTitle']
+        note_link=request.POST['noteLink']
+        note_comment = request.POST['noteComment']
+        folder_name=request.POST['file']
+        try:
+            fid=Folder.objects.get(folder_name=folder_name).id
+        except:
+            Folder.objects.create(folder_name=folder_name, author=request.user)
+            fid=Folder.objects.get(folder_name=folder_name).id
+        Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_comment=note_comment, author=request.user)
+        return render(request, 'appCodingNote/index.html')

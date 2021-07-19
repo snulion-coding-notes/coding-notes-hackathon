@@ -89,7 +89,6 @@ const onClickDeleteButton=async(folderId,noteId) => {
     document.getElementById(`each-note-${noteId}`).remove();
     document.getElementById('content-note-num').innerHTML=`${response.data.notesNum}개`;
   }
-  
 
 }
 

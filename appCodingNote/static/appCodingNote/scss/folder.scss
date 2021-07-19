@@ -146,11 +146,34 @@ main {
 // }
 
 .save, .edit, .delete, .update{
-  background: $medium-gray;
-  color: $black-gray;
-  font-size:20px;
   
   &.hide{
     display:none;
   }
+}
+
+.edit-img, .delete-img{
+  width:17px;
+  margin:0px 10px 0px 10px;
+}
+
+.card{
+  width:90%;
+  display:inline-flex;
+}
+
+.card-item-container{
+  height: 200px;
+	width: 200px;
+  margin:15px 10px 15px 30px;
+  box-shadow:5px 5px 10px $medium-gray, -5px -5px 10px $light-gray;
+}
+
+.card-body-image{
+  height:120px;
+}
+
+.card-body-description{
+  background-color: $light-gray;
+  height:60px;
 }

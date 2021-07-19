@@ -73,6 +73,8 @@ class NoteCRUD:
             note_comment = request.POST['noteComment']
             
             Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user)
+            nid=Note.objects.get(note_name=note_name).id
+            Tag.objects.create(tag_name=request.POST['tag'], user=request.user, note_id=nid)
             # Note.objects.create(folder_id=fid, note_name=note_name, note_link_title=note_link_title, note_comment=note_comment)
             notes=Note.objects.filter(folder__id=fid)
             notesNum=notes.count()
@@ -132,6 +134,10 @@ class Tagging:
         tag.delete()
         return redirect(f'/dashboard/{fid}/{nid}/readnote/')
 
+class Search:
+    def loginSearch(request):
+        return render()
+
 class chromeExtension:
     @csrf_exempt
     def create_note(request):
@@ -146,4 +152,6 @@ class chromeExtension:
             Folder.objects.create(folder_name=folder_name, author=request.user)
             fid=Folder.objects.get(folder_name=folder_name).id
         Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_comment=note_comment, author=request.user)
+        nid=Note.objects.get(note_name=note_name).id
+        Tag.objects.create(tag_name=request.POST['noteTag'], user=request.user, note_id=nid)
         return render(request, 'appCodingNote/index.html')

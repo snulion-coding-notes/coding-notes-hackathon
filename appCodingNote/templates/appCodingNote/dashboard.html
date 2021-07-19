@@ -8,15 +8,15 @@
 {% endblock style %}
 {% block js %}
 {% endblock js %}
-
 {% block content_dashboard %}
   <main id="main">
     <!-- Search Bar -->
     <div class="dashboard-header">
       <div class="search-container">
         <div class="search-bar">
-          <input type="text" placeholder="제목, 태그로 검색">
-          <button>
+          {% csrf_token %}
+          <input id="keyword" type="text" placeholder="제목, 태그로 검색">
+          <button onclick="loginSearch()">
             <img src="{% static 'img/search.png' %}" alt="search icon">
           </button>
         </div>
@@ -67,5 +67,7 @@
         </div>
       </div>
     </div>
+    <script src="{% static 'appCodingNote/js/search.js' %}"></script>
   </main>
+  
     {% endblock content_dashboard %}

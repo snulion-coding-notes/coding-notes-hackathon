@@ -88,7 +88,7 @@ class Bookmarking:
         return redirect(f'/dashboard/{fid}/{nid}/readnote/')
 
 
-class Taging:
+class Tagging:
     def create_tag(request, fid, nid):
         note = Note.objects.get(id=nid)
         Tag.objects.create(user=request.user, note=note, tag_name=request.POST['tagName'])

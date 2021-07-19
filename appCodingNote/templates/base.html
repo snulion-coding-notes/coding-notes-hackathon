@@ -48,8 +48,8 @@
           <p>Sign In</p>
           <form method="POST" action="{% url 'signin' %}">
             {% csrf_token %}
-            <input name="username" type="text" placeholder="Username" autocomplete="on">
-            <input name="password" type="password" placeholder="Password" autocomplete="on">
+            <input id="signin-username" name="username" type="text" placeholder="Username" autocomplete="on">
+            <input id="signin-password" name="password" type="password" placeholder="Password" autocomplete="on">
             <button class="submit-button" type="submit">Sign In</button>
           </form>
           <div class="tab-button-container">

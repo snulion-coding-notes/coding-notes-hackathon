@@ -1,0 +1,30 @@
+.input{
+    width: 190px;
+    height: 31px;
+    background: #9B9898;
+    border-radius: 7px;
+    margin:8px;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 15px;
+    color: #FFFFFF;
+}
+
+#submit{
+    width: 200px;
+    height: 38px;
+    background: #FFDD29;
+    border-radius: 7px;
+    margin:8px;
+}
+
+.font{
+    font-family: Roboto;
+font-style: normal;
+font-weight: normal;
+font-size: 13px;
+line-height: 15px;
+color: #FFFFFF;
+}

@@ -1,6 +1,6 @@
 
 
-//chrome extension은 html 상의 onclick을 허용하지 않음. 마찬가지로 링크 기반 스크립트도 안됨. 보안 상의 이유라는데 왜지..
+//chrome extension은 html 상의 onclick을 허용하지 않음. 마찬가지로 링크 기반 스크립트도 안됨. 보안 상의 이유라는데 왜지.. 안되는게 그냥 많음..ㅜㅜ
 var click=document.getElementById("submit")
 if(click){
     click.addEventListener("click", saveNote);

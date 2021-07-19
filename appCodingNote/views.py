@@ -125,7 +125,7 @@ class Tagging:
         tag_name = tag.tag_name
         my_notes = Note.objects.get(author=request.user)
         my_notes_tag = my_notes.tag_set.filter(tag_name=tag_name)
-        return render(request, 'appCodingNote/tag.html', {'notes': my_notes_tag, 'tag_name': tag_name})
+        return render(request, 'appCodingNote/tag.html', {'tags': my_notes_tag, 'tag_name': tag_name})
 
     def update_tag(request, fid, nid, tid):
         tag = Tag.objects.get(id=tid)

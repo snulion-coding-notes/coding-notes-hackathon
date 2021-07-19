@@ -40,6 +40,6 @@ def signin(request):
 
 
 def signout(request):
-    if request.method == "POST":
+    if request.method == "GET":
         auth.logout(request)
-        return render(request, 'appCodingNote/index.html')
+        return redirect('/')

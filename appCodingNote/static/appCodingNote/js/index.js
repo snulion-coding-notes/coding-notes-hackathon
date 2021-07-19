@@ -24,3 +24,20 @@ const switchTab = (tabName) => {
   document.getElementById(`${tabName}-section`).classList.remove("hide");
   document.getElementById(`${hiddenTab}-section`).classList.add("hide");
 }
+
+const signup = async () => {
+  const response = await axios.post('/')
+}
+
+const signin = async () => {
+  const signinUsernameInputElement = document.getElementById("signin-username");
+  const signinPasswordInputElement = document.getElementById("signin-password");
+  if (signinUsernameInputElement.value && signinPasswordInputElement.value) {
+    let data = new FormData();
+    data.append("username", signinUsernameInputElement.value);
+    data.append("password", signinPasswordInputElement.value);
+    const response = await axios.post('/accounts/signin', data);
+    console.log(response);
+  }
+}
+

@@ -43,6 +43,7 @@
     </div>
     {% for tags in my_tags %}
       <div class="tag-dropdown dropdown-container" style="display: none;">
+        {% comment %} <a href={% url 'appCodingNote:read_tag' %}>{{ tag.tag_name }}</a> {% endcomment %}
         <a href="#">{{ tag.tag_name }}</a>
       </div>
     {% endfor %}
@@ -52,7 +53,7 @@
       <a href="#Bookmarks">Bookmarks</a>
     </div>
     <div class="signout-button">
-      <a href="{% url 'logout' %}">Sign Out</a>
+      <a href="{% url 'signout' %}">Sign Out</a>
     </div>
   </div>
   {% block content_dashboard %}

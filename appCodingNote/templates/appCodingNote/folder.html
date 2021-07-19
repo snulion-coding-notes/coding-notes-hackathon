@@ -39,8 +39,8 @@
       <h3>folder: {{folder.folder_name}}</h3>
     </div>
     <div class="content-title-item">
-      <button class="card-view"></button>
-      <button class="table-view"></button>
+      <button class="list-view"><img class="list-view-img" src="{%static 'img/list-view.png' %}"/></button>
+      <button class="card-view"><img class="card-view-img" src="{%static 'img/card-view.png' %}"/></button>
     </div>
   </div>
   <div class="content-num">
@@ -49,10 +49,10 @@
   <table class="table data">
     <thead>
       <tr>
-        <th class="thead">Name</th>
-        <th class="thead">Comment</th>
-        <th class="thead">Website</th>
-        <th class="thead">Tags</th>
+        <th class="thead-name">Name</th>
+        <th class="thead-comment">Comment</th>
+        <th class="thead-website">Website</th>
+        <th class="thead-tag">Tags</th>
         <th class="table-hide">
           <button class="add" onclick="onClickAddButton({{folder.id}})">
             + New

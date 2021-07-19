@@ -94,7 +94,7 @@ class Tagging:
         Tag.objects.create(user=request.user, note=note, tag_name=request.POST['tagName'])
         return redirect(f'/dashboard/{fid}/{nid}/readnote/')
 
-    def read_tag(request, tid):
+    def read_tag(request, fid, nid, tid):
         tag = Tag.objects.get(id=tid)
         tag_name = tag.tag_name
         my_notes = Note.objects.all(user=request.user)

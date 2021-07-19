@@ -75,8 +75,8 @@ class NoteCRUD:
             Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user)
             # Note.objects.create(folder_id=fid, note_name=note_name, note_link_title=note_link_title, note_comment=note_comment)
             notes=Note.objects.filter(folder__id=fid)
-            
-            return JsonResponse({'noteNum':notes.count()})
+            notesNum=notes.count()
+            return JsonResponse({'notesNum':notesNum, 'note_link_title':note_link_title})
         else:
             return redirect(f'/dashboard/{fid}/readfolder/')
 
@@ -95,7 +95,7 @@ class NoteCRUD:
         note = Note.objects.get(id=nid)
         note.delete()
         notes=Note.objects.filter(folder__id=fid)
-        return JsonResponse({'noteNum':notes.count()})
+        return JsonResponse({'notesNum':notes.count()})
 
 
 class Bookmarking:

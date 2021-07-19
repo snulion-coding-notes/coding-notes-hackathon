@@ -34,16 +34,14 @@ const onClickSaveButton = async folderId => {
   let data=new FormData();
   data.append("noteName",newNameElement.value);
   data.append("noteComment", newCommentElement.value);
-  data.append("noteLinkTitle",newWebsiteElement.value);
+  data.append("noteLink",newWebsiteElement.value);
   data.append("tag",newTagElement.value);
   const response = await axios.post(`/codingnote/dashboard/${folderId}/createnote/`, data);
   document.getElementById("new-name-row").innerHTML=newNameElement.value;
   document.getElementById("new-comment-row").innerHTML=newCommentElement.value;
-  document.getElementById("new-website-row").innerHTML=newWebsiteElement.value;
+  document.getElementById("new-website-row").innerHTML=`${response.data.note_link_title}`;
   document.getElementById("new-tag-row").innerHTML=newTagElement.value;
-  const noteNum = document.getElementById('content-note-num');
-  noteNum.innerHtml=`${response.data.noteNum}개`;
-  // let tableSaveButton=document.getElementById(`{folderId}-save-btn`);
+  document.getElementById('content-note-num').innerHtml=`${response.data.notesNum}개`;
   document.getElementById(`${folderId}-save-btn`).classList.add('hide');
 
 }
@@ -89,8 +87,7 @@ const onClickDeleteButton=async(folderId,noteId) => {
   if (alert){
     const response=await axios.delete(`/codingnote/dashboard/${folderId}/${noteId}/deletenote`);
     document.getElementById(`each-note-${noteId}`).remove();
-    const noteNum = document.getElementById('content-note-num');
-    noteNum.innerHtml=`${response.data.noteNum}개`;
+    document.getElementById('content-note-num').innerHTML=`${response.data.notesNum}개`;
   }
   
 

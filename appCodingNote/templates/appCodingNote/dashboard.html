@@ -55,9 +55,9 @@
         <h2>태그</h2>
         <div class = "tag-container">
           {% for tag in my_tags %}
-            <div class="tag-content">
+            <a class="tag-content" href="#">
               <p>{{ tag.tag_name }}</p>
-            </div>
+            </a>
           {% endfor %}
           <!-- sample tag -->
           <div class="tag-content">

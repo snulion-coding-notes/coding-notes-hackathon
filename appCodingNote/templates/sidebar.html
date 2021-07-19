@@ -3,7 +3,7 @@
 {% load static %} 
 {% load sass_tags %}
 {% block side_style %}
-<link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/sidebar.scss' %}"/>
+  <link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/sidebar.scss' %}"/>
 {% endblock side_style%}
 {% block side_js %}
   <script src="{% static 'appCodingNote/js/sidebar.js' %}"></script>
@@ -43,7 +43,7 @@
     </div>
     {% for tag in my_tags %}
       <div class="tag-dropdown dropdown-container" style="display: none;">
-        {% comment %} <a href={% url 'appCodingNote:read_' %}>{{ tag.tag_name }}</a> {% endcomment %}
+        {% comment %} <a href={% url 'appCodingNote:read_tag' tag.id %}>{{ tag.tag_name }}</a> {% endcomment %}
         <a href="#">{{ tag.tag_name }}</a>
       </div>
     {% endfor %}

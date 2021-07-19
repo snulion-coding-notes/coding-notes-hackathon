@@ -1,0 +1,151 @@
+@import "./colors.scss";
+
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100px;
+  margin-bottom: 20px;
+}
+
+.search-container {
+  margin-left: 40px;
+
+  .search-bar {
+    display: flex;
+    justify-content: space-between;
+    width: 25vw;
+    min-width: 270px;
+    height: 60px;
+    margin: auto;
+    padding-left: 25px;
+    border: none;
+    border-radius: 10px;
+    background-color: #f2f2f2;
+  }
+
+  input {
+    font-size: 18px;
+    width: 90%;
+    border: none;
+    background: none;
+  }
+
+  input::placeholder {
+    color: $medium-gray;
+  }
+
+  button {
+    margin-right: 10px;
+
+    img {
+      width: 25px;
+      margin: 10px;
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  .search-container {
+    display: none;
+  }
+}
+
+.greeting {
+  font-size: 18px;
+  margin-right: 40px;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-left: 250px;
+  width: calc(100% - 250px);
+  height: 100%;
+}
+
+h2 {
+  font-size: 30px;
+  font-weight: 700;
+}
+
+main .content {
+  margin-left: 60px;
+}
+
+.main-title > h2 {
+  margin-bottom: 10px;
+}
+
+.folder-container,
+.tag-container {
+  margin-left: -10px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.folder-container {
+  .notebook {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    img {
+      width: 170px;
+    }
+
+    p {
+      position: relative;
+      bottom: 10px;
+      right: 5px;
+      font-size: 18px;
+    }
+  }
+}
+
+.folder-container > form {
+  display: flex;
+  flex-direction: column;
+  width: 170px;
+
+  img {
+    width: 135px;
+    margin-top: 14px;
+  }
+
+  input {
+    font-size: 18px;
+    text-align: center;
+    border: none;
+    margin-top: 10px;
+  }
+
+  input::placeholder {
+    color: $medium-gray;
+  }
+}
+
+.main-folder-content {
+  margin-bottom: 50px;
+}
+
+.tag-content {
+  background-image: url(../../img/tag-image.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  width: 200px;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  p {
+    position: relative;
+    bottom: 25px;
+    right: 10px;
+    font-size: 20px;
+    // margin-bottom: 25px;
+  }
+}

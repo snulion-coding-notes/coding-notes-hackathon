@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% load static %} 
+{% load sass_tags %}
+{% block side_style %}
+<link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/sidebar.scss' %}"/>
+{% endblock side_style%}
+{% block side_js %}
+  <script src="{% static 'appCodingNote/js/sidebar.js' %}"></script>
+{% endblock side_js %}
+
+{% block content %}
+  <!-- Sidebar -->
+  <div id="mySidenav" class="sidenav">
+    <div class ="menu-item-logo">
+      <a href="/codingnote/dashboard">
+        <img src="{% static 'img/logo-white.png' %}">
+      </a>
+    </div>
+    <div class="menu-item">
+      <a href="/codingnote/dashboard">Dashboard</a>
+    </div>
+
+    <!-- Folders -->
+    <div class="menu-item">
+      <button class="dropdown-btn" onclick="activateToggle('folder')">
+        <p>Folders</p>
+        <img id="folder-dropdown-btn" src="{% static 'img/toggle-switch.png' %}">
+      </button>
+    </div>
+    {% for folder in my_folders %}
+      <div class="folder-dropdown dropdown-container" style="display: none;">
+        <a href={% url 'appCodingNote:read_folder' folder.id %}>{{ folder.folder_name }}</a>
+      </div>
+    {% endfor %}
+
+    <!-- Tags -->
+    <div class="menu-item">
+      <button class="dropdown-btn" onclick="activateToggle('tag')">
+        <p>Tags</p>
+        <img id="tag-dropdown-btn" src="{% static 'img/toggle-switch.png' %}">
+      </button>
+    </div>
+    {% for tags in my_tags %}
+      <div class="tag-dropdown dropdown-container" style="display: none;">
+        <a href="#">{{ tag.tag_name }}</a>
+      </div>
+    {% endfor %}
+
+    <!-- Bookmarks -->
+    <div class="menu-item">
+      <a href="#Bookmarks">Bookmarks</a>
+    </div>
+    <div class="signout-button">
+      <a href="{% url 'logout' %}">Sign Out</a>
+    </div>
+  </div>
+  {% block content_dashboard %}
+  {% endblock content_dashboard %}
+{% endblock %}

@@ -1,5 +1,71 @@
-{% extends 'base.html' %}
+{% extends 'sidebar.html' %}
 
-{% block content %}
-    <h1> 대시보드 페이지 입니다. </h1>
-{% endblock content %}
+{% load static %}
+{% load sass_tags %}
+
+{% block style %}
+  <link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/dashboard.scss' %}">
+{% endblock style %}
+{% block js %}
+{% endblock js %}
+
+{% block content_dashboard %}
+  <main id="main">
+    <!-- Search Bar -->
+    <div class="dashboard-header">
+      <div class="search-container">
+        <div class="search-bar">
+          <input type="text" placeholder="제목, 태그로 검색">
+          <button>
+            <img src="{% static 'img/search.png' %}" alt="search icon">
+          </button>
+        </div>
+      </div>
+      <div class="greeting">
+        <p>{{ user.username }}님, 안녕하세요!</p>
+      </div>
+    </div>
+
+    <div class="main-folder-content content">
+      <div class="main-title">
+        <h2>폴더</h2>
+        <div class="folder-container">
+          {% for folder in my_folders %}
+            <div class="notebook">
+              <a href={% url 'appCodingNote:read_folder' folder.id %}>
+                <img src="{% static 'img/blue-note.png' %}" alt="note">
+              </a>
+              <p>{{ folder.folder_name }}</p>
+            </div>
+          {% endfor %}
+
+          <!-- New Folder -->
+          <form action ="{% url 'appCodingNote:create_folder' %}" method="POST">
+            {% csrf_token %}
+            <button type="submit">
+              <img src="{% static 'img/add-folder.png' %}" alt="add folder">
+            </button>
+            <input class ="folder-new-input" type="text" placeholder="새 폴더명" name="folderName"/>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="main-tag-content content">
+      <div class ="main-title">
+        <h2>태그</h2>
+        <div class = "tag-container">
+          {% for tag in my_tags %}
+            <div class="tag-content">
+              <p>{{ tag.tag_name }}</p>
+            </div>
+          {% endfor %}
+          <!-- sample tag -->
+          <div class="tag-content">
+            <p>샘플 태그</p>
+          </div>
+          <!-- sample tag -->
+        </div>
+      </div>
+    </div>
+  </main>
+    {% endblock content_dashboard %}

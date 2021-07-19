@@ -1,0 +1,156 @@
+$black-gray: #282828;
+$dark-gray: #464646;
+$medium-gray: #9b9898;
+$light-gray: #eaeaea;
+$yellow: #ffdd29;
+
+.topnav {
+  overflow: hidden;
+  background-color: #e9e9e9;
+  height: 60px;
+}
+
+.topnav input[type=text] {
+  float: left;
+  padding: 6px;
+  border: none;
+  border-radius:5px 0px 0px 5px;
+  margin-top: 8px;
+  margin-left: 16px;
+  font-size: 17px;
+  height: 40px;
+}
+
+.topnav .search-container button{
+  float: left;
+  width: 50px;
+  border-radius:0px 5px 5px 0px;
+  height: 40px;
+  padding: 6px 10px;
+  margin-top: 8px;
+  margin-left: 0px;
+  background: #ddd;
+  font-size: 17px;
+  border: none;
+  cursor: pointer;
+
+  &:hover{
+    background-color:$yellow;
+  }
+}
+
+
+.fa{
+  font-size:25px;
+  margin:auto;
+}
+
+main {
+  margin-left:250px;
+}
+
+.content-title-container{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.card-view{
+  margin-right:20px;
+  width:30px;
+  height:30px;
+  background-color: $light-gray;
+  float:right;
+}
+
+.table-view{
+  margin-right:0px;
+  width:30px;
+  height:30px;
+  background-color: $dark-gray;
+  float:right;
+}
+
+.table{
+  width: 90%;
+  margin:auto;
+  thead{
+    th{
+      margin:0px;
+      padding: 10px 10px;
+      background: none;
+      font-size: 20px;
+      vertical-align: middle;
+      color: $black-gray;
+      font-weight: bold;
+      text-align: center;
+      border-top:solid 2px $black-gray;
+      border-bottom:solid 2px $black-gray;
+    }
+    td{
+      border:0px;
+    }
+  }
+  tbody{
+    tr{
+      td{
+        border:0px;
+        padding: 5px 0px 5px 10px;
+        background: none;
+        font-size: 14px;
+        vertical-align:middle;
+        overflow: hidden;
+      }
+    }
+  }
+}
+
+
+.add{
+  padding: 10px;
+  border-radius:10px;
+  height:30px;
+  line-height:75%;
+  background:none;
+  color:$black-gray;
+  border:2px solid $black-gray;
+
+  &:hover{
+    background-color:$yellow
+  }
+}
+
+
+// .add{
+//   float: right;
+//   background: transparent;
+//   border: 1px solid #ffffff;
+//   color: #ffffff;
+//   font-size: 13px;
+//   padding: 0;
+//   padding: 3px 5px;
+//   cursor: pointer;
+  
+//   &:hover{
+//     background: #ffffff;
+//     color: #00adee;
+//   }
+// }
+
+// .save{
+//   background: #32AD60;
+//   color: #ffffff;
+  
+//   &:hover{
+//     background: darken(#32AD60, 10%);
+//   }
+// }
+
+.save, .edit, .delete, .update{
+  background: $medium-gray;
+  color: $black-gray;
+  font-size:20px;
+  
+  &.hide{
+    display:none;
+  }
+}

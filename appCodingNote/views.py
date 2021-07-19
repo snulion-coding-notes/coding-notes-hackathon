@@ -1,8 +1,7 @@
+import json
+from django.http.response import JsonResponse
 from django.shortcuts import render, redirect
 from .models import Folder, Note, Bookmark, Tag
-
-# Create your views here.
-
 
 def index(request):
     return render(request, 'appCodingNote/index.html')
@@ -12,24 +11,25 @@ def result(request):
     return render(request, 'appCodingNote/index-search.html')
     # 인덱스 - 검색 결과 템플릿 위해 추가
 
-
 def dashboard(request):
     all_notes = Note.objects.all()
     all_tags = Tag.objects.all()
-    my_folders = Folder.objects.filter(user=request.user)
+    my_folders = Folder.objects.filter(author=request.user)
     my_tags = Tag.objects.filter(user=request.user)
     return render(request, 'appCodingNote/dashboard.html', {'all_notes': all_notes, 'all_tags': all_tags, 'my_folders': my_folders, 'my_tags': my_tags})
 
 
 class FolderCRUD:
     def create_folder(request):
-        folder_name = request.POST['folderName']
-        Folder.objects.create(folder_name=folder_name)
-        return redirect(f'/dashboard/')
+        if request.method=='POST':
+            folder_name = request.POST['folderName']
+            Folder.objects.create(folder_name=folder_name, author=request.user)
+        return redirect('appCodingNote:dashboard')
 
     def read_folder(request, fid):
         folder = Folder.objects.get(id=fid)
-        return render(request, 'appCodingNote/folder.html', {'folder': folder})
+        notes=Note.objects.filter(folder__id=fid)
+        return render(request, 'appCodingNote/folder.html', {'folder': folder, 'notes':notes})
 
     def update_folder(request, fid):
         folder = Folder.objects.get(id=fid)
@@ -44,13 +44,17 @@ class FolderCRUD:
 
 class NoteCRUD:
     def create_note(request, fid):
-        note_name = request.POST['noteName']
-        note_link = request.POST['noteLink']
-        note_link_title = request.POST['noteLinkTitle']
-        note_comment = request.POST['noteComment']
-        Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link,
-                            note_link_title=note_link_title, note_comment=note_comment, author=request.user)
-        return redirect(f'/dashboard/{fid}/readfolder/')
+        if request.method=='POST':
+            note_name = request.POST['noteName']
+            # note_link = request.POST['noteLink']
+            note_link_title = request.POST['noteLinkTitle']
+            note_comment = request.POST['noteComment']
+            # Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_comment=note_comment, author=request.user)
+            Note.objects.create(folder_id=fid, note_name=note_name, note_link_title=note_link_title, note_comment=note_comment)
+            notes=Note.objects.filter(folder__id=fid)
+            return JsonResponse({'noteNum':notes.count()})
+        else:
+            return redirect(f'/dashboard/{fid}/readfolder/')
 
     def read_note(request, fid, nid):
         folder = Folder.objects.get(id=fid)
@@ -59,14 +63,15 @@ class NoteCRUD:
 
     def update_note(request, fid, nid):
         note = Note.objects.get(id=nid)
-        note.update(note_name=request.POST['noteName'], note_link=request.POST['noteLink'],
-                    note_link_title=request.POST['noteLinkTitle'], note_comment=request.POST['noteComment'])
+        # note.update(note_name=request.POST['noteName'], note_link=request.POST['noteLink'], note_link_title=request.POST['noteLinkTitle'], note_comment=request.POST['noteComment'])
+        note.update(note_name=request.POST['noteName'], note_link_title=request.POST['noteLinkTitle'], note_comment=request.POST['noteComment'])
         return redirect(f'/dashboard/{fid}/readfolder/')
 
     def delete_note(request, fid, nid):
         note = Note.objects.get(id=nid)
         note.delete()
-        return redirect(f'/dashboard/{fid}/readfolder/')
+        notes=Note.objects.filter(folder__id=fid)
+        return JsonResponse({'noteNum':notes.count()})
 
 
 class Bookmarking:
@@ -80,11 +85,17 @@ class Bookmarking:
         return redirect(f'/dashboard/{fid}/{nid}/readnote/')
 
 
-class Taging:
+class Tagging:
     def create_tag(request, fid, nid):
         note = Note.objects.get(id=nid)
         Tag.objects.create(user=request.user, note=note, tag_name=request.POST['tagName'])
         return redirect(f'/dashboard/{fid}/{nid}/readnote/')
+
+    def read_tag(request, fid, nid, tid):
+        folder = Folder.objects.get(id=fid)
+        note = Note.objects.get(id=nid)
+        tag = Tag.objects.get(id=tid)
+        return render(request, 'appCodingNote/tag.html', {'folder': folder, 'note': note, 'tag':tag})
 
     def update_tag(request, fid, nid, tid):
         tag = Tag.objects.get(id=tid)

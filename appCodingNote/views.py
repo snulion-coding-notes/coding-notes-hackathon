@@ -95,10 +95,11 @@ class Tagging:
         return redirect(f'/dashboard/{fid}/{nid}/readnote/')
 
     def read_tag(request, tid):
-        tag = Tag.objects.get(id =tid)
+        tag = Tag.objects.get(id=tid)
         tag_name = tag.tag_name
-        tags = Tag.objects.filter(user=request.user, tag_name=tag_name)
-        return render(request, 'appCodingNote/tag.html', {'tags':tags})
+        my_notes = Note.objects.all(user=request.user)
+        my_notes_tag = my_notes.tag_set.filter(tag_name=tag_name)
+        return render(request, 'appCodingNote/tag.html', {'tags': my_notes_tag})
 
     def update_tag(request, fid, nid, tid):
         tag = Tag.objects.get(id=tid)

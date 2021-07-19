@@ -21,6 +21,7 @@ class Folder(models.Model):
 class Note(models.Model):
     author = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     bookmark_users = models.ManyToManyField(User, blank=True, related_name='bookmark_notes', through='Bookmark')
+    tag_users = models.ManyToManyField(User, blank=True, related_name='tag_notes', through='Tag')
     folder = models.ForeignKey(Folder, on_delete=models.CASCADE, related_name='notes')
     note_name = models.CharField(max_length=256)
     note_link = models.URLField()

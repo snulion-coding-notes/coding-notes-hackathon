@@ -94,11 +94,11 @@ class Tagging:
         Tag.objects.create(user=request.user, note=note, tag_name=request.POST['tagName'])
         return redirect(f'/dashboard/{fid}/{nid}/readnote/')
 
-    def read_tag(request, fid, nid, tid):
-        folder = Folder.objects.get(id=fid)
-        note = Note.objects.get(id=nid)
-        tag = Tag.objects.get(id=tid)
-        return render(request, 'appCodingNote/tag.html', {'folder': folder, 'note': note, 'tag':tag})
+    def read_tag(request, tid):
+        tag = Tag.objects.get(id =tid)
+        tag_name = tag.tag_name
+        tags = Tag.objects.filter(user=request.user, tag_name=tag_name)
+        return render(request, 'appCodingNote/tag.html', {'tags':tags})
 
     def update_tag(request, fid, nid, tid):
         tag = Tag.objects.get(id=tid)

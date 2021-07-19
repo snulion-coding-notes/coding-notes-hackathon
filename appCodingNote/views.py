@@ -124,8 +124,8 @@ class Tagging:
     def read_tag(request, tid):
         tag = Tag.objects.get(id=tid)
         tag_name = tag.tag_name
-        my_notes = Note.objects.get(author=request.user)
-        my_notes_tag = my_notes.tag_set.filter(tag_name=tag_name)
+        my_notes = Note.objects.get(author=request.user) # filter 로 쿼리셋 불러와서
+        my_notes_tag = my_notes.tag_set.filter(tag_name=tag_name) # 해당 쿼리셋에서 태그로 한 번 더 filter 하는 과정 필요
         return render(request, 'appCodingNote/tag.html', {'tags': my_notes_tag, 'tag_name': tag_name})
 
     def update_tag(request, fid, nid, tid):

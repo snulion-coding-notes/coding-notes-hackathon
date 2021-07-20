@@ -73,16 +73,12 @@ class NoteCRUD:
                 note_link_image = None
 
             note_comment = request.POST['noteComment']
-
-            Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title,
-                                note_link_image=note_link_image, note_comment=note_comment, author=request.user)
-            nid = Note.objects.get(note_name=note_name).id
-            Tag.objects.create(
-                tag_name=request.POST['tag'], user=request.user, note_id=nid)
-            # Note.objects.create(folder_id=fid, note_name=note_name, note_link_title=note_link_title, note_comment=note_comment)
-            notes = Note.objects.filter(folder__id=fid)
-            notesNum = notes.count()
-            return JsonResponse({'notesNum': notesNum, 'note_link_title': note_link_title})
+            newNote=Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user)
+            nid=newNote.id
+            Tag.objects.create(tag_name=request.POST['tag'], user=request.user, note_id=nid)
+            notes=Note.objects.filter(folder_id=fid)
+            notesNum=notes.count()
+            return JsonResponse({'notesNum':notesNum, 'note_link_title':note_link_title})
         else:
             return redirect(f'/dashboard/{fid}/readfolder/')
 
@@ -101,8 +97,8 @@ class NoteCRUD:
     def delete_note(request, fid, nid):
         note = Note.objects.get(id=nid)
         note.delete()
-        notes = Note.objects.filter(folder__id=fid)
-        return JsonResponse({'notesNum': notes.count()})
+        notes=Note.objects.filter(folder_id=fid)
+        return JsonResponse({'notesNum':notes.count()})
 
 
 class Bookmarking:

@@ -41,7 +41,7 @@ const onClickSaveButton = async folderId => {
   document.getElementById("new-comment-row").innerHTML=newCommentElement.value;
   document.getElementById("new-website-row").innerHTML=`${response.data.note_link_title}`;
   document.getElementById("new-tag-row").innerHTML=newTagElement.value;
-  document.getElementById('content-note-num').innerHtml=`${response.data.notesNum}개`;
+  document.getElementById('content-note-num').innerHTML=`${response.data.notesNum}개`;
   document.getElementById(`${folderId}-save-btn`).classList.add('hide');
 
 }

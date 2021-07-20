@@ -92,7 +92,7 @@ class NoteCRUD:
         return render(request, 'appCodingNote/note.html', {'folder': folder, 'note': note})
 
     def update_note(request, fid, nid):
-        note = Note.objects.get(id=nid)
+        note = Note.objects.filter(id=nid) #update 메서드는 querySet에 적용되므로 get대신 filter
         # note.update(note_name=request.POST['noteName'], note_link=request.POST['noteLink'], note_link_title=request.POST['noteLinkTitle'], note_comment=request.POST['noteComment'])
         note.update(note_name=request.POST['noteName'],
                     note_link_title=request.POST['noteLinkTitle'], note_comment=request.POST['noteComment'])
@@ -119,8 +119,7 @@ class Bookmarking:
 class Tagging:
     def create_tag(request, fid, nid):
         note = Note.objects.get(id=nid)
-        Tag.objects.create(user=request.user, note=note,
-                           tag_name=request.POST['tagName'])
+        Tag.objects.create(user=request.user, note=note,tag_name=request.POST['tagName'])
         return redirect(f'/dashboard/{fid}/{nid}/readnote/')
 
     def read_tag(request, tid):

@@ -52,6 +52,8 @@ class NoteCRUD:
         if request.method == 'POST':
             note_name = request.POST['noteName']
             note_link = request.POST['noteLink']
+            if not note_link.startwith('https://') :
+                note_link = 'https://' + note_link
 
             # note_link로 부터 데이터 쌓기
             headers = {
@@ -73,11 +75,10 @@ class NoteCRUD:
                 note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
 
             note_comment = request.POST['noteComment']
-            newNote = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title,
-                                          note_link_image=note_link_image, note_comment=note_comment, author=request.user)
+
+            newNote = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user)
             nid = newNote.id
-            Tag.objects.create(
-                tag_name=request.POST['tag'], user=request.user, note_id=nid)
+            Tag.objects.create(tag_name=request.POST['tag'], user=request.user, note_id=nid)
             notes = Note.objects.filter(folder_id=fid)
             notesNum = notes.count()
             return JsonResponse({'notesNum': notesNum, 'note_link_title': note_link_title})
@@ -118,15 +119,13 @@ class Bookmarking:
 class Tagging:
     def create_tag(request, fid, nid):
         note = Note.objects.get(id=nid)
-        Tag.objects.create(user=request.user, note=note,
-                           tag_name=request.POST['tagName'])
+        Tag.objects.create(user=request.user, note=note,tag_name=request.POST['tagName'])
         return redirect(f'/dashboard/{fid}/{nid}/readnote/')
 
     def read_tag(request, tid):
         tag = Tag.objects.get(id=tid)
         tag_name = tag.tag_name
-        tagged_notes = Note.objects.filter(
-            tag__tag_name=tag_name, author=request.user)
+        tagged_notes = Note.objects.filter(tag__tag_name = tag_name, author=request.user)
         return render(request, 'appCodingNote/tag.html', {'tagged_notes': tagged_notes, 'tag_name': tag_name})
 
     def update_tag(request, fid, nid, tid):

@@ -100,7 +100,6 @@ class NoteCRUD:
         notes=Note.objects.filter(folder_id=fid)
         return JsonResponse({'notesNum':notes.count()})
 
-
 class Bookmarking:
     def create_bookmark(request, fid, nid):
         note = Note.objects.get(id=nid)
@@ -115,7 +114,7 @@ class Bookmarking:
 class Tagging:
     def create_tag(request, fid, nid):
         note = Note.objects.get(id=nid)
-        Tag.objects.create(user=request.user, note=note,tag_name=request.POST['tagName'])
+        Tag.objects.create(user=request.user, note=note, tag_name=request.POST['tagName'])
         return redirect(f'/dashboard/{fid}/{nid}/readnote/')
 
     def read_tag(request, tid):

@@ -73,14 +73,16 @@ class NoteCRUD:
                 note_link_image = None
 
             note_comment = request.POST['noteComment']
-            
-            Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user)
-            nid=Note.objects.get(note_name=note_name).id
-            Tag.objects.create(tag_name=request.POST['tag'], user=request.user, note_id=nid)
+
+            Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title,
+                                note_link_image=note_link_image, note_comment=note_comment, author=request.user)
+            nid = Note.objects.get(note_name=note_name).id
+            Tag.objects.create(
+                tag_name=request.POST['tag'], user=request.user, note_id=nid)
             # Note.objects.create(folder_id=fid, note_name=note_name, note_link_title=note_link_title, note_comment=note_comment)
-            notes=Note.objects.filter(folder__id=fid)
-            notesNum=notes.count()
-            return JsonResponse({'notesNum':notesNum, 'note_link_title':note_link_title})
+            notes = Note.objects.filter(folder__id=fid)
+            notesNum = notes.count()
+            return JsonResponse({'notesNum': notesNum, 'note_link_title': note_link_title})
         else:
             return redirect(f'/dashboard/{fid}/readfolder/')
 
@@ -99,8 +101,8 @@ class NoteCRUD:
     def delete_note(request, fid, nid):
         note = Note.objects.get(id=nid)
         note.delete()
-        notes=Note.objects.filter(folder__id=fid)
-        return JsonResponse({'notesNum':notes.count()})
+        notes = Note.objects.filter(folder__id=fid)
+        return JsonResponse({'notesNum': notes.count()})
 
 
 class Bookmarking:
@@ -124,9 +126,9 @@ class Tagging:
     def read_tag(request, tid):
         tag = Tag.objects.get(id=tid)
         tag_name = tag.tag_name
-        my_notes = Note.objects.get(author=request.user) # filter 로 쿼리셋 불러와서
-        my_notes_tag = my_notes.tag_set.filter(tag_name=tag_name) # 해당 쿼리셋에서 태그로 한 번 더 filter 하는 과정 필요
-        return render(request, 'appCodingNote/tag.html', {'tags': my_notes_tag, 'tag_name': tag_name})
+        tagged_notes = Note.objects.filter(
+            tag__tag_name=tag_name, author=request.user)
+        return render(request, 'appCodingNote/tag.html', {'tagged_notes': tagged_notes, 'tag_name': tag_name})
 
     def update_tag(request, fid, nid, tid):
         tag = Tag.objects.get(id=tid)
@@ -138,9 +140,11 @@ class Tagging:
         tag.delete()
         return redirect(f'/dashboard/{fid}/{nid}/readnote/')
 
+
 class Search:
     def loginSearch(request):
         return render()
+
 
 class chromeExtension:
     @csrf_exempt
@@ -154,8 +158,10 @@ class chromeExtension:
             fid = Folder.objects.get(folder_name=folder_name).id
         except:
             Folder.objects.create(folder_name=folder_name, author=request.user)
-            fid=Folder.objects.get(folder_name=folder_name).id
-        Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_comment=note_comment, author=request.user)
-        nid=Note.objects.get(note_name=note_name).id
-        Tag.objects.create(tag_name=request.POST['noteTag'], user=request.user, note_id=nid)
+            fid = Folder.objects.get(folder_name=folder_name).id
+        Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link,
+                            note_link_title=note_link_title, note_comment=note_comment, author=request.user)
+        nid = Note.objects.get(note_name=note_name).id
+        Tag.objects.create(
+            tag_name=request.POST['noteTag'], user=request.user, note_id=nid)
         return render(request, 'appCodingNote/index.html')

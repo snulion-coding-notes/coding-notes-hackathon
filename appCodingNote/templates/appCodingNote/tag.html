@@ -29,7 +29,7 @@
     </div>
 
     <!-- Tag 불러오기 -->
-    <div class="title-header content">
+    <div class="title-header">
       <div class="tag-title">
         {% comment %} <input id="tag-name-input" value={{ tag_name }} onkeyup="checkSize()" maxlength="10" disabled></input> {% endcomment %}
         <h2>{{ tag_name }}</h2>
@@ -37,16 +37,16 @@
         <button class="tag-delete-btn"></button>
       </div>
     </div>
-    <div class="card-container content">
-      {% for tag in tags %}
+    <div class="card-container">
+      {% for note in tagged_notes %}
         <section class="card-content">
           <div class="note-image">
-            <img src={{ tag.note.note_link_image }} alt="note image">
-            <p>{{ tag.note.note_link_title }}</p>
+            <img src={{ note.note_link_image }} alt="note image">
           </div>
           <div class="note-info">
-            <p class="note-name">{{ tag.note }}</p>
-            <p class="note-tag">{{ tag.tag_name }}</p>
+            <p class="note-name">{{ note.note_name }}</p>
+            <!-- TODO : 태그 여러 개일 경우 태그를 보여줘야 함 -->
+            {% comment %} <p class="note-tag">{{ note.tag_set }}</p> {% endcomment %}
           </div>
         </section>
       {% endfor %}

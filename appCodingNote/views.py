@@ -52,7 +52,7 @@ class NoteCRUD:
         if request.method == 'POST':
             note_name = request.POST['noteName']
             note_link = request.POST['noteLink']
-            if not note_link.startwith('https://') :
+            if not note_link.startswith('https://') :
                 note_link = 'https://' + note_link
 
             # note_link로 부터 데이터 쌓기

@@ -18,7 +18,7 @@ const onClickAddButton = (folderId) =>{
   newTableSaveButton.setAttribute("class","save");
   newTableSaveButton.setAttribute("id",`${folderId}-save-btn`);
   newTableSaveButton.setAttribute("onclick",`onClickSaveButton(${folderId})`);
-  newTableSaveButton.innerHTML='save';
+  newTableSaveButton.innerHTML='<img class="save-img" src="/static/img/save-update.png" />';
 
   newTableAction.append(newTableSaveButton);
   noteElement.appendChild(newTabletr);
@@ -41,7 +41,7 @@ const onClickSaveButton = async folderId => {
   document.getElementById("new-comment-row").innerHTML=newCommentElement.value;
   document.getElementById("new-website-row").innerHTML=`${response.data.note_link_title}`;
   document.getElementById("new-tag-row").innerHTML=newTagElement.value;
-  document.getElementById('content-note-num').innerHtml=`${response.data.notesNum}개`;
+  document.getElementById('content-note-num').innerHTML=`${response.data.notesNum}개`;
   document.getElementById(`${folderId}-save-btn`).classList.add('hide');
 
 }
@@ -56,7 +56,7 @@ const onClickEditButton =async (folderId, noteId,noteName,noteComment,noteLinkTi
   linkElement.innerHTML=`<input id="edit-link-${noteId}" type="text", value="${noteLinkTitle}" name="link-title"></input>`;
   const tagElement=document.getElementById(`note-tag-${noteId}`);
   tagElement.innerHTML=`<input id="edit-tag-${noteId}" type="text", value="${noteName}" name="tag"></input>`;
-  document.getElementById(`note-action-${noteId}`).innerHTML=`<button class="update" id="${noteId}-update-btn" onclick="onClickUpdateButton(${folderId},${noteId})">Update</button>`
+  document.getElementById(`note-action-${noteId}`).innerHTML=`<button class="update" id="${noteId}-update-btn" onclick="onClickUpdateButton(${folderId},${noteId})"><img class="update-img" src="/static/img/save-update.png" /></button>`
 }
 
 const onClickUpdateButton=async(folderId, noteId) => {
@@ -89,7 +89,6 @@ const onClickDeleteButton=async(folderId,noteId) => {
     document.getElementById(`each-note-${noteId}`).remove();
     document.getElementById('content-note-num').innerHTML=`${response.data.notesNum}개`;
   }
-  
 
 }
 

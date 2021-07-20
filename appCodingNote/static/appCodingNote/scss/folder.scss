@@ -19,6 +19,7 @@ $yellow: #ffdd29;
   margin-left: 16px;
   font-size: 17px;
   height: 40px;
+  width:250px; //list-view input width 설정으로 인해 topnav input width도 별도 설정
 }
 
 .topnav .search-container button{
@@ -54,20 +55,22 @@ main {
   justify-content:space-between;
   align-items:center;
 }
-.card-view{
-  margin-right:20px;
-  width:30px;
-  height:30px;
-  background-color: $light-gray;
-  float:right;
+.list-view{
+
+  .list-view-img{
+    width:30px;
+    height:30px;
+  }
 }
 
-.table-view{
-  margin-right:0px;
-  width:30px;
-  height:30px;
-  background-color: $dark-gray;
+.card-view{
+  margin-right:70px;
   float:right;
+
+  .card-view-img{
+    width:30px;
+    height:30px;
+  }
 }
 
 .table{
@@ -85,6 +88,7 @@ main {
       text-align: center;
       border-top:solid 2px $black-gray;
       border-bottom:solid 2px $black-gray;
+
     }
     td{
       border:0px;
@@ -104,11 +108,32 @@ main {
   }
 }
 
+.thead-name{
+  max-width:100px;
+}
+
+.thead-comment{
+  max-width:150px;
+}
+
+.thead-website{
+  max-width:80px;
+}
+
+.thead-tag{
+  max-width:100px;
+}
+
+.table-hide{
+  width:40px;
+}
+
 
 .add{
-  padding: 10px;
+  width:45px;
+  font-size:12px;
   border-radius:10px;
-  height:30px;
+  height:25px;
   line-height:75%;
   background:none;
   color:$black-gray;
@@ -119,6 +144,20 @@ main {
   }
 }
 
+input{
+  border:0;
+  border-bottom:1px solid $dark-gray;
+  outline:none;
+  cursor:default;
+  width:95%;
+  margin:auto;
+  position:relative;
+
+  &:focus{
+    border-bottom:2px solid $yellow;
+    transition:0.3s;
+  }
+}
 
 // .add{
 //   float: right;
@@ -146,11 +185,47 @@ main {
 // }
 
 .save, .edit, .delete, .update{
-  background: $medium-gray;
-  color: $black-gray;
-  font-size:20px;
   
   &.hide{
     display:none;
   }
+}
+
+.edit-img, .delete-img, {
+  width:17px;
+  margin:0px 0px 0px 5px;
+
+  &:hover{
+    filter:opacity(.5) drop-shadow(0 0 0 red);
+  }
+}
+
+.update-img, .save-img{
+  width:17px;
+  margin:0px 0px 0px 5px;
+
+  &:hover{
+    filter:opacity(.5) drop-shadow(0 0 0 green);
+  }
+}
+
+.card{
+  width:90%;
+  display:inline-flex;
+}
+
+.card-item-container{
+  height: 200px;
+	width: 200px;
+  margin:15px 10px 15px 30px;
+  box-shadow:5px 5px 10px $medium-gray, -5px -5px 10px $light-gray;
+}
+
+.card-body-image{
+  height:120px;
+}
+
+.card-body-description{
+  background-color: $light-gray;
+  height:60px;
 }

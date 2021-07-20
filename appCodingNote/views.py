@@ -34,7 +34,8 @@ class FolderCRUD:
     def read_folder(request, fid):
         folder = Folder.objects.get(id=fid)
         notes = Note.objects.filter(folder__id=fid)
-        return render(request, 'appCodingNote/folder.html', {'folder': folder, 'notes': notes})
+        my_folders = Folder.objects.filter(author=request.user)
+        return render(request, 'appCodingNote/folder.html', {'folder': folder, 'notes': notes, 'my_folders':my_folders})
 
     def update_folder(request, fid):
         folder = Folder.objects.get(id=fid)

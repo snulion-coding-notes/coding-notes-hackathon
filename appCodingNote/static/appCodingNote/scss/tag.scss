@@ -1,0 +1,93 @@
+@import "./colors.scss";
+
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-left: 250px;
+  width: calc(100% - 250px);
+  height: 100%;
+}
+
+.title-header {
+  margin-bottom: 20px;
+  margin-left: 60px;
+}
+
+.tag-title-header {
+  display: flex;
+}
+
+.tag-title {
+  display: flex;
+  align-items: center;
+
+  input {
+    border: none;
+    font-size: 30px;
+    font-weight: 700;
+    margin-right: 15px;
+    color: black;
+    background: none;
+  }
+
+  button {
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    padding: 5px;
+  }
+}
+
+h2 {
+  font-size: 30px;
+  font-weight: 700;
+  margin-right: 15px;
+}
+
+.tag-edit-btn {
+  background-image: url(../../img/edit.png);
+  margin: 0 5px;
+}
+
+.tag-delete-btn {
+  background-image: url(../../img/delete.png);
+  margin: 0 5px 2px 5px;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: 35px;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  height: 400px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  margin: 0 25px;
+}
+
+.note-image {
+  height: 280px;
+  background-color: white;
+}
+
+.note-info {
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: $light-gray;
+
+  p {
+    margin: 0 10px 10px 20px;
+  }
+}
+
+.note-name {
+  font-size: 23px;
+}

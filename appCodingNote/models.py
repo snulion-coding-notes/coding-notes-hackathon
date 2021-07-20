@@ -29,7 +29,7 @@ class Note(models.Model):
     note_link = models.URLField()
     note_link_title = models.CharField(max_length=256, blank=True, null=True) 
     note_link_image = models.URLField(blank=True, null=True) 
-    note_comment = models.TextField()
+    note_comment = models.TextField(blank=True, null=True) 
     note_created_at = models.DateTimeField(default=timezone.now)
     note_updated_at = models.DateTimeField(blank=True, null=True) 
 

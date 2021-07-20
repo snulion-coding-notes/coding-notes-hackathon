@@ -2,7 +2,7 @@
 
 {% load static %}
 {% load sass_tags %}
-
+{% load folder_cover %}
 {% block style %}
   <link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/dashboard-header.scss' %}">
   <link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/dashboard.scss' %}">
@@ -34,7 +34,7 @@
           {% for folder in my_folders %}
             <div class="notebook">
               <a href={% url 'appCodingNote:read_folder' folder.id %}>
-                <img src="{% static 'img/blue-note.png' %}" alt="note">
+                <img src="{% get_static_prefix %}img/{{folder.id|modulo}}-note.png" alt="note">
               </a>
               <p>{{ folder.folder_name }}</p>
             </div>

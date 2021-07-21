@@ -173,8 +173,11 @@ class Search:
                 elif search_type == 'name':
                     search_note_list=note_list.filter(note_name=search_keyword)
                 elif search_type == 'tag':
-                    search_note_list=note_list.filter(tag__tag_name=search_keyword)    
-            return render(request, 'appCodingNote/login-search.html', {'note': search_note_list})
+                    search_note_list=note_list.filter(tag__tag_name=search_keyword)
+
+            my_search_note_list=search_note_list.filter(author=request.user)
+            other_search_note_list=search_note_list.exclude(author=request.user)
+            return render(request, 'appCodingNote/login-search.html', {'myNote': my_search_note_list, 'otherNote': other_search_note_list})
 
 
 class chromeExtension:

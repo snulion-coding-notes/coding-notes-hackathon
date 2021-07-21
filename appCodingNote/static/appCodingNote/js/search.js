@@ -6,6 +6,5 @@ const loginSearch = async () => {
                     data.append("keyword", searchInputElement.value);
                     data.append("type", searchTypeElement.value);
                     const response=await axios.post('/codingnote/dashboard/search/', data);
-                    console.log(response);
           }
 }

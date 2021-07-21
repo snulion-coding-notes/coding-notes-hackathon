@@ -36,12 +36,13 @@
     <!-- dashboard-header.scss 파일이랑 같이 복붙하기 -->
 
     <!-- Tag 섹션 -->
-    <div class="title-header">
+    <div class="title-header" onmouseover="showBtns()" onmouseout="hideBtns()">
       <div id="tag-title" class="tag-title">
-        {% comment %} <input id="tag-name-input" value={{ tag_name }} onkeyup="checkSize()" maxlength="10" disabled></input> {% endcomment %}
-        <h2>{{ tag_name }}</h2>
-        <button class="tag-edit-btn tag-title-btn"></button>
-        <button class="tag-delete-btn tag-title-btn"></button>
+        <h2 id="tag-name">{{ tag_name }}</h2>
+        <button class="tag-edit-btn edit-delete-btn hide" onclick="editTagName('{{ tag_name }}')"></button>
+        <!-- Tag Update, Tag Delete 함수 만들어서 연결 -->
+        <button class="tag-delete-btn edit-delete-btn hide" onclick="deleteTag('{{ tag_name }}')"></button>
+        <button id="edit-done-btn" class="edit-done-btn tag-title-btn hide" onclick="updateTag()"></button>
       </div>
     </div>
 
@@ -63,21 +64,12 @@
           </a>
           <div class="note-info">
             <p class="note-name">{{ note.note_name }}</p>
-            <!-- TODO : 태그 여러 개일 경우 태그를 보여줘야 함 -->
             <p class="note-comment">{{ note.note_comment }}</p>
-            <p class="note-tag">{{ note.tag_set }}</p>
+            <!-- TODO : 태그 여러 개일 경우 태그를 보여줘야 함 -->
+            {% comment %} <p class="note-tag">{{ note.tag_set.all }}</p> {% endcomment %}
           </div>
         </section>
       {% endfor %}
-
-      <!-- New Tag -->
-      {% comment %} <form>
-        {% csrf_token %}
-        <button type="submit">
-          <img src="{% static 'img/add-folder.png' %}" alt="add folder">
-        </button>
-        <input class ="folder-new-input" type="text" placeholder="새 폴더명" name="folderName"/>
-      </form> {% endcomment %}
     </div>
   </main>
 {% endblock content_dashboard %}

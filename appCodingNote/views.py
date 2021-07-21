@@ -1,12 +1,16 @@
-import json
 from django.http.response import JsonResponse
 from django.shortcuts import render, redirect
 from .models import Folder, Note, Bookmark, Tag
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib import messages
+from django.db.models import Q
 import requests
 from bs4 import BeautifulSoup
 from django.contrib.auth.models import User
 from django.contrib import auth
+
+# TODO : Tag 모델 수정 후 my_tags 있는 부분 수정 필요할 시 수정해야 함 for sidebar (210721)
+
 
 def index(request):
     cur_user = request.user
@@ -42,7 +46,8 @@ class FolderCRUD:
         folder = Folder.objects.get(id=fid)
         notes = Note.objects.filter(folder__id=fid)
         my_folders = Folder.objects.filter(author=request.user)
-        return render(request, 'appCodingNote/folder.html', {'folder': folder, 'notes': notes, 'my_folders':my_folders})
+        my_tags = Tag.objects.filter(user=request.user)
+        return render(request, 'appCodingNote/folder.html', {'folder': folder, 'notes': notes, 'my_folders': my_folders, 'my_tags': my_tags})
 
     def update_folder(request, fid):
         folder = Folder.objects.filter(id=fid)
@@ -60,7 +65,7 @@ class NoteCRUD:
         if request.method == 'POST':
             note_name = request.POST['noteName']
             note_link = request.POST['noteLink']
-            if not note_link.startswith('https://') :
+            if not note_link.startswith('https://'):
                 note_link = 'https://' + note_link
 
             # note_link로 부터 데이터 쌓기
@@ -83,10 +88,11 @@ class NoteCRUD:
                 note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
 
             note_comment = request.POST['noteComment']
-            newNote = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user)
+            newNote = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title,
+                                          note_link_image=note_link_image, note_comment=note_comment, author=request.user)
             nid = newNote.id
             Tagging.create_tag(nid)
-            notes = Note.objects.filter(folder_id=fid)      
+            notes = Note.objects.filter(folder_id=fid)
             notesNum = notes.count()
             return JsonResponse({'notesNum': notesNum, 'note_link_title': note_link_title, 'note_link':note_link})
         else:
@@ -102,7 +108,8 @@ class NoteCRUD:
         # update 메서드는 querySet에 적용되므로 get대신 filter
         note = Note.objects.filter(id=nid)
         # note.update(note_name=request.POST['noteName'], note_link=request.POST['noteLink'], note_link_title=request.POST['noteLinkTitle'], note_comment=request.POST['noteComment'])
-        note.update(note_name=request.POST['noteName'], note_link_title=request.POST['noteLinkTitle'], note_comment=request.POST['noteComment'])
+        note.update(note_name=request.POST['noteName'],
+                    note_link_title=request.POST['noteLinkTitle'], note_comment=request.POST['noteComment'])
         return redirect(f'/dashboard/{fid}/readfolder/')
 
     def delete_note(request, fid, nid):
@@ -115,24 +122,32 @@ class NoteCRUD:
 class Bookmarking:
     def create_bookmark(request, fid, nid):
         note = Note.objects.get(id=nid)
-        is_bookmarking = note.bookmark_set.filter(user_id=request.user.id)
-        if is_bookmarking:
+
+        if note.bookmark_set.filter(user_id=request.user.id).count():
             note.bookmark_set.get(user=request.user).delete()
         else:
             Bookmark.objects.create(user=request.user, note=note)
-        return redirect(f'/dashboard/{fid}/{nid}/readnote/')
+
+        is_bookmarking = note.bookmark_set.filter(
+            user_id=request.user.id).count()
+
+        return JsonResponse({'isBookmarking': is_bookmarking})
 
 
 class Tagging:
     def create_tag(request, nid):
         note = Note.objects.get(id=nid)
-        Tag.objects.create(user=request.user, note=note,tag_name=request.POST['tagName'])
+        Tag.objects.create(user=request.user, note=note,
+                           tag_name=request.POST['tagName'])
 
     def read_tag(request, tid):
         tag = Tag.objects.get(id=tid)
         tag_name = tag.tag_name
-        tagged_notes = Note.objects.filter(tag__tag_name = tag_name, author=request.user)
-        return render(request, 'appCodingNote/tag.html', {'tagged_notes': tagged_notes, 'tag_name': tag_name})
+        tagged_notes = Note.objects.filter(
+            tag__tag_name=tag_name, author=request.user)
+        my_folders = Folder.objects.filter(author=request.user)
+        my_tags = Tag.objects.filter(user=request.user)
+        return render(request, 'appCodingNote/tag.html', {'tagged_notes': tagged_notes, 'tag_name': tag_name, 'my_folders': my_folders, 'my_tags': my_tags})
 
     def update_tag(request, fid, nid, tid):
         tag = Tag.objects.get(id=tid)
@@ -147,7 +162,22 @@ class Tagging:
 
 class Search:
     def loginSearch(request):
-        return render()
+        search_keyword = request.POST.get('keyword', '')
+        search_type = request.POST.get('type', '')
+        note_list = Note.objects.order_by('-id') 
+    
+        if search_keyword :
+            if len(search_keyword) > 1 :
+                if search_type == 'name-and-tag':
+                    search_note_list=note_list.filter(Q (note_name=search_keyword) | Q (tag__tag_name=search_keyword))
+                elif search_type == 'name':
+                    search_note_list=note_list.filter(note_name=search_keyword)
+                elif search_type == 'tag':
+                    search_note_list=note_list.filter(tag__tag_name=search_keyword)
+
+            my_search_note_list=search_note_list.filter(author=request.user)
+            other_search_note_list=search_note_list.exclude(author=request.user)
+            return render(request, 'appCodingNote/login-search.html', {'myNote': my_search_note_list, 'otherNote': other_search_note_list})
 
 
 class chromeExtension:

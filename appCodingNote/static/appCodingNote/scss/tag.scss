@@ -21,6 +21,7 @@ main {
 .tag-title {
   display: flex;
   align-items: center;
+  height: 45px;
 
   input {
     border: none;
@@ -29,6 +30,13 @@ main {
     margin-right: 15px;
     color: black;
     background: none;
+    border-bottom: solid;
+    border-color: $yellow;
+    width: 300px;
+
+    & ::placeholder {
+      color: black;
+    }
   }
 
   button {
@@ -54,6 +62,20 @@ h2 {
 .tag-delete-btn {
   background-image: url(../../img/delete.png);
   margin: 0 5px 2px 5px;
+}
+
+.edit-done-btn {
+  background-image: url(../../img/save-update.png);
+}
+
+.hide {
+  visibility: hidden;
+}
+
+.edit-delete-btn {
+  &:hover {
+    filter: opacity(0.5) drop-shadow(0 0 0 $edit-btn-orange);
+  }
 }
 
 .card-container {
@@ -109,7 +131,10 @@ h2 {
   background-color: $light-gray;
 
   p {
-    margin: 0 10px 10px 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin: 0 20px 10px 20px;
   }
 }
 

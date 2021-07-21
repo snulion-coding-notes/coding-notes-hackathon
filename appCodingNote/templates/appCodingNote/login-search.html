@@ -1,0 +1,56 @@
+{% extends 'sidebar.html' %} 
+{% load static %} 
+{% load sass_tags %} 
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/folder.scss' %}"/>
+<link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/dashboard-header.scss' %}">
+{% endblock style %} 
+{% block content_dashboard %}
+<main>
+  <!-- Search Bar -->
+    <div class="dashboard-header">
+      <div class="search-container">
+        <div class="search-bar">
+          {% csrf_token %}
+          <input id="keyword" type="text" placeholder="제목, 태그로 검색">
+          <button onclick="loginSearch()">
+            <img src="{% static 'img/search.png' %}" alt="search icon">
+          </button>
+        </div>
+      </div>
+      <div class="greeting">
+        <p>{{ user.username }}님, 안녕하세요!</p>
+      </div>
+    </div>
+    {% for note in myNote %}
+    <div class="card-item-container">
+      <div class="card-header">
+        <div class="card-header-bookmark">북마크</div>
+      </div>
+      <div class="card-body">
+        <div class="card-body-image">이미지</div>
+        <div class="card-body-description">
+          <div class="card-body-noteName">{{note.note_name}}</div>
+          <div class="card-body-Tags">#Tags</div>
+        </div>
+      </div>
+    {% endfor %}
+    {% for note in otherNote %}
+    <div class="card-item-container">
+      <div class="card-header">
+        <div class="card-header-bookmark">북마크</div>
+      </div>
+      <div class="card-body">
+        <div class="card-body-image">이미지</div>
+        <div class="card-body-description">
+          <div class="card-body-noteName">{{note.note_name}}</div>
+          <div class="card-body-Tags">#Tags</div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <script src="//code.jquery.com/jquery.min.js"></script>
+  <script src="{% static 'appCodingNote/js/folder.js' %}"></script>
+  {%endblock%}
+</main>

@@ -68,8 +68,12 @@ function saveNote(){
             switch (result) {
                 case true:
                     processResponse(result);
+                    window.close();
+                    alert("저장되었습니다.");
                     break;
                 default:
+                    window.close();
+                    alert("저장되었습니다.");
                     
             }
         },

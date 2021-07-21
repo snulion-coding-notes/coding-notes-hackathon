@@ -2,6 +2,8 @@ from django.http.response import JsonResponse
 from django.shortcuts import render, redirect
 from .models import Folder, Note, Bookmark, Tag
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib import messages
+from django.db.models import Q
 import requests
 from bs4 import BeautifulSoup
 from django.contrib.auth.models import User
@@ -160,7 +162,19 @@ class Tagging:
 
 class Search:
     def loginSearch(request):
-        return render()
+        search_keyword = request.POST.get('keyword', '')
+        search_type = request.POST.get('type', '')
+        note_list = Note.objects.order_by('-id') 
+    
+        if search_keyword :
+            if len(search_keyword) > 1 :
+                if search_type == 'name-and-tag':
+                    search_note_list=note_list.filter(Q (note_name=search_keyword) | Q (tag__tag_name=search_keyword))
+                elif search_type == 'name':
+                    search_note_list=note_list.filter(note_name=search_keyword)
+                elif search_type == 'tag':
+                    search_note_list=note_list.filter(tag__tag_name=search_keyword)    
+            return render(request, 'appCodingNote/login-search.html', {'note': search_note_list})
 
 
 class chromeExtension:

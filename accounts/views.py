@@ -1,13 +1,19 @@
-from django.http.response import JsonResponse
+from re import M
+from django.core.checks import messages
+from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import auth
+from django import forms
 
 
 # Create your views here.
 def signup(request):
     if request.method == 'POST':
         if request.POST['password1'] == request.POST['password2']:
+            if User.objects.filter(username=request.POST['username']).exists():
+                message = "이미 사용중인 아이디입니다."
+                return render(request, 'appCodingNote/index.html', {'message': message})
             user = User.objects.create_user(
                 username=request.POST['username'], password=request.POST['password1'], email=request.POST['email'])
             auth.login(request, user)
@@ -29,7 +35,7 @@ def signin(request):
                 return redirect('/codingnote/dashboard')
             else:
                 message = "패스워드가 올바르지 않습니다."
-                return render(request, {'message': message})
+                return render(request, 'appCodingNote/index.html', {'message': message})
                 # return JsonResponse({'message': message})
         else:
             message = "아이디가 올바르지 않습니다."

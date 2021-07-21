@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <!-- Tag 불러오기 -->
+    <!-- Tag 섹션 -->
     <div class="title-header">
       <div class="tag-title">
         {% comment %} <input id="tag-name-input" value={{ tag_name }} onkeyup="checkSize()" maxlength="10" disabled></input> {% endcomment %}
@@ -37,16 +37,24 @@
         <button class="tag-delete-btn"></button>
       </div>
     </div>
+
+    <!-- Tag 카드 -->
     <div class="card-container">
       {% for note in tagged_notes %}
         <section class="card-content">
+          <div class="bookmark-section">
+            <button class="bookmark-btn">
+              <img src="{% static 'img/star-empty.png' %}" alt="bookmark">
+            </button>
+          </div>
           <div class="note-image">
             <img src={{ note.note_link_image }} alt="note image">
           </div>
           <div class="note-info">
             <p class="note-name">{{ note.note_name }}</p>
             <!-- TODO : 태그 여러 개일 경우 태그를 보여줘야 함 -->
-            {% comment %} <p class="note-tag">{{ note.tag_set }}</p> {% endcomment %}
+            <p class="note-comment">{{ note.note_comment }}</p>
+            <p class="note-tag">{{ note.tag_set }}</p>
           </div>
         </section>
       {% endfor %}

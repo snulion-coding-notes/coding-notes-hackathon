@@ -5,14 +5,21 @@ from .models import Folder, Note, Bookmark, Tag
 from django.views.decorators.csrf import csrf_exempt
 import requests
 from bs4 import BeautifulSoup
-
+from django.contrib.auth.models import User
+from django.contrib import auth
 
 def index(request):
-    return render(request, 'appCodingNote/index.html')
+    cur_user = request.user
+    if cur_user.is_authenticated:
+        return render(request, 'appCodingNote/dashboard.html')
+    else:
+        return render(request, 'appCodingNote/index.html')
 
 
 def result(request):
-    return render(request, 'appCodingNote/index-search.html')
+    all_notes = Note.objects.all()
+    all_tags = Tag.objects.all()
+    return render(request, 'appCodingNote/index-search.html', {'all_notes': all_notes, 'all_tags': all_tags})
     # 인덱스 - 검색 결과 템플릿 위해 추가
 
 
@@ -53,6 +60,8 @@ class NoteCRUD:
         if request.method == 'POST':
             note_name = request.POST['noteName']
             note_link = request.POST['noteLink']
+            if not note_link.startswith('https://') :
+                note_link = 'https://' + note_link
 
             # note_link로 부터 데이터 쌓기
             headers = {
@@ -71,35 +80,37 @@ class NoteCRUD:
                 note_link_image = og_image['content']   # note_link_image 얻기
             else:
                 # note_link_image 정보를 가져 올 수 없을 경우 처리, 디폴트 이미지 필요
-                note_link_image = None
+                note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
 
             note_comment = request.POST['noteComment']
-            newNote=Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user)
-            nid=newNote.id
-            Tag.objects.create(tag_name=request.POST['tag'], user=request.user, note_id=nid)
-            notes=Note.objects.filter(folder_id=fid)
-            notesNum=notes.count()
-            return JsonResponse({'notesNum':notesNum, 'note_link_title':note_link_title})
+            newNote = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user)
+            nid = newNote.id
+            Tagging.create_tag(nid)
+            notes = Note.objects.filter(folder_id=fid)      
+            notesNum = notes.count()
+            return JsonResponse({'notesNum': notesNum, 'note_link_title': note_link_title})
         else:
             return redirect(f'/dashboard/{fid}/readfolder/')
 
     def read_note(request, fid, nid):
         folder = Folder.objects.get(id=fid)
         note = Note.objects.get(id=nid)
-        return render(request, 'appCodingNote/note.html', {'folder': folder, 'note': note})
+        tags = Tag.objects.filter(note__id=nid)
+        return render(request, 'appCodingNote/note.html', {'folder': folder, 'note': note, 'tags': tags})
 
     def update_note(request, fid, nid):
-        note = Note.objects.filter(id=nid) #update 메서드는 querySet에 적용되므로 get대신 filter
+        # update 메서드는 querySet에 적용되므로 get대신 filter
+        note = Note.objects.filter(id=nid)
         # note.update(note_name=request.POST['noteName'], note_link=request.POST['noteLink'], note_link_title=request.POST['noteLinkTitle'], note_comment=request.POST['noteComment'])
-        note.update(note_name=request.POST['noteName'],
-                    note_link_title=request.POST['noteLinkTitle'], note_comment=request.POST['noteComment'])
+        note.update(note_name=request.POST['noteName'], note_link_title=request.POST['noteLinkTitle'], note_comment=request.POST['noteComment'])
         return redirect(f'/dashboard/{fid}/readfolder/')
 
     def delete_note(request, fid, nid):
         note = Note.objects.get(id=nid)
         note.delete()
-        notes=Note.objects.filter(folder_id=fid)
-        return JsonResponse({'notesNum':notes.count()})
+        notes = Note.objects.filter(folder_id=fid)
+        return JsonResponse({'notesNum': notes.count()})
+
 
 class Bookmarking:
     def create_bookmark(request, fid, nid):
@@ -113,16 +124,14 @@ class Bookmarking:
 
 
 class Tagging:
-    def create_tag(request, fid, nid):
+    def create_tag(request, nid):
         note = Note.objects.get(id=nid)
-        Tag.objects.create(user=request.user, note=note, tag_name=request.POST['tagName'])
-        return redirect(f'/dashboard/{fid}/{nid}/readnote/')
+        Tag.objects.create(user=request.user, note=note,tag_name=request.POST['tagName'])
 
     def read_tag(request, tid):
         tag = Tag.objects.get(id=tid)
         tag_name = tag.tag_name
-        tagged_notes = Note.objects.filter(
-            tag__tag_name=tag_name, author=request.user)
+        tagged_notes = Note.objects.filter(tag__tag_name = tag_name, author=request.user)
         return render(request, 'appCodingNote/tag.html', {'tagged_notes': tagged_notes, 'tag_name': tag_name})
 
     def update_tag(request, fid, nid, tid):

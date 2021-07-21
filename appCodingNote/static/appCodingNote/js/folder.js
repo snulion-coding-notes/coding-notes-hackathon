@@ -18,7 +18,7 @@ const onClickAddButton = (folderId) =>{
   newTableSaveButton.setAttribute("class","save");
   newTableSaveButton.setAttribute("id",`${folderId}-save-btn`);
   newTableSaveButton.setAttribute("onclick",`onClickSaveButton(${folderId})`);
-  newTableSaveButton.innerHTML='<img class="save-img" src="/static/img/save-update.png" />';
+  newTableSaveButton.innerHTML='<img class="save-img" src="/static/img/save-update.svg" />';
 
   newTableAction.append(newTableSaveButton);
   noteElement.appendChild(newTabletr);
@@ -56,7 +56,7 @@ const onClickEditButton =async (folderId, noteId,noteName,noteComment,noteLinkTi
   linkElement.innerHTML=`<input id="edit-link-${noteId}" type="text", value="${noteLinkTitle}" name="link-title"></input>`;
   const tagElement=document.getElementById(`note-tag-${noteId}`);
   tagElement.innerHTML=`<input id="edit-tag-${noteId}" type="text", value="${noteName}" name="tag"></input>`;
-  document.getElementById(`note-action-${noteId}`).innerHTML=`<button class="update" id="${noteId}-update-btn" onclick="onClickUpdateButton(${folderId},${noteId})"><img class="update-img" src="/static/img/save-update.png" /></button>`
+  document.getElementById(`note-action-${noteId}`).innerHTML=`<button class="update" id="${noteId}-update-btn" onclick="onClickUpdateButton(${folderId},${noteId})"><img class="update-img" src="/static/img/save-update.svg" /></button>`
 }
 
 const onClickUpdateButton=async(folderId, noteId) => {

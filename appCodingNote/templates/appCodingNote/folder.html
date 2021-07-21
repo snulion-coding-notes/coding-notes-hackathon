@@ -28,9 +28,9 @@
     <div class="content-head-folder" onmouseover="folderShowButton()" onmouseout="folderHideButton()">
       <h2 id="folder-name">{{folder.folder_name}}</h2>
       <div id ="folder-action">
-        <button class="edit" id="folder-edit-btn" onClick="onClickFolderEditButton({{folder.id}},'{{folder.folder_name}}')"><img class="folder-edit-img" src="{% static 'img/edit.png' %}"/></button>
-        <button class="delete" id="folder-delete-btn" onClick="onClickFolderDeleteButton({{folder.id}})"><img class="folder-delete-img" src="{% static 'img/delete.png' %}"/></button>
-        <button class="update hide" id="folder-update-btn" onclick="onClickFolderUpdateButton({{folder.id}})"><img class="folder-update-img" src="{% static 'img/save-update.png' %}" /></button>
+        <button class="edit" id="folder-edit-btn" onClick="onClickFolderEditButton({{folder.id}},'{{folder.folder_name}}')"><img class="folder-edit-img" src="{% static 'img/edit.svg' %}"/></button>
+        <button class="delete" id="folder-delete-btn" onClick="onClickFolderDeleteButton({{folder.id}})"><img class="folder-delete-img" src="{% static 'img/delete.svg' %}"/></button>
+        <button class="update hide" id="folder-update-btn" onclick="onClickFolderUpdateButton({{folder.id}})"><img class="folder-update-img" src="{% static 'img/save-update.svg' %}" /></button>
       </div>
     </div>
   <!-- 리스트 카드 뷰 선택-->
@@ -71,14 +71,14 @@
             id="{{note.id}}-edit-btn"
             onclick="onClickEditButton({{folder.id}},{{note.id}},'{{note.note_name}}','{{note.note_comment}}','{{note.note_link_title}}')"
           >
-            <img class="edit-img" src="{% static 'img/edit.png' %}" />
+            <img class="edit-img" src="{% static 'img/edit.svg' %}" />
           </button>
           <button
             class="delete hide"
             id="{{note.id}}-delete-btn"
             onclick="onClickDeleteButton({{folder.id}},{{note.id}})"
           >
-            <img class="delete-img" src="{% static 'img/delete.png' %}" />
+            <img class="delete-img" src="{% static 'img/delete.svg' %}" />
           </button>
           
         </td>

@@ -21,6 +21,10 @@ main {
   height:20px;
   margin-left:8px;
   margin-top:8px;
+
+  &:hover{
+    filter:opacity(.5) drop-shadow(0 0 0 red);
+  }
 }
 
 h2{
@@ -131,7 +135,8 @@ h2{
 }
 
 input{
-  border:0.5mm solid $medium-gray;
+  border:none;
+  border-bottom:0.5mm solid $medium-gray;
   outline:none;
   cursor:default;
   margin:auto;
@@ -139,7 +144,8 @@ input{
   width:220px;
 
   &:focus{
-    border:0.8mm solid $yellow;
+    border:none;
+    border-bottom:0.8mm solid $yellow;
     transition:0.3s;
   }
 }

@@ -50,9 +50,9 @@ class FolderCRUD:
         return render(request, 'appCodingNote/folder.html', {'folder': folder, 'notes': notes, 'my_folders': my_folders, 'my_tags': my_tags})
 
     def update_folder(request, fid):
-        folder = Folder.objects.get(id=fid)
+        folder = Folder.objects.filter(id=fid)
         folder.update(folder_name=request.POST['folderName'])
-        return redirect(f'/dashboard/{fid}/readfolder/')
+        return redirect(f'/codingnote/dashboard/{fid}/readfolder/')
 
     def delete_folder(request, fid):
         folder = Folder.objects.get(id=fid)
@@ -94,7 +94,7 @@ class NoteCRUD:
             Tagging.create_tag(nid)
             notes = Note.objects.filter(folder_id=fid)
             notesNum = notes.count()
-            return JsonResponse({'notesNum': notesNum, 'note_link_title': note_link_title})
+            return JsonResponse({'notesNum': notesNum, 'note_link_title': note_link_title, 'note_link':note_link})
         else:
             return redirect(f'/dashboard/{fid}/readfolder/')
 

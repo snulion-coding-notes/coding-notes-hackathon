@@ -12,7 +12,12 @@
       <div class="search-container">
         <div class="search-bar">
           {% csrf_token %}
-          <input id="keyword" type="text" placeholder="제목, 태그로 검색">
+          <select name="search-option" class="search-option">
+            <option value="name-and-tag">제목 + 태그</option>
+            <option value="name">제목</option>
+            <option value="tag">태그</option>
+          </select>
+          <input id="keyword" type="text" placeholder="검색어를 입력하세요">
           <button onclick="loginSearch()">
             <img src="{% static 'img/search.png' %}" alt="search icon">
           </button>
@@ -22,13 +27,17 @@
         <p>{{ user.username }}님, 안녕하세요!</p>
       </div>
     </div>
+    <!-- dashboard-header.scss 파일이랑 같이 복붙하기 -->
   <!--본문 head-->
   <div class="content-head-container">
   <!--폴더 이름, 편집, 삭제-->
-    <div class="content-head-folder">
-      <h2 onmouseover="folderShowButton()" onmouseout="folderHideButton()">{{folder.folder_name}}</h2>
-      <button class="edit" id="folder-edit-btn"><img class="folder-edit-img" src="{% static 'img/edit.png' %}"/></button>
-      <button class="delete" id="folder-delete-btn"><img class="folder-delete-img" src="{% static 'img/delete.png' %}"/></button>
+    <div class="content-head-folder" onmouseover="folderShowButton()" onmouseout="folderHideButton()">
+      <h2 id="folder-name">{{folder.folder_name}}</h2>
+      <div id ="folder-action">
+        <button class="edit" id="folder-edit-btn" onClick="onClickFolderEditButton({{folder.id}},'{{folder.folder_name}}')"><img class="folder-edit-img" src="{% static 'img/edit.svg' %}"/></button>
+        <button class="delete" id="folder-delete-btn" onClick="onClickFolderDeleteButton({{folder.id}})"><img class="folder-delete-img" src="{% static 'img/delete.svg' %}"/></button>
+        <button class="update hide" id="folder-update-btn" onclick="onClickFolderUpdateButton({{folder.id}})"><img class="folder-update-img" src="{% static 'img/save-update.svg' %}" /></button>
+      </div>
     </div>
   <!-- 리스트 카드 뷰 선택-->
     <div class="content-head-view">
@@ -59,7 +68,7 @@
       <tr id="each-note-{{note.id}}" onmouseover="showButton({{note.id}})" onmouseout="hideButton({{note.id}})">
         <td id="note-name-{{note.id}}">{{note.note_name}}</td>
         <td id="note-comment-{{note.id}}">{{note.note_comment}}</td>
-        <td id="note-link-{{note.id}}">{{note.note_link_title}}</td>
+        <td id="note-link-{{note.id}}"><a href="{{note.note_link}}">{{note.note_link_title}}</td><a>
         <td id="note-tag-{{note.id}}">#Tags</td>
         <td id="note-action-{{note.id}}">
         
@@ -68,14 +77,14 @@
             id="{{note.id}}-edit-btn"
             onclick="onClickEditButton({{folder.id}},{{note.id}},'{{note.note_name}}','{{note.note_comment}}','{{note.note_link_title}}')"
           >
-            <img class="edit-img" src="{% static 'img/edit.png' %}" />
+            <img class="edit-img" src="{% static 'img/edit.svg' %}" />
           </button>
           <button
             class="delete hide"
             id="{{note.id}}-delete-btn"
             onclick="onClickDeleteButton({{folder.id}},{{note.id}})"
           >
-            <img class="delete-img" src="{% static 'img/delete.png' %}" />
+            <img class="delete-img" src="{% static 'img/delete.svg' %}" />
           </button>
           
         </td>

@@ -14,13 +14,18 @@ main {
 }
 .content-head-folder{
   display:inline-flex;
+  align-items:baseline;
 }
 
-.folder-edit-img, .folder-delete-img{
+.folder-edit-img, .folder-delete-img, .folder-update-img{
   width:20px;
   height:20px;
   margin-left:8px;
   margin-top:8px;
+
+  &:hover{
+    filter: invert(51%) sepia(17%) saturate(5809%) hue-rotate(2deg) brightness(98%) contrast(95%);
+  }
 }
 
 h2{
@@ -131,7 +136,8 @@ h2{
 }
 
 input{
-  border:0.5mm solid $medium-gray;
+  border:none;
+  border-bottom:0.5mm solid $medium-gray;
   outline:none;
   cursor:default;
   margin:auto;
@@ -139,7 +145,8 @@ input{
   width:220px;
 
   &:focus{
-    border:0.8mm solid $yellow;
+    border:none;
+    border-bottom:0.8mm solid $yellow;
     transition:0.3s;
   }
 }
@@ -157,7 +164,7 @@ input{
   margin: 0px 0px 0px 5px;
 
   &:hover{
-    filter:opacity(.5) drop-shadow(0 0 0 red);
+    filter: invert(51%) sepia(17%) saturate(5809%) hue-rotate(2deg) brightness(98%) contrast(95%);
   }
 }
 
@@ -166,7 +173,7 @@ input{
   margin:0px 0px 0px 5px;
 
   &:hover{
-    filter:opacity(.5) drop-shadow(0 0 0 green);
+    filter: invert(51%) sepia(17%) saturate(5809%) hue-rotate(2deg) brightness(98%) contrast(95%);
   }
 }
 

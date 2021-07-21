@@ -118,13 +118,13 @@ class NoteCRUD:
 class Bookmarking:
     def create_bookmark(request, fid, nid):
         note = Note.objects.get(id=nid)  # 북마크 했는지 판단할 노트
-        # 그 노트를 북마크 한 유저들 중 내가 있는지 -> 있으면 1, 없으면 0
-        is_bookmarking = note.bookmark_set.filter(
-            user_id=request.user.id).count()
-        if is_bookmarking:
+        
+        if note.bookmark_set.filter(user_id=request.user.id).count(): # 그 노트를 북마크 한 유저들 중 내가 있는지 -> 있으면 1, 없으면 0
             note.bookmark_set.get(user=request.user).delete()
         else:
             Bookmark.objects.create(user=request.user, note=note)
+
+        is_bookmarking = note.bookmark_set.filter(user_id=request.user.id).count()
 
         # return redirect(f'/dashboard/{fid}/{nid}/readnote/')
         return JsonResponse(

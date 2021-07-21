@@ -54,9 +54,9 @@
               <img id="bookmark-star-{{ note.id }}" src="{% static 'img/star-empty.png' %}" alt="bookmark">
             </button>
           </div>
-          <div class="note-image">
+          <a class="note-image" href={{ note.note_link }} target="_blank">
             <img src={{ note.note_link_image }} alt="note image">
-          </div>
+          </a>
           <div class="note-info">
             <p class="note-name">{{ note.note_name }}</p>
             <!-- TODO : 태그 여러 개일 경우 태그를 보여줘야 함 -->

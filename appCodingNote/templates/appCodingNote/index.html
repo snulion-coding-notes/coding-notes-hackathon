@@ -12,13 +12,14 @@
       <p class="main-title">Hey, developer!</p>
       <p class="sub-title">개발자를 위한 최고의 지식 저장소</p>
     </div>
-    <div class="search-container">
+    <form action="{% url 'appCodingNote:result' %}" method="POST" class="search-container">
       <div class="search-bar">
-        <input type="text" placeholder="제목, 태그로 검색">
-        <button onclick="location.href='codingnote/result'">
+      {% csrf_token %}
+        <input name="keyword" type="text" placeholder="제목, 태그로 검색">
+        <button value="submit" type="submit">
           <img src="{% static 'img/search.png' %}" alt="search icon">
         </button>
       </div>
-    </div>
+    </form>
   </section>
 {% endblock content %}

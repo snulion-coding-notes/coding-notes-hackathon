@@ -19,11 +19,15 @@ def index(request):
     else:
         return render(request, 'appCodingNote/index.html')
 
-
+@csrf_exempt
 def result(request):
-    all_notes = Note.objects.all()
-    all_tags = Tag.objects.all()
-    return render(request, 'appCodingNote/index-search.html', {'all_notes': all_notes, 'all_tags': all_tags})
+    notes = Note.objects.all()
+    search_keyword = request.POST.get('keyword', '')
+    if(search_keyword):
+        search_note_list=notes.filter(Q (note_name=search_keyword) | Q (tag__tag_name=search_keyword))
+        return render(request, 'appCodingNote/index-search.html', {'notes':search_note_list})
+    
+    return render(request, 'appCodingNote/index.html')
     # 인덱스 - 검색 결과 템플릿 위해 추가
 
 
@@ -163,8 +167,9 @@ class Tagging:
 class Search:
     def loginSearch(request):
         search_keyword = request.POST.get('keyword', '')
-        search_type = request.POST.get('type', '')
+        search_type = request.POST.get('search-option', '')
         note_list = Note.objects.order_by('-id') 
+        print(search_type)
     
         if search_keyword :
             if len(search_keyword) > 1 :
@@ -174,10 +179,10 @@ class Search:
                     search_note_list=note_list.filter(note_name=search_keyword)
                 elif search_type == 'tag':
                     search_note_list=note_list.filter(tag__tag_name=search_keyword)
-
-            my_search_note_list=search_note_list.filter(author=request.user)
-            other_search_note_list=search_note_list.exclude(author=request.user)
-            return render(request, 'appCodingNote/login-search.html', {'myNote': my_search_note_list, 'otherNote': other_search_note_list})
+                my_search_note_list=search_note_list.filter(author=request.user)
+                other_search_note_list=search_note_list.exclude(author=request.user)
+                return render(request, 'appCodingNote/login-search.html', {'myNote': my_search_note_list, 'otherNote': other_search_note_list})
+        return redirect('appCodingNote:dashboard')
 
 
 class chromeExtension:

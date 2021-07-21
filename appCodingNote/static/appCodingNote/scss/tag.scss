@@ -49,11 +49,13 @@ h2 {
 .tag-edit-btn {
   background-image: url(../../img/edit.png);
   margin: 0 5px;
+  visibility: hidden;
 }
 
 .tag-delete-btn {
   background-image: url(../../img/delete.png);
   margin: 0 5px 2px 5px;
+  visibility: hidden;
 }
 
 .card-container {
@@ -109,7 +111,10 @@ h2 {
   background-color: $light-gray;
 
   p {
-    margin: 0 10px 10px 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin: 0 20px 10px 20px;
   }
 }
 

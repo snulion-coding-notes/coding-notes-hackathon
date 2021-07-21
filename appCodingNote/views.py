@@ -1,4 +1,3 @@
-import json
 from django.http.response import JsonResponse
 from django.shortcuts import render, redirect
 from .models import Folder, Note, Bookmark, Tag
@@ -7,6 +6,8 @@ import requests
 from bs4 import BeautifulSoup
 from django.contrib.auth.models import User
 from django.contrib import auth
+
+# TODO : Tag 모델 수정 후 my_tags 있는 부분 수정 필요할 시 수정해야 함 for sidebar (210721)
 
 
 def index(request):
@@ -43,7 +44,8 @@ class FolderCRUD:
         folder = Folder.objects.get(id=fid)
         notes = Note.objects.filter(folder__id=fid)
         my_folders = Folder.objects.filter(author=request.user)
-        return render(request, 'appCodingNote/folder.html', {'folder': folder, 'notes': notes, 'my_folders': my_folders})
+        my_tags = Tag.objects.filter(user=request.user)
+        return render(request, 'appCodingNote/folder.html', {'folder': folder, 'notes': notes, 'my_folders': my_folders, 'my_tags': my_tags})
 
     def update_folder(request, fid):
         folder = Folder.objects.get(id=fid)
@@ -117,21 +119,17 @@ class NoteCRUD:
 
 class Bookmarking:
     def create_bookmark(request, fid, nid):
-        note = Note.objects.get(id=nid)  # 북마크 했는지 판단할 노트
-        
-        if note.bookmark_set.filter(user_id=request.user.id).count(): # 그 노트를 북마크 한 유저들 중 내가 있는지 -> 있으면 1, 없으면 0
+        note = Note.objects.get(id=nid)
+
+        if note.bookmark_set.filter(user_id=request.user.id).count():
             note.bookmark_set.get(user=request.user).delete()
         else:
             Bookmark.objects.create(user=request.user, note=note)
 
-        is_bookmarking = note.bookmark_set.filter(user_id=request.user.id).count()
+        is_bookmarking = note.bookmark_set.filter(
+            user_id=request.user.id).count()
 
-        # return redirect(f'/dashboard/{fid}/{nid}/readnote/')
-        return JsonResponse(
-            {
-                'isBookmarking': is_bookmarking
-            }
-        )
+        return JsonResponse({'isBookmarking': is_bookmarking})
 
 
 class Tagging:
@@ -145,7 +143,9 @@ class Tagging:
         tag_name = tag.tag_name
         tagged_notes = Note.objects.filter(
             tag__tag_name=tag_name, author=request.user)
-        return render(request, 'appCodingNote/tag.html', {'tagged_notes': tagged_notes, 'tag_name': tag_name})
+        my_folders = Folder.objects.filter(author=request.user)
+        my_tags = Tag.objects.filter(user=request.user)
+        return render(request, 'appCodingNote/tag.html', {'tagged_notes': tagged_notes, 'tag_name': tag_name, 'my_folders': my_folders, 'my_tags': my_tags})
 
     def update_tag(request, fid, nid, tid):
         tag = Tag.objects.get(id=tid)

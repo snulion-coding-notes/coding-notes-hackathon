@@ -1,18 +1,18 @@
 const onClickAddButton = (folderId) =>{
-  const noteElement = document.getElementById("table");
+  const noteElement = document.getElementById("table-body");
   let newTabletr=document.createElement('tr');
   let newTableName=document.createElement('td');
   newTableName.setAttribute("id","new-name-row");
-  newTableName.innerHTML=`<input id="table-name-${folderId}" type="text", placeholder="Add new", name="name"></input>`
+  newTableName.innerHTML=`<input id="table-name-${folderId}" type="text", placeholder="(필수)제목을 입력해주세요.", name="name"></input>`
   let newTableComment=document.createElement('td');
   newTableComment.setAttribute("id","new-comment-row");
-  newTableComment.innerHTML=`<input id="table-comment-${folderId}" type="text", placeholder="Add new", name="comment"></input>`
+  newTableComment.innerHTML=`<input id="table-comment-${folderId}" type="text", placeholder="(선택)코멘트를 입력해주세요.", name="comment"></input>`
   let newTableWebsite=document.createElement('td');
   newTableWebsite.setAttribute("id","new-website-row");
-  newTableWebsite.innerHTML=`<input id="table-website-${folderId}" type="text", placeholder="Add new", name="link-title"></input>`
+  newTableWebsite.innerHTML=`<input id="table-website-${folderId}" type="text", placeholder="(필수)url을 입력해주세요.", name="link-title"></input>`
   let newTableTag=document.createElement('td');
   newTableTag.setAttribute("id","new-tag-row");
-  newTableTag.innerHTML=`<input id="table-tag-${folderId}" type="text", placeholder="Add new", name="tag"></input>`;
+  newTableTag.innerHTML=`<input id="table-tag-${folderId}" type="text", placeholder="(선택)태그를 입력해주세요.", name="tag"></input>`;
   let newTableAction=document.createElement('td');
   let newTableSaveButton=document.createElement('button');
   newTableSaveButton.setAttribute("class","save");
@@ -92,6 +92,16 @@ const onClickDeleteButton=async(folderId,noteId) => {
 
 }
 
+const folderShowButton=()=>{
+  document.getElementById('folder-edit-btn').classList.remove('hide');
+  document.getElementById('folder-delete-btn').classList.remove('hide');
+}
+
+const folderHideButton=()=>{
+  document.getElementById('folder-edit-btn').classList.add('hide');
+  document.getElementById('folder-delete-btn').classList.add('hide');
+}
+
 const showButton=(noteId)=>{
   document.getElementById(`${noteId}-edit-btn`).classList.remove('hide');
   document.getElementById(`${noteId}-delete-btn`).classList.remove('hide');
@@ -100,4 +110,23 @@ const showButton=(noteId)=>{
 const hideButton=(noteId)=>{
   document.getElementById(`${noteId}-edit-btn`).classList.add('hide');
   document.getElementById(`${noteId}-delete-btn`).classList.add('hide');
+}
+
+
+const onClickViewButton=(event)=>{
+  //click한 마우스 커서 위치에 따라 view 이미지 변경
+  const img=document.getElementById('view-select');
+  const imgWidth=img.offsetWidth;
+  const x=event.pageX - img.offsetLeft;
+    const listOn=()=>{
+      console.log('리스트')
+      document.getElementById('list-view').classList.remove('hide');
+      document.getElementById('card-view').classList.add('hide');
+    }
+    const cardOn=()=>{
+      console.log('카드')
+      document.getElementById('list-view').classList.add('hide');
+      document.getElementById('card-view').classList.remove('hide');
+    }
+  x<imgWidth/2 ? listOn() : cardOn();
 }

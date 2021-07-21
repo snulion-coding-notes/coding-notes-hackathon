@@ -4,185 +4,146 @@ $medium-gray: #9b9898;
 $light-gray: #eaeaea;
 $yellow: #ffdd29;
 
-.topnav {
-  overflow: hidden;
-  background-color: #e9e9e9;
-  height: 60px;
-}
-
-.topnav input[type=text] {
-  float: left;
-  padding: 6px;
-  border: none;
-  border-radius:5px 0px 0px 5px;
-  margin-top: 8px;
-  margin-left: 16px;
-  font-size: 17px;
-  height: 40px;
-  width:250px; //list-view input width 설정으로 인해 topnav input width도 별도 설정
-}
-
-.topnav .search-container button{
-  float: left;
-  width: 50px;
-  border-radius:0px 5px 5px 0px;
-  height: 40px;
-  padding: 6px 10px;
-  margin-top: 8px;
-  margin-left: 0px;
-  background: #ddd;
-  font-size: 17px;
-  border: none;
-  cursor: pointer;
-
-  &:hover{
-    background-color:$yellow;
-  }
-}
-
-
-.fa{
-  font-size:25px;
-  margin:auto;
-}
-
 main {
   margin-left:250px;
 }
 
-.content-title-container{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+.content-head-container{
+  width:90%;
+  margin-left:35px;
 }
-.list-view{
-
-  .list-view-img{
-    width:30px;
-    height:30px;
-  }
+.content-head-folder{
+  display:inline-flex;
 }
 
-.card-view{
-  margin-right:70px;
+.folder-edit-img, .folder-delete-img{
+  width:20px;
+  height:20px;
+  margin-left:8px;
+  margin-top:8px;
+}
+
+h2{
+  font-size:30px;
+  font-weight:700;
+  margin-right:7px;
+}
+
+.content-head-view{
   float:right;
+  margin-top:15px;
+  
 
-  .card-view-img{
-    width:30px;
-    height:30px;
+    .view-select-img{
+      width:65px;
+    }
+}
+
+.content-head-notesNum{
+  width:100%;
+  margin-top:10px;
+  #content-note-num{
+    float:right;
   }
+}
+
+.content-body-container{
+  margin-top:40px;
+  width:90%;
+  margin-left:35px;
 }
 
 .table{
-  width: 90%;
-  margin:auto;
+  border-collapse:collapse;
+  width:100%;
+  margin:0px;
+  padding:0px;
   thead{
-    th{
-      margin:0px;
-      padding: 10px 10px;
-      background: none;
-      font-size: 20px;
-      vertical-align: middle;
-      color: $black-gray;
-      font-weight: bold;
-      text-align: center;
-      border-top:solid 2px $black-gray;
-      border-bottom:solid 2px $black-gray;
-
-    }
-    td{
-      border:0px;
+      th{
+        margin-top:5px;
+        padding: 10px 10px;
+        background: none;
+        font-size: 20px;
+        vertical-align: middle;
+        color: $black-gray;
+        font-weight: bold;
+        text-align: center;
+        border-top:solid 0.7mm $black-gray;
+        border-bottom:solid 0.7mm $black-gray;
     }
   }
   tbody{
-    tr{
       td{
-        border:0px;
         padding: 5px 0px 5px 10px;
         background: none;
         font-size: 14px;
         vertical-align:middle;
         overflow: hidden;
-      }
+        border-bottom: solid 0.2mm $medium-gray;
+        height:50px;
+        max-width:200px;
+    }
+  }
+  tfoot{
+    td{
+      height:60px;
+      border-bottom: solid 0.4mm $medium-gray;
     }
   }
 }
 
-.thead-name{
-  max-width:100px;
-}
+// .thead-name{
+//   max-width:100px;
+// }
 
-.thead-comment{
-  max-width:150px;
-}
+// .thead-comment{
+//   max-width:150px;
+// }
 
-.thead-website{
-  max-width:80px;
-}
+// .thead-website{
+//   max-width:80px;
+// }
 
-.thead-tag{
-  max-width:100px;
-}
+// .thead-tag{
+//   max-width:100px;
+// }
 
-.table-hide{
-  width:40px;
+.thead-action{
+  width:60px;
 }
 
 
 .add{
-  width:45px;
-  font-size:12px;
-  border-radius:10px;
+  margin-left:20px;
+  margin-top:30px;
+  font-size:20px;
   height:25px;
   line-height:75%;
   background:none;
-  color:$black-gray;
-  border:2px solid $black-gray;
+  color:$medium-gray;
+  font-weight:700;
 
   &:hover{
-    background-color:$yellow
+    color:$dark-gray;
+    font-weight:700;
+    cursor:pointer;
   }
 }
 
 input{
-  border:0;
-  border-bottom:1px solid $dark-gray;
+  border:0.5mm solid $medium-gray;
   outline:none;
   cursor:default;
-  width:95%;
   margin:auto;
-  position:relative;
+  height:30px;
+  width:220px;
 
   &:focus{
-    border-bottom:2px solid $yellow;
+    border:0.8mm solid $yellow;
     transition:0.3s;
   }
 }
 
-// .add{
-//   float: right;
-//   background: transparent;
-//   border: 1px solid #ffffff;
-//   color: #ffffff;
-//   font-size: 13px;
-//   padding: 0;
-//   padding: 3px 5px;
-//   cursor: pointer;
-  
-//   &:hover{
-//     background: #ffffff;
-//     color: #00adee;
-//   }
-// }
-
-// .save{
-//   background: #32AD60;
-//   color: #ffffff;
-  
-//   &:hover{
-//     background: darken(#32AD60, 10%);
-//   }
-// }
 
 .save, .edit, .delete, .update{
   
@@ -191,9 +152,9 @@ input{
   }
 }
 
-.edit-img, .delete-img, {
-  width:17px;
-  margin:0px 0px 0px 5px;
+.edit-img, .delete-img {
+  width:15px;
+  margin: 0px 0px 0px 5px;
 
   &:hover{
     filter:opacity(.5) drop-shadow(0 0 0 red);
@@ -201,7 +162,7 @@ input{
 }
 
 .update-img, .save-img{
-  width:17px;
+  width:15px;
   margin:0px 0px 0px 5px;
 
   &:hover{

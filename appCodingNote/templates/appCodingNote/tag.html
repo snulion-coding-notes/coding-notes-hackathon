@@ -8,7 +8,7 @@
   <link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/dashboard-header.scss' %}">
 {% endblock style %}
 {% block js %}
-  <script type="text/javascript" src="{% static 'appCodingNote/js/tag.js' %}">
+  <script defer type="text/javascript" src="{% static 'appCodingNote/js/tag.js' %}"></script>
 {% endblock js %}
 
 {% block content_dashboard %}
@@ -17,8 +17,14 @@
     <div class="dashboard-header">
       <div class="search-container">
         <div class="search-bar">
-          <input type="text" placeholder="제목, 태그로 검색">
-          <button>
+          {% csrf_token %}
+          <select name="search-option" class="search-option">
+            <option value="name-and-tag">제목 + 태그</option>
+            <option value="name">제목</option>
+            <option value="tag">태그</option>
+          </select>
+          <input id="keyword" type="text" placeholder="검색어를 입력하세요">
+          <button onclick="loginSearch()">
             <img src="{% static 'img/search.png' %}" alt="search icon">
           </button>
         </div>
@@ -27,14 +33,15 @@
         <p>{{ user.username }}님, 안녕하세요!</p>
       </div>
     </div>
+    <!-- dashboard-header.scss 파일이랑 같이 복붙하기 -->
 
     <!-- Tag 섹션 -->
     <div class="title-header">
-      <div class="tag-title">
+      <div id="tag-title" class="tag-title">
         {% comment %} <input id="tag-name-input" value={{ tag_name }} onkeyup="checkSize()" maxlength="10" disabled></input> {% endcomment %}
         <h2>{{ tag_name }}</h2>
-        <button class="tag-edit-btn"></button>
-        <button class="tag-delete-btn"></button>
+        <button class="tag-edit-btn tag-title-btn"></button>
+        <button class="tag-delete-btn tag-title-btn"></button>
       </div>
     </div>
 
@@ -43,13 +50,17 @@
       {% for note in tagged_notes %}
         <section class="card-content">
           <div class="bookmark-section">
-            <button class="bookmark-btn">
-              <img src="{% static 'img/star-empty.png' %}" alt="bookmark">
+            <button id="bookmark-star-btn" class="bookmark-btn" onclick="onClickBookmarking({{ note.folder.id }}, {{ note.id }})">
+              {% if user in note.bookmark_users.all %}
+                <img id="bookmark-star-{{ note.id }}" src="{% static 'img/star-fill.png' %}" alt="bookmark">
+              {% else %}
+                <img id="bookmark-star-{{ note.id }}" src="{% static 'img/star-empty.png' %}" alt="bookmark">
+              {% endif %}
             </button>
           </div>
-          <div class="note-image">
+          <a class="note-image" href={{ note.note_link }} target="_blank">
             <img src={{ note.note_link_image }} alt="note image">
-          </div>
+          </a>
           <div class="note-info">
             <p class="note-name">{{ note.note_name }}</p>
             <!-- TODO : 태그 여러 개일 경우 태그를 보여줘야 함 -->

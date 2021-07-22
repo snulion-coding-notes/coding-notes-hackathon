@@ -126,15 +126,21 @@ class NoteCRUD:
     def update_note(request, fid, nid):
         note = Note.objects.filter(id=nid)
         note.update(note_name=request.POST['noteName'],
-                    note_link_title=request.POST['noteLinkTitle'], note_comment=request.POST['noteComment'])
-        tagMass = Tagging.create_tag(request)
-        for tag in tagMass:
-                note.tags.add(tag)
+                    note_link_title=request.POST['noteLink'], note_comment=request.POST['noteComment'])
+
+        tag_mass = Tagging.create_tag(request)
+        tag_name_array = []
+        for tag in tag_mass:
+                Note.objects.get(id=nid).tags.add(tag)
+                tag_name_array.append(tag.tag_name)
 
         updated_note = Note.objects.get(id=nid)
-        return JsonResponse({'updated_note': updated_note})
+        updated_note_title = updated_note.note_name
+        updated_note_comment = updated_note.note_comment
+        updated_note_link_title = updated_note.note_link_title
+        updated_note_tags = ' '.join(tag_name_array)
+        return JsonResponse({'updatedNoteName': updated_note_title, 'updatedNoteComment': updated_note_comment, 'updatedNoteLinkTitle': updated_note_link_title, 'updatedNoteTags': updated_note_tags})
 
-        #return redirect(f'/dashboard/{fid}/readfolder/')
 
     def delete_note(request, fid, nid):
         note = Note.objects.get(id=nid)

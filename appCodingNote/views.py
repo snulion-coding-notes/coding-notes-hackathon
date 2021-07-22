@@ -123,14 +123,16 @@ class NoteCRUD:
         return render(request, 'appCodingNote/note.html', {'folder': folder, 'note': note, 'tags': tags})
 
     def update_note(request, fid, nid):
-        # update 메서드는 querySet에 적용되므로 get대신 filter
         note = Note.objects.filter(id=nid)
-        # note.update(note_name=request.POST['noteName'], note_link=request.POST['noteLink'], note_link_title=request.POST['noteLinkTitle'], note_comment=request.POST['noteComment'])
         note.update(note_name=request.POST['noteName'],
                     note_link_title=request.POST['noteLinkTitle'], note_comment=request.POST['noteComment'])
         tag=Tagging.create_tag(request)
         note.tags.add(tag)
-        return redirect(f'/dashboard/{fid}/readfolder/')
+
+        updated_note = Note.objects.get(id=nid)
+        return JsonResponse({'updated_note': updated_note})
+
+        #return redirect(f'/dashboard/{fid}/readfolder/')
 
     def delete_note(request, fid, nid):
         note = Note.objects.get(id=nid)

@@ -1,4 +1,4 @@
-@import "./colors.scss";
+@import './colors.scss';
 
 main {
   display: flex;
@@ -10,8 +10,25 @@ main {
 }
 
 .title-header {
-  margin-bottom: 20px;
-  margin-left: 60px;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 60px 20px 60px;
+  height: 40px;
+}
+
+.change-view {
+  display: flex;
+  align-items: flex-end;
+  height: 40px;
+
+  button {
+    display: flex;
+    img {
+      min-width: 70px;
+      width: 5vw;
+      max-width: 100px;
+    }
+  }
 }
 
 .tag-title-header {
@@ -35,7 +52,7 @@ main {
     width: 16vw;
     min-width: 250px;
 
-    & ::placeholder {
+    &::placeholder {
       color: black;
     }
   }
@@ -69,8 +86,12 @@ h2 {
   background-image: url(../../img/save-update.svg);
 }
 
-.hide {
-  visibility: hidden;
+.no-visibility {
+  visibility: hidden !important;
+}
+
+.no-display {
+  display: none !important;
 }
 
 .edit-delete-btn,
@@ -81,6 +102,153 @@ h2 {
   }
 }
 
+// 태그 리스트뷰 CSS
+.save,
+.edit,
+.delete,
+.update {
+  & .hide {
+    visibility: hidden;
+  }
+}
+
+.edit-img,
+.delete-img {
+  width: 20px;
+  margin: 0 4px;
+
+  &:hover {
+    filter: invert(51%) sepia(17%) saturate(5809%) hue-rotate(2deg)
+      brightness(98%) contrast(95%);
+  }
+}
+
+.update-img,
+.save-img {
+  width: 20px;
+  margin: 0px 0px 0px 5px;
+
+  &:hover {
+    filter: invert(51%) sepia(17%) saturate(5809%) hue-rotate(2deg)
+      brightness(98%) contrast(95%);
+  }
+}
+.content-note-num {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-bottom: 10px;
+
+  span {
+    font-size: 18px;
+  }
+}
+
+.list-container {
+  margin: 0 60px;
+}
+
+.content-body-container {
+  margin-top: 40px;
+  width: 90%;
+  margin-left: 35px;
+}
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+
+  thead {
+    th {
+      margin-top: 5px;
+      padding: 10px 10px;
+      background: none;
+      font-size: 22px;
+      vertical-align: middle;
+      color: $black-gray;
+      font-weight: bold;
+      text-align: left;
+      border-top: solid 3px $black-gray;
+      border-bottom: solid 3px $black-gray;
+    }
+  }
+  tbody {
+    td {
+      padding: 5px 0px 5px 10px;
+      background: none;
+      font-size: 18px;
+      vertical-align: middle;
+      overflow: hidden;
+      border-bottom: solid 0.2mm $medium-gray;
+      height: 50px;
+    }
+
+    input {
+      border: none;
+      border-bottom: 1px solid $medium-gray;
+      outline: none;
+      cursor: default;
+      margin: auto;
+      height: 30px;
+      width: 100%;
+      font-size: 18px;
+
+      &:focus {
+        border: none;
+        border-bottom: 2px solid $yellow;
+        transition: 0.3s;
+      }
+    }
+  }
+
+  tfoot {
+    td {
+      height: 60px;
+      border-bottom: solid 0.4mm $medium-gray;
+    }
+  }
+}
+
+.note-action {
+  width: 100px;
+}
+
+.add {
+  margin-left: 20px;
+  margin-top: 30px;
+  font-size: 20px;
+  height: 25px;
+  line-height: 75%;
+  background: none;
+  color: $medium-gray;
+  font-weight: 700;
+
+  &:hover {
+    color: $dark-gray;
+    font-weight: 700;
+    cursor: pointer;
+  }
+}
+
+.col-1 {
+  width: 30%;
+}
+
+.col-2 {
+  width: 25%;
+}
+
+.col-3 {
+  width: 20%;
+}
+
+.col-4 {
+  width: 15%;
+}
+
+// 태그 카드뷰 CSS
 .card-container {
   display: flex;
   flex-wrap: wrap;

@@ -28,6 +28,7 @@
       </div>
     </div>
     <!-- dashboard-header.scss 파일이랑 같이 복붙하기 -->
+
   <!--본문 head-->
   <div class="content-head-container">
   <!--폴더 이름, 편집, 삭제-->
@@ -41,7 +42,10 @@
     </div>
   <!-- 리스트 카드 뷰 선택-->
     <div class="content-head-view">
-      <button id ="view-select" class="view-select" onClick="onClickViewButton(event)"><img class="view-select-img" id="list-view" src="{%static 'img/list-view-on.png' %}"/><img class="view-select-img hide" id="card-view" src="{%static 'img/card-view-on.png' %}"/></button>
+      <button id ="view-select" class="view-select" onClick="onClickViewButton(event)">
+        <img class="view-select-img" id="list-view" src="{%static 'img/list-view-on.png' %}"/>
+        <img class="view-select-img hide" id="card-view" src="{%static 'img/card-view-on.png' %}"/>
+      </button>
     </div>
   <!-- 노트 개수 안내-->
     <div class="content-head-notesNum">
@@ -64,7 +68,7 @@
       </tr>
     </thead>
     <tbody id="table-body">
-      {% for note in notes%}
+      {% for note in notes %}
       <tr id="each-note-{{note.id}}" onmouseover="showButton({{note.id}})" onmouseout="hideButton({{note.id}})">
         <td id="note-name-{{note.id}}">{{note.note_name}}</td>
         <td id="note-comment-{{note.id}}">{{note.note_comment}}</td>

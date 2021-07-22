@@ -12,7 +12,6 @@ const activateToggle = (element) => {
 // TODO : Bookmark도 추가
 window.onload = () => {
   const currentPath = window.location.pathname;
-  console.log(currentPath);
   let currentPageElement;
 
   if (currentPath === '/codingnote/dashboard/') {

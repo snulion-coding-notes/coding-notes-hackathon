@@ -21,6 +21,9 @@ class Folder(models.Model):
 class Tag(models.Model):
     tag_name = models.CharField(max_length=30)
 
+    def __str__(self):
+        return self.tag_name
+
 
 class Note(models.Model):
     author = models.ForeignKey(User, null=True, on_delete=models.CASCADE)

@@ -5,8 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 import requests
 from bs4 import BeautifulSoup
-from django.contrib.auth.models import User
-from django.contrib import auth
+
 
 # TODO : Tag 모델 수정 후 my_tags 있는 부분 수정 필요할 시 수정해야 함 for sidebar (210721)
 
@@ -32,16 +31,19 @@ def result(request):
 
 
 def dashboard(request):
-    all_notes = Note.objects.all()
-    all_tags = Tag.objects.all()
-    my_folders = Folder.objects.filter(author=request.user)
-    my_note=Note.objects.filter(author=request.user)
-    my_tags=Tag.objects.none()
-    for note in my_note:
-        my_tags=my_tags.union(note.tags.all())
-    
-    return render(request, 'appCodingNote/dashboard.html', {'all_notes': all_notes, 'all_tags': all_tags, 'my_folders': my_folders, 'my_tags': my_tags})
-
+    cur_user = request.user
+    if cur_user.is_authenticated:
+        all_notes = Note.objects.all()
+        all_tags = Tag.objects.all()
+        my_folders = Folder.objects.filter(author=request.user)
+        my_note=Note.objects.filter(author=request.user)
+        my_tags=Tag.objects.none()
+        for note in my_note:
+            my_tags=my_tags.union(note.tags.all())
+        
+        return render(request, 'appCodingNote/dashboard.html', {'all_notes': all_notes, 'all_tags': all_tags, 'my_folders': my_folders, 'my_tags': my_tags})
+    else :
+        return render(request, 'appCodingNote/index.html')
 
 class FolderCRUD:
     def create_folder(request):
@@ -49,8 +51,7 @@ class FolderCRUD:
             folder_name = request.POST['folderName']
 
             try:
-                Folder.objects.get(folder_name=folder_name,
-                                   author=request.user)
+                Folder.objects.get(folder_name=folder_name, author=request.user)
                 return JsonResponse({'message': '중복된 폴더명입니다'})
 
             except:
@@ -106,8 +107,7 @@ class NoteCRUD:
 
             note_comment = request.POST['noteComment']
             tag=Tagging.create_tag(request)
-            newNote = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title,
-                                          note_link_image=note_link_image, note_comment=note_comment, author=request.user, )
+            newNote = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user, )
             newNote.tags.add(tag)
             
             notes = Note.objects.filter(folder_id=fid)

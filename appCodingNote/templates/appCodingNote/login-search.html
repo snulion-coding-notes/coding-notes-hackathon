@@ -1,13 +1,20 @@
-{% extends 'sidebar.html' %} 
-{% load static %} 
-{% load sass_tags %} 
+{% extends 'sidebar.html' %}
+
+{% load static %}
+{% load sass_tags %}
+
 {% block style %}
-<link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/folder.scss' %}"/>
-<link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/dashboard-header.scss' %}">
-{% endblock style %} 
+  <link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/tag.scss' %}">
+  <link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/dashboard-header.scss' %}">
+{% endblock style %}
+{% block js %}
+  <script defer type="text/javascript" src="{% static 'appCodingNote/js/tag.js' %}"></script>
+  <script defer type="text/javascript" src="{% static 'appCodingNote/js/viewRelated.js' %}"></script>
+{% endblock js %}
+
 {% block content_dashboard %}
-<main>
-  <!-- Search Bar -->
+  <main id="main">
+    <!-- Search Bar -->
     <div class="dashboard-header">
       <form action="{% url 'appCodingNote:login_search' %}" method="POST" class="search-container">
         <div class="search-bar">
@@ -23,36 +30,76 @@
           </button>
         </div>
       </form>
+      <div class="greeting">
+        <p>{{ user.username }}님, 안녕하세요!</p>
+      </div>
     </div>
-    {% for note in myNote %}
-    <div class="card-item-container">
-      <div class="card-header">
-        <div class="card-header-bookmark">북마크</div>
-      </div>
-      <div class="card-body">
-        <div class="card-body-image">이미지</div>
-        <div class="card-body-description">
-          <div class="card-body-noteName">{{note.note_name}}</div>
-          <div class="card-body-Tags">#Tags</div>
+    <div class="title-header">
+        <div id="tag-title" class="tag-title" onmouseover="showTitleActionBtns()" onmouseout="hideTitleActionBtns()">
+            <h2 id="tag-name">내 노트</h2>
         </div>
-      </div>
-    {% endfor %}
-    {% for note in otherNote %}
-    <div class="card-item-container">
-      <div class="card-header">
-        <div class="card-header-bookmark">북마크</div>
-      </div>
-      <div class="card-body">
-        <div class="card-body-image">이미지</div>
-        <div class="card-body-description">
-          <div class="card-body-noteName">{{note.note_name}}</div>
-          <div class="card-body-Tags">#Tags</div>
+    </div>
+    <!-- dashboard-header.scss 파일이랑 같이 복붙하기 -->
+    <!-- 내 노트 -->
+    <div id="card-container" class="card-container no-display">
+      {% for note in myNote %}
+        <section class="card-content">
+          <div class="bookmark-section">
+            <button id="bookmark-star-btn" class="bookmark-btn" onclick="onClickBookmarking({{ note.folder.id }}, {{ note.id }})">
+              {% if user in note.bookmark_users.all %}
+                <img id="bookmark-star-{{ note.id }}" src="{% static 'img/star-fill.png' %}" alt="bookmark">
+              {% else %}
+                <img id="bookmark-star-{{ note.id }}" src="{% static 'img/star-empty.png' %}" alt="bookmark">
+              {% endif %}
+            </button>
+          </div>
+          <a class="note-image" href={{ note.note_link }} target="_blank">
+            <img src={{ note.note_link_image }} alt="note image">
+          </a>
+          <div class="note-info">
+            <p class="note-name">{{ note.note_name }}</p>
+            <p class="note-comment">{{ note.note_comment }}</p>
+            <div class="note-tag">
+              {% for tag in note.tags.all %}
+                <span class="tag-style">{{ tag.tag_name }}</span>
+              {% endfor %}
+            </div>
+          </div>
+        </section>
+      {% endfor %}
+    </div>
+    <div class="title-header">
+        <div id="tag-title" class="tag-title" onmouseover="showTitleActionBtns()" onmouseout="hideTitleActionBtns()">
+            <h2 id="tag-name">전체 검색 결과</h2>
         </div>
-      </div>
-    {% endfor %}
-  </div>
-
-  <script src="//code.jquery.com/jquery.min.js"></script>
-  <script src="{% static 'appCodingNote/js/folder.js' %}"></script>
-  {%endblock%}
-</main>
+    </div>
+    <!-- 다른 사람 노트 -->
+    <div id="card-container" class="card-container no-display">
+      {% for note in otherNote %}
+        <section class="card-content">
+          <div class="bookmark-section">
+            <button id="bookmark-star-btn" class="bookmark-btn" onclick="onClickBookmarking({{ note.folder.id }}, {{ note.id }})">
+              {% if user in note.bookmark_users.all %}
+                <img id="bookmark-star-{{ note.id }}" src="{% static 'img/star-fill.png' %}" alt="bookmark">
+              {% else %}
+                <img id="bookmark-star-{{ note.id }}" src="{% static 'img/star-empty.png' %}" alt="bookmark">
+              {% endif %}
+            </button>
+          </div>
+          <a class="note-image" href={{ note.note_link }} target="_blank">
+            <img src={{ note.note_link_image }} alt="note image">
+          </a>
+          <div class="note-info">
+            <p class="note-name">{{ note.note_name }}</p>
+            <p class="note-comment">{{ note.note_comment }}</p>
+            <div class="note-tag">
+              {% for tag in note.tags.all %}
+                <span class="tag-style">{{ tag.tag_name }}</span>
+              {% endfor %}
+            </div>
+          </div>
+        </section>
+      {% endfor %}
+    </div>
+  </main>
+{% endblock content_dashboard %}

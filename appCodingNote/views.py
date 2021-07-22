@@ -106,9 +106,10 @@ class NoteCRUD:
                 note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
 
             note_comment = request.POST['noteComment']
-            tag=Tagging.create_tag(request)
-            newNote = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user, )
-            newNote.tags.add(tag)
+            tagMass=Tagging.create_tag(request)
+            newNote = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user)
+            for tag in tagMass:
+                newNote.tags.add(tag)
             
             notes = Note.objects.filter(folder_id=fid)
             notesNum = notes.count()
@@ -126,8 +127,9 @@ class NoteCRUD:
         note = Note.objects.filter(id=nid)
         note.update(note_name=request.POST['noteName'],
                     note_link_title=request.POST['noteLinkTitle'], note_comment=request.POST['noteComment'])
-        tag = Tagging.create_tag(request)
-        note.tags.add(tag)
+        tagMass = Tagging.create_tag(request)
+        for tag in tagMass:
+                note.tags.add(tag)
 
         updated_note = Note.objects.get(id=nid)
         return JsonResponse({'updated_note': updated_note})
@@ -158,10 +160,16 @@ class Bookmarking:
 
 class Tagging:
     def create_tag(request):
-        if Tag.objects.filter(tag_name=request.POST['tag']).exists():
-            return Tag.objects.get(tag_name=request.POST['tag'])
-        else:
-            return Tag.objects.create(tag_name=request.POST['tag'])
+        tagMass=request.POST['tag']
+        list_tag=tagMass.split(' ')
+        returnTag=Tag.objects.none()
+        for tag in list_tag:
+            if Tag.objects.filter(tag_name=tag).exists():
+                returnTag=returnTag.union(Tag.objects.filter(tag_name=tag))
+            else:
+                Tag.objects.create(tag_name=tag)
+                returnTag=returnTag.union(Tag.objects.filter(tag_name=tag))
+        return returnTag
 
 
     def read_tag(request, tid):
@@ -203,6 +211,7 @@ class Search:
                     search_note_list=note_list.filter(tags__tag_name=search_keyword)
                 my_search_note_list=search_note_list.filter(author=request.user)
                 other_search_note_list=search_note_list.exclude(author=request.user)
+                print(my_search_note_list)
                 return render(request, 'appCodingNote/login-search.html', {'myNote': my_search_note_list, 'otherNote': other_search_note_list})
         return redirect('appCodingNote:dashboard')
 
@@ -233,8 +242,8 @@ class chromeExtension:
             # note_link_image 정보를 가져 올 수 없을 경우 처리, 디폴트 이미지 필요
             note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
         
-        tag=Tagging.create_tag(request)
-        newNote = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_image=note_link_image,
-                            note_link_title=note_link_title, note_comment=note_comment, author=request.user)
-        newNote.tags.add(tag)
+        tagMass=Tagging.create_tag(request)
+        newNote = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user)
+        for tag in tagMass:
+            newNote.tags.add(tag)
         return render(request, 'appCodingNote/index.html')

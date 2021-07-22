@@ -87,8 +87,10 @@ h2 {
 .card-content {
   display: flex;
   flex-direction: column;
-  width: 300px;
-  height: 400px;
+  width: 16vw;
+  height: 21vw;
+  min-width: 250px;
+  min-height: 333px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   margin: 0 25px 40px 25px;
 }

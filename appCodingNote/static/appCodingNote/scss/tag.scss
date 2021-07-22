@@ -182,8 +182,8 @@ h2 {
       vertical-align: middle;
       overflow: hidden;
       border-bottom: solid 0.2mm $medium-gray;
-      height: 50px;
       word-break: keep-all;
+      height: 100px;
     }
 
     input {
@@ -205,10 +205,7 @@ h2 {
   }
 
   tfoot {
-    td {
-      height: 60px;
-      border-bottom: solid 0.4mm $medium-gray;
-    }
+    border: solid 3px $black-gray;
   }
 }
 

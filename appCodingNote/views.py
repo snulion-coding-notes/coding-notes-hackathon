@@ -211,8 +211,8 @@ class Search:
                     search_note_list=note_list.filter(tags__tag_name=search_keyword)
                 my_search_note_list=search_note_list.filter(author=request.user)
                 other_search_note_list=search_note_list.exclude(author=request.user)
-                print(my_search_note_list)
                 return render(request, 'appCodingNote/login-search.html', {'myNote': my_search_note_list, 'otherNote': other_search_note_list})
+            return render(request, 'appCodingNote/login-search.html')
         return redirect('appCodingNote:dashboard')
 
 

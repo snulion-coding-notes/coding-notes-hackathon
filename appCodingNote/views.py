@@ -5,8 +5,7 @@ from .models import Folder, Note, Bookmark, Tag
 from django.views.decorators.csrf import csrf_exempt
 import requests
 from bs4 import BeautifulSoup
-from django.contrib.auth.models import User
-from django.contrib import auth
+
 
 def index(request):
     cur_user = request.user
@@ -83,8 +82,9 @@ class NoteCRUD:
 
             note_comment = request.POST['noteComment']
             newNote = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user)
-            nid = newNote.id
-            Tagging.create_tag(nid)
+            # nid = newNote.id
+            # print(f'{nid} 번째입니다.')
+            # Tagging.create_tag(newNote.id)
             notes = Note.objects.filter(folder_id=fid)      
             notesNum = notes.count()
             return JsonResponse({'notesNum': notesNum, 'note_link_title': note_link_title})

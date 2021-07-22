@@ -50,7 +50,7 @@
   </div>
 
   <!--본문 body-->
-  <div class="content-body-container">
+  <div class="content-body-container list-container">
   <!--리스트 뷰-->
   <table class="table data">
     <thead>
@@ -105,22 +105,32 @@
   </table>
   </div>
 
-  {% comment %} <div class="card data hide">
-    {% for note in notes %}
-    <div class="card-item-container">
-      <div class="card-header">
-        <div class="card-header-bookmark">북마크</div>
-      </div>
-      <div class="card-body">
-        <div class="card-body-image">이미지</div>
-        <div class="card-body-description">
-          <div class="card-body-noteName">{{note.note_name}}</div>
-          <div class="card-body-Tags">#Tags</div>
-        </div>
-      </div>
-    </div>
-    {% endfor %}
-  </div> {% endcomment %}
+  <!--카드뷰-->
+  <div class="content-body-container card-container hide">
+      {% for note in notes %}
+        <section class="card-content">
+          <div class="bookmark-section">
+            <button id="bookmark-star-btn" class="bookmark-btn" onclick="onClickBookmarking({{ note.folder.id }}, {{ note.id }})">
+              {% if user in note.bookmark_users.all %}
+                <img id="bookmark-star-{{ note.id }}" src="{% static 'img/star-fill.png' %}" alt="bookmark">
+              {% else %}
+                <img id="bookmark-star-{{ note.id }}" src="{% static 'img/star-empty.png' %}" alt="bookmark">
+              {% endif %}
+            </button>
+          </div>
+          <a class="note-image" href={{ note.note_link }} target="_blank">
+            <img src={{ note.note_link_image }} alt="note image">
+          </a>
+          <div class="note-info">
+            <p class="note-name">{{ note.note_name }}</p>
+            <p class="note-comment">{{ note.note_comment }}</p>
+            <!-- TODO : 태그 여러 개일 경우 태그를 보여줘야 함 -->
+            {% comment %} <p class="note-tag">{{ note.tag_set.all }}</p> {% endcomment %}
+          </div>
+        </section>
+      {% endfor %}
+  </div>
+  </div>
 
   <script src="//code.jquery.com/jquery.min.js"></script>
   <script src="{% static 'appCodingNote/js/folder.js' %}"></script>

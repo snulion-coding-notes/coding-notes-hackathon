@@ -9,8 +9,11 @@ main {
 }
 
 .content-head-container{
-  width:90%;
-  margin-left:35px;
+  width:calc(100% - 150px);
+  margin-left:75px;
+  &.hide{
+    display:none;
+  }
 }
 .content-head-folder{
   display:inline-flex;
@@ -32,8 +35,15 @@ h2{
   font-size:30px;
   font-weight:700;
   margin-right:7px;
-}
+    input{
+    font-size:30px;
+    font-weight:700;
+    margin-right:7px;
+    padding-bottom:7px;
+    height:40px;
+    }
 
+  }
 .content-head-view{
   float:right;
   margin-top:15px;
@@ -54,8 +64,8 @@ h2{
 
 .content-body-container{
   margin-top:40px;
-  width:90%;
-  margin-left:35px;
+  width:calc(100% - 150px);
+  margin-left:75px;
 }
 
 .table{
@@ -68,7 +78,7 @@ h2{
         margin-top:5px;
         padding: 10px 10px;
         background: none;
-        font-size: 20px;
+        font-size: 25px;
         vertical-align: middle;
         color: $black-gray;
         font-weight: bold;
@@ -81,12 +91,12 @@ h2{
       td{
         padding: 5px 0px 5px 10px;
         background: none;
-        font-size: 14px;
+        font-size: 18px;
         vertical-align:middle;
         overflow: hidden;
         border-bottom: solid 0.2mm $medium-gray;
-        height:50px;
-        max-width:200px;
+        height:55px;
+        max-width:200px; // 해상도에 따라 얼마나 차이나는지 확인 필요
     }
   }
   tfoot{
@@ -97,22 +107,6 @@ h2{
   }
 }
 
-// .thead-name{
-//   max-width:100px;
-// }
-
-// .thead-comment{
-//   max-width:150px;
-// }
-
-// .thead-website{
-//   max-width:80px;
-// }
-
-// .thead-tag{
-//   max-width:100px;
-// }
-
 .thead-action{
   width:60px;
 }
@@ -121,7 +115,7 @@ h2{
 .add{
   margin-left:20px;
   margin-top:30px;
-  font-size:20px;
+  font-size:25px;
   height:25px;
   line-height:75%;
   background:none;
@@ -142,7 +136,7 @@ input{
   cursor:default;
   margin:auto;
   height:30px;
-  width:220px;
+  width:calc(100%-20px);
 
   &:focus{
     border:none;
@@ -177,23 +171,68 @@ input{
   }
 }
 
-.card{
-  width:90%;
-  display:inline-flex;
+.card-container {
+  margin-top: 40px;
+  display: flex;
+  flex-wrap: wrap;
+
+  &.hide{
+    display:none;
+  }
 }
 
-.card-item-container{
-  height: 200px;
-	width: 200px;
-  margin:15px 10px 15px 30px;
-  box-shadow:5px 5px 10px $medium-gray, -5px -5px 10px $light-gray;
+.card-content {
+  display: flex;
+  flex-direction: column;
+  width: 22%;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
 
-.card-body-image{
-  height:120px;
+.bookmark-section {
+  display: flex;
+  justify-content: flex-end;
+  height: 40px;
 }
 
-.card-body-description{
+.bookmark-btn {
+  position: relative;
+  top: 10px;
+  right: 10px;
+  z-index: 1;
+
+  img {
+    width: 35px;
+  }
+}
+
+.note-image {
+  display: flex;
+  overflow: hidden;
+  align-items: center;
+  background-color: white;
+  margin-top: -40px;
+
+  img {
+    width: 100%;
+  }
+}
+
+.note-info {
+  padding:15px 0px 15px 0px;
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
   background-color: $light-gray;
-  height:60px;
+
+  p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin: 0 20px 10px 20px;
+  }
+}
+
+.note-name {
+  font-size: 23px;
+  font-weight: 700;
 }

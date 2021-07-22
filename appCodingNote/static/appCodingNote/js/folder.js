@@ -94,6 +94,8 @@ const onClickDeleteButton=async(folderId,noteId) => {
 const onClickFolderEditButton=async(folderId, folderName)=>{
   const folderNameElement=document.getElementById("folder-name");
   folderNameElement.innerHTML=`<input id="folder-new-name" type="text", value="${folderName}", name="folderName"></input>`;
+  document.getElementById('folder-new-name').setSelectionRange(folderName.length, folderName.length);
+  document.getElementById('folder-new-name').focus();
   document.getElementById('folder-edit-btn').classList.add('hide');
   document.getElementById('folder-delete-btn').classList.add('hide');
   document.getElementById('folder-update-btn').classList.remove('hide');
@@ -132,6 +134,7 @@ const folderShowButton=()=>{
 }
 
 const folderHideButton=()=>{
+  console.log('error');
   const editHasHide = document.getElementById('folder-edit-btn').classList.contains('hide');
   const deleteHasHide=document.getElementById('folder-delete-btn').classList.contains('hide');
   const updateHasHide=document.getElementById('folder-update-btn').classList.contains('hide');
@@ -170,11 +173,15 @@ const onClickViewButton=(event)=>{
       console.log('리스트')
       document.getElementById('list-view').classList.remove('hide');
       document.getElementById('card-view').classList.add('hide');
+      document.getElementsByClassName('content-body-container').item(0).classList.remove('hide');
+      document.getElementsByClassName('content-body-container').item(1).classList.add('hide');
     }
     const cardOn=()=>{
       console.log('카드')
       document.getElementById('list-view').classList.add('hide');
       document.getElementById('card-view').classList.remove('hide');
+      document.getElementsByClassName('content-body-container').item(0).classList.add('hide');
+      document.getElementsByClassName('content-body-container').item(1).classList.remove('hide');
     }
   x<imgWidth/2 ? listOn() : cardOn();
 }

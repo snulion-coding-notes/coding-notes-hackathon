@@ -35,6 +35,10 @@
     width: 170px;
   }
 
+  select:focus {
+    outline: none;
+  }
+
   input {
     font-size: 18px;
     width: 80%;

@@ -205,7 +205,12 @@ class Search:
     def loginSearch(request):
         search_keyword = request.POST.get('keyword', '')
         search_type = request.POST.get('search-option', '')
-        note_list = Note.objects.order_by('-id')   
+        note_list = Note.objects.order_by('-id')
+        my_folders = Folder.objects.filter(author=request.user)
+        my_note=Note.objects.filter(author=request.user)
+        my_tags=Tag.objects.none()
+        for note in my_note:
+            my_tags=my_tags.union(note.tags.all())  
         if search_keyword :
             if len(search_keyword) > 1 :
                 if search_type == 'name-and-tag':
@@ -217,7 +222,7 @@ class Search:
                     search_note_list=note_list.filter(tags__tag_name=search_keyword)
                 my_search_note_list=search_note_list.filter(author=request.user)
                 other_search_note_list=search_note_list.exclude(author=request.user)
-                return render(request, 'appCodingNote/login-search.html', {'myNote': my_search_note_list, 'otherNote': other_search_note_list})
+                return render(request, 'appCodingNote/login-search.html', {'myNote': my_search_note_list, 'otherNote': other_search_note_list, 'my_folders': my_folders, 'my_tags': my_tags})
             return render(request, 'appCodingNote/login-search.html')
         return redirect('appCodingNote:dashboard')
 

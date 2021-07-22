@@ -8,4 +8,4 @@ def random_num():
 
 @register.filter
 def modulo(val):
-  return val%3
+  return val%4

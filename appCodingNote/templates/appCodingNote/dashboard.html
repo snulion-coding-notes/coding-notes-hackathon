@@ -2,18 +2,20 @@
 
 {% load static %}
 {% load sass_tags %}
-
+{% load folder_cover %}
 {% block style %}
   <link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/dashboard-header.scss' %}">
   <link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/dashboard.scss' %}">
 {% endblock style %}
 {% block js %}
+  <script src="{% static 'appCodingNote/js/dashboard.js' %}"></script>
 {% endblock js %}
+
 {% block content_dashboard %}
   <main id="main">
     <!-- Search Bar -->
     <div class="dashboard-header">
-      <div class="search-container">
+      <form action="{% url 'appCodingNote:login_search' %}" method="POST" class="search-container">
         <div class="search-bar">
           {% csrf_token %}
           <select name="search-option" class="search-option">
@@ -21,12 +23,12 @@
             <option value="name">제목</option>
             <option value="tag">태그</option>
           </select>
-          <input id="keyword" type="text" placeholder="검색어를 입력하세요">
-          <button onclick="loginSearch()">
+          <input name="keyword" id="keyword" type="text" placeholder="검색어를 입력하세요">
+          <button value="submit" type="submit">
             <img src="{% static 'img/search.png' %}" alt="search icon">
           </button>
         </div>
-      </div>
+      </form>
       <div class="greeting">
         <p>{{ user.username }}님, 안녕하세요!</p>
       </div>
@@ -40,20 +42,21 @@
           {% for folder in my_folders %}
             <div class="notebook">
               <a href={% url 'appCodingNote:read_folder' folder.id %}>
-                <img src="{% static 'img/blue-note.png' %}" alt="note">
+                <img src="{% get_static_prefix %}img/{{folder.id|modulo}}-note.png" alt="note">
               </a>
               <p>{{ folder.folder_name }}</p>
             </div>
           {% endfor %}
 
           <!-- New Folder -->
-          <form action ="{% url 'appCodingNote:create_folder' %}" method="POST">
-            {% csrf_token %}
-            <button type="submit">
+          {% comment %} <form action ="{% url 'appCodingNote:create_folder' %}" method="POST"> {% endcomment %}
+          <div class="new-folder-container">
+            {% comment %} {% csrf_token %} {% endcomment %}
+            <button onclick="checkInput()">
               <img src="{% static 'img/add-folder.png' %}" alt="add folder">
             </button>
-            <input class ="folder-new-input" type="text" placeholder="새 폴더명" name="folderName"/>
-          </form>
+            <input id="folder-new-input" class ="folder-new-input" type="text" placeholder="새 폴더명" name="folderName"/>
+          </div>
         </div>
       </div>
     </div>
@@ -66,15 +69,9 @@
               <p>{{ tag.tag_name }}</p>
             </a>
           {% endfor %}
-          <!-- sample tag -->
-          {% comment %} <div class="tag-content">
-            <p>샘플 태그</p>
-          </div> {% endcomment %}
-          <!-- sample tag -->
         </div>
       </div>
     </div>
-    <script src="{% static 'appCodingNote/js/search.js' %}"></script>
   </main>
   
     {% endblock content_dashboard %}

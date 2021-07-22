@@ -2,50 +2,56 @@
 {% load static %} 
 {% load sass_tags %} 
 {% block style %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
-<link
-  rel="stylesheet"
-  type="text/css"
-  href="{% sass_src 'appCodingNote/scss/folder.scss' %}"
-/>
-<link
-  rel="stylesheet"
-  href="https://fonts.googleapis.com/icon?family=Material+Icons"
-/>
-<link
-  rel="stylesheet"
-  href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css"
-/>
-<script
-  defer="defer"
-  src="https://code.getmdl.io/1.3.0/material.min.js"
-></script>
+<link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/folder.scss' %}"/>
+<link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/dashboard-header.scss' %}">
 {% endblock style %} 
 {% block content_dashboard %}
 <main>
-  <div class="topnav">
-    <div class="search-container">
-      <form action="#">
-        <input type="text" placeholder="제목, 태그로 검색" />
-        <button type="submit">
-          <img src="{%static 'img/search.png'%}" style="width: 30px" />
-        </button>
+  <!-- Search Bar -->
+    <div class="dashboard-header">
+      <form action="{% url 'appCodingNote:login_search' %}" method="POST" class="search-container">
+        <div class="search-bar">
+          {% csrf_token %}
+          <select name="search-option" class="search-option">
+            <option value="name-and-tag">제목 + 태그</option>
+            <option value="name">제목</option>
+            <option value="tag">태그</option>
+          </select>
+          <input name="keyword" id="keyword" type="text" placeholder="검색어를 입력하세요">
+          <button value="submit" type="submit">
+            <img src="{% static 'img/search.png' %}" alt="search icon">
+          </button>
+        </div>
       </form>
+      <div class="greeting">
+        <p>{{ user.username }}님, 안녕하세요!</p>
+      </div>
+    </div>
+    <!-- dashboard-header.scss 파일이랑 같이 복붙하기 -->
+  <!--본문 head-->
+  <div class="content-head-container">
+  <!--폴더 이름, 편집, 삭제-->
+    <div class="content-head-folder" onmouseover="folderShowButton()" onmouseout="folderHideButton()">
+      <h2 id="folder-name">{{folder.folder_name}}</h2>
+      <div id ="folder-action">
+        <button class="edit" id="folder-edit-btn" onClick="onClickFolderEditButton({{folder.id}},'{{folder.folder_name}}')"><img class="folder-edit-img" src="{% static 'img/edit.svg' %}"/></button>
+        <button class="delete" id="folder-delete-btn" onClick="onClickFolderDeleteButton({{folder.id}})"><img class="folder-delete-img" src="{% static 'img/delete.svg' %}"/></button>
+        <button class="update hide" id="folder-update-btn" onclick="onClickFolderUpdateButton({{folder.id}})"><img class="folder-update-img" src="{% static 'img/save-update.svg' %}" /></button>
+      </div>
+    </div>
+  <!-- 리스트 카드 뷰 선택-->
+    <div class="content-head-view">
+      <button id ="view-select" class="view-select" onClick="onClickViewButton(event)"><img class="view-select-img" id="list-view" src="{%static 'img/list-view-on.png' %}"/><img class="view-select-img hide" id="card-view" src="{%static 'img/card-view-on.png' %}"/></button>
+    </div>
+  <!-- 노트 개수 안내-->
+    <div class="content-head-notesNum">
+      <span id="content-note-num"> {{notes.count}} notes </span>
     </div>
   </div>
 
-  <div class="content-title-container">
-    <div class="content-title-item">
-      <h3>folder: {{folder.folder_name}}</h3>
-    </div>
-    <div class="content-title-item">
-      <button class="list-view"><img class="list-view-img" src="{%static 'img/list-view.png' %}"/></button>
-      <button class="card-view"><img class="card-view-img" src="{%static 'img/card-view.png' %}"/></button>
-    </div>
-  </div>
-  <div class="content-num">
-    <span id="content-note-num"> {{notes.count}}개 </span>
-  </div>
+  <!--본문 body-->
+  <div class="content-body-container">
+  <!--리스트 뷰-->
   <table class="table data">
     <thead>
       <tr>
@@ -53,40 +59,51 @@
         <th class="thead-comment">Comment</th>
         <th class="thead-website">Website</th>
         <th class="thead-tag">Tags</th>
-        <th class="table-hide">
-          <button class="add" onclick="onClickAddButton({{folder.id}})">
-            + New
-          </button>
+        <th class="thead-action">
         </th>
       </tr>
     </thead>
-    <tbody id="table">
+    <tbody id="table-body">
       {% for note in notes%}
       <tr id="each-note-{{note.id}}" onmouseover="showButton({{note.id}})" onmouseout="hideButton({{note.id}})">
         <td id="note-name-{{note.id}}">{{note.note_name}}</td>
         <td id="note-comment-{{note.id}}">{{note.note_comment}}</td>
-        <td id="note-link-{{note.id}}">{{note.note_link_title}}</td>
+        <td id="note-link-{{note.id}}"><a href="{{note.note_link}}">{{note.note_link_title}}</td><a>
         <td id="note-tag-{{note.id}}">#Tags</td>
         <td id="note-action-{{note.id}}">
+        
           <button
             class="edit hide"
             id="{{note.id}}-edit-btn"
             onclick="onClickEditButton({{folder.id}},{{note.id}},'{{note.note_name}}','{{note.note_comment}}','{{note.note_link_title}}')"
           >
-            <img class="edit-img" src="{% static 'img/edit.png' %}" />
+            <img class="edit-img" src="{% static 'img/edit.svg' %}" />
           </button>
           <button
             class="delete hide"
             id="{{note.id}}-delete-btn"
             onclick="onClickDeleteButton({{folder.id}},{{note.id}})"
           >
-            <img class="delete-img" src="{% static 'img/delete.png' %}" />
+            <img class="delete-img" src="{% static 'img/delete.svg' %}" />
           </button>
+          
         </td>
       </tr>
       {% endfor %}
-    </tbody>
+      </tbody>
+      <tfoot>
+      <tr id="new-btn-row" onmouseover="#" onmouseout="#">
+      <td><span class="add" onclick="onClickAddButton({{folder.id}})">
+            + New
+          </span></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      </tr>
+      </tfoot>
   </table>
+  </div>
 
   {% comment %} <div class="card data hide">
     {% for note in notes %}

@@ -1,10 +1,13 @@
-import json
-from django.http.response import JsonResponse
+from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from .models import Folder, Note, Bookmark, Tag
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Q
 import requests
 from bs4 import BeautifulSoup
+
+
+# TODO : Tag 모델 수정 후 my_tags 있는 부분 수정 필요할 시 수정해야 함 for sidebar (210721)
 
 
 def index(request):
@@ -15,37 +18,59 @@ def index(request):
         return render(request, 'appCodingNote/index.html')
 
 
+@csrf_exempt
 def result(request):
-    all_notes = Note.objects.all()
-    all_tags = Tag.objects.all()
-    return render(request, 'appCodingNote/index-search.html', {'all_notes': all_notes, 'all_tags': all_tags})
+    notes = Note.objects.all()
+    search_keyword = request.POST.get('keyword', '')
+    if(search_keyword):
+        search_note_list=notes.filter(Q (note_name=search_keyword) | Q (tags__tag_name=search_keyword))
+        return render(request, 'appCodingNote/index-search.html', {'notes':search_note_list})
+
+    return render(request, 'appCodingNote/index.html')
     # 인덱스 - 검색 결과 템플릿 위해 추가
 
 
 def dashboard(request):
-    all_notes = Note.objects.all()
-    all_tags = Tag.objects.all()
-    my_folders = Folder.objects.filter(author=request.user)
-    my_tags = Tag.objects.filter(user=request.user)
-    return render(request, 'appCodingNote/dashboard.html', {'all_notes': all_notes, 'all_tags': all_tags, 'my_folders': my_folders, 'my_tags': my_tags})
-
+    cur_user = request.user
+    if cur_user.is_authenticated:
+        all_notes = Note.objects.all()
+        all_tags = Tag.objects.all()
+        my_folders = Folder.objects.filter(author=request.user)
+        my_note=Note.objects.filter(author=request.user)
+        my_tags=Tag.objects.none()
+        for note in my_note:
+            my_tags=my_tags.union(note.tags.all())
+        
+        return render(request, 'appCodingNote/dashboard.html', {'all_notes': all_notes, 'all_tags': all_tags, 'my_folders': my_folders, 'my_tags': my_tags})
+    else :
+        return render(request, 'appCodingNote/index.html')
 
 class FolderCRUD:
     def create_folder(request):
         if request.method == 'POST':
             folder_name = request.POST['folderName']
-            Folder.objects.create(folder_name=folder_name, author=request.user)
-        return redirect('appCodingNote:dashboard')
+
+            try:
+                Folder.objects.get(folder_name=folder_name, author=request.user)
+                return JsonResponse({'message': '중복된 폴더명입니다'})
+
+            except:
+                Folder.objects.create(
+                    folder_name=folder_name, author=request.user)
+                return HttpResponse()
 
     def read_folder(request, fid):
         folder = Folder.objects.get(id=fid)
         notes = Note.objects.filter(folder__id=fid)
-        return render(request, 'appCodingNote/folder.html', {'folder': folder, 'notes': notes})
+        my_folders = Folder.objects.filter(author=request.user)
+        my_tags = Tag.objects.filter(notes__author=request.user)
+        
+        return render(request, 'appCodingNote/folder.html', {'folder': folder, 'notes': notes, 'my_folders': my_folders, 'my_tags': my_tags})
 
     def update_folder(request, fid):
-        folder = Folder.objects.get(id=fid)
+        folder = Folder.objects.filter(id=fid)
         folder.update(folder_name=request.POST['folderName'])
-        return redirect(f'/dashboard/{fid}/readfolder/')
+        return redirect(f'/codingnote/dashboard/{fid}/readfolder/')
 
     def delete_folder(request, fid):
         folder = Folder.objects.get(id=fid)
@@ -58,7 +83,7 @@ class NoteCRUD:
         if request.method == 'POST':
             note_name = request.POST['noteName']
             note_link = request.POST['noteLink']
-            if not note_link.startswith('https://') :
+            if not note_link.startswith('https://'):
                 note_link = 'https://' + note_link
 
             # note_link로 부터 데이터 쌓기
@@ -81,13 +106,13 @@ class NoteCRUD:
                 note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
 
             note_comment = request.POST['noteComment']
-            newNote = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user)
-            # nid = newNote.id
-            # print(f'{nid} 번째입니다.')
-            # Tagging.create_tag(newNote.id)
-            notes = Note.objects.filter(folder_id=fid)      
+            tag=Tagging.create_tag(request)
+            newNote = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user, )
+            newNote.tags.add(tag)
+            
+            notes = Note.objects.filter(folder_id=fid)
             notesNum = notes.count()
-            return JsonResponse({'notesNum': notesNum, 'note_link_title': note_link_title})
+            return JsonResponse({'notesNum': notesNum, 'note_link_title': note_link_title, 'note_link': note_link})
         else:
             return redirect(f'/dashboard/{fid}/readfolder/')
 
@@ -101,7 +126,10 @@ class NoteCRUD:
         # update 메서드는 querySet에 적용되므로 get대신 filter
         note = Note.objects.filter(id=nid)
         # note.update(note_name=request.POST['noteName'], note_link=request.POST['noteLink'], note_link_title=request.POST['noteLinkTitle'], note_comment=request.POST['noteComment'])
-        note.update(note_name=request.POST['noteName'], note_link_title=request.POST['noteLinkTitle'], note_comment=request.POST['noteComment'])
+        note.update(note_name=request.POST['noteName'],
+                    note_link_title=request.POST['noteLinkTitle'], note_comment=request.POST['noteComment'])
+        tag=Tagging.create_tag(request)
+        note.tags.add(tag)
         return redirect(f'/dashboard/{fid}/readfolder/')
 
     def delete_note(request, fid, nid):
@@ -114,24 +142,34 @@ class NoteCRUD:
 class Bookmarking:
     def create_bookmark(request, fid, nid):
         note = Note.objects.get(id=nid)
-        is_bookmarking = note.bookmark_set.filter(user_id=request.user.id)
-        if is_bookmarking:
+
+        if note.bookmark_set.filter(user_id=request.user.id).count():
             note.bookmark_set.get(user=request.user).delete()
         else:
             Bookmark.objects.create(user=request.user, note=note)
-        return redirect(f'/dashboard/{fid}/{nid}/readnote/')
+
+        is_bookmarking = note.bookmark_set.filter(
+            user_id=request.user.id).count()
+
+        return JsonResponse({'isBookmarking': is_bookmarking})
 
 
 class Tagging:
-    def create_tag(request, nid):
-        note = Note.objects.get(id=nid)
-        Tag.objects.create(user=request.user, note=note,tag_name=request.POST['tagName'])
+    def create_tag(request):
+        if Tag.objects.filter(tag_name=request.POST['tag']).exists():
+            return Tag.objects.get(tag_name=request.POST['tag'])
+        else:
+            return Tag.objects.create(tag_name=request.POST['tag'])
+            
 
     def read_tag(request, tid):
         tag = Tag.objects.get(id=tid)
         tag_name = tag.tag_name
-        tagged_notes = Note.objects.filter(tag__tag_name = tag_name, author=request.user)
-        return render(request, 'appCodingNote/tag.html', {'tagged_notes': tagged_notes, 'tag_name': tag_name})
+        tagged_notes = Note.objects.filter(
+            tag__tag_name=tag_name, author=request.user)
+        my_folders = Folder.objects.filter(author=request.user)
+        my_tags = Tag.objects.filter(user=request.user)
+        return render(request, 'appCodingNote/tag.html', {'tagged_notes': tagged_notes, 'tag_name': tag_name, 'my_folders': my_folders, 'my_tags': my_tags})
 
     def update_tag(request, fid, nid, tid):
         tag = Tag.objects.get(id=tid)
@@ -146,7 +184,22 @@ class Tagging:
 
 class Search:
     def loginSearch(request):
-        return render()
+        search_keyword = request.POST.get('keyword', '')
+        search_type = request.POST.get('search-option', '')
+        note_list = Note.objects.order_by('-id')   
+        if search_keyword :
+            if len(search_keyword) > 1 :
+                if search_type == 'name-and-tag':
+                    search_note_list=note_list.filter(Q (note_name=search_keyword) | Q (tags__tag_name=search_keyword))
+                elif search_type == 'name':
+                    search_note_list = note_list.filter(
+                        note_name=search_keyword)
+                elif search_type == 'tag':
+                    search_note_list=note_list.filter(tags__tag_name=search_keyword)
+                my_search_note_list=search_note_list.filter(author=request.user)
+                other_search_note_list=search_note_list.exclude(author=request.user)
+                return render(request, 'appCodingNote/login-search.html', {'myNote': my_search_note_list, 'otherNote': other_search_note_list})
+        return redirect('appCodingNote:dashboard')
 
 
 class chromeExtension:
@@ -162,9 +215,9 @@ class chromeExtension:
         except:
             Folder.objects.create(folder_name=folder_name, author=request.user)
             fid = Folder.objects.get(folder_name=folder_name).id
-        Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link,
+        
+        tag=Tagging.create_tag(request)
+        newNote = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link,
                             note_link_title=note_link_title, note_comment=note_comment, author=request.user)
-        nid = Note.objects.get(note_name=note_name).id
-        Tag.objects.create(
-            tag_name=request.POST['noteTag'], user=request.user, note_id=nid)
+        newNote.tags.add(tag)
         return render(request, 'appCodingNote/index.html')

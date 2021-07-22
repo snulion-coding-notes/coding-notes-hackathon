@@ -58,7 +58,7 @@ function saveNote(){
         type: "POST",
         data : {
             noteName: document.getElementById("noteName").value,
-            noteTag: document.getElementById("noteTag").value,
+            tag: document.getElementById("noteTag").value,
             noteComment: document.getElementById("noteComment").value,
             file: document.getElementById("File").value,
             noteLink: url,
@@ -68,8 +68,12 @@ function saveNote(){
             switch (result) {
                 case true:
                     processResponse(result);
+                    window.close();
+                    alert("저장되었습니다.");
                     break;
                 default:
+                    window.close();
+                    alert("저장되었습니다.");
                     
             }
         },

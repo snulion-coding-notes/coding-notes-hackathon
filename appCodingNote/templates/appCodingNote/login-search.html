@@ -1,0 +1,58 @@
+{% extends 'sidebar.html' %} 
+{% load static %} 
+{% load sass_tags %} 
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/folder.scss' %}"/>
+<link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/dashboard-header.scss' %}">
+{% endblock style %} 
+{% block content_dashboard %}
+<main>
+  <!-- Search Bar -->
+    <div class="dashboard-header">
+      <form action="{% url 'appCodingNote:login_search' %}" method="POST" class="search-container">
+        <div class="search-bar">
+          {% csrf_token %}
+          <select name="search-option" class="search-option">
+            <option value="name-and-tag">제목 + 태그</option>
+            <option value="name">제목</option>
+            <option value="tag">태그</option>
+          </select>
+          <input name="keyword" id="keyword" type="text" placeholder="검색어를 입력하세요">
+          <button value="submit" type="submit">
+            <img src="{% static 'img/search.png' %}" alt="search icon">
+          </button>
+        </div>
+      </form>
+    </div>
+    {% for note in myNote %}
+    <div class="card-item-container">
+      <div class="card-header">
+        <div class="card-header-bookmark">북마크</div>
+      </div>
+      <div class="card-body">
+        <div class="card-body-image">이미지</div>
+        <div class="card-body-description">
+          <div class="card-body-noteName">{{note.note_name}}</div>
+          <div class="card-body-Tags">#Tags</div>
+        </div>
+      </div>
+    {% endfor %}
+    {% for note in otherNote %}
+    <div class="card-item-container">
+      <div class="card-header">
+        <div class="card-header-bookmark">북마크</div>
+      </div>
+      <div class="card-body">
+        <div class="card-body-image">이미지</div>
+        <div class="card-body-description">
+          <div class="card-body-noteName">{{note.note_name}}</div>
+          <div class="card-body-Tags">#Tags</div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <script src="//code.jquery.com/jquery.min.js"></script>
+  <script src="{% static 'appCodingNote/js/folder.js' %}"></script>
+  {%endblock%}
+</main>

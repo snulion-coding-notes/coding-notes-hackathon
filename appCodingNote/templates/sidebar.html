@@ -6,7 +6,7 @@
   <link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/sidebar.scss' %}"/>
 {% endblock side_style%}
 {% block side_js %}
-  <script src="{% static 'appCodingNote/js/sidebar.js' %}"></script>
+  <script defer src="{% static 'appCodingNote/js/sidebar.js' %}"></script>
 {% endblock side_js %}
 
 {% block content %}
@@ -17,15 +17,17 @@
         <img src="{% static 'img/logo-white.png' %}">
       </a>
     </div>
-    <div class="menu-item">
+
+    <!-- Dashboard -->
+    <div id="dashboard-menu" class="menu-item">
       <a href="/codingnote/dashboard">Dashboard</a>
     </div>
 
     <!-- Folders -->
-    <div class="menu-item">
+    <div id="folders-menu" class="menu-item">
       <button class="dropdown-btn" onclick="activateToggle('folder')">
         <p>Folders</p>
-        <img id="folder-dropdown-btn" src="{% static 'img/toggle-switch.png' %}">
+        <img id="folder-dropdown-btn" src="{% static 'img/toggle-switch.svg' %}">
       </button>
     </div>
     {% for folder in my_folders %}
@@ -35,10 +37,10 @@
     {% endfor %}
 
     <!-- Tags -->
-    <div class="menu-item">
+    <div id="tags-menu" class="menu-item">
       <button class="dropdown-btn" onclick="activateToggle('tag')">
         <p>Tags</p>
-        <img id="tag-dropdown-btn" src="{% static 'img/toggle-switch.png' %}">
+        <img id="tag-dropdown-btn" src="{% static 'img/toggle-switch.svg' %}">
       </button>
     </div>
     {% for tag in my_tags %}
@@ -49,7 +51,7 @@
     {% endfor %}
 
     <!-- Bookmarks -->
-    <div class="menu-item">
+    <div id="bookmarks-menu" class="menu-item">
       <a href="#Bookmarks">Bookmarks</a>
     </div>
     <div class="signout-button">

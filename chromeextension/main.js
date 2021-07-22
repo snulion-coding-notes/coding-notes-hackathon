@@ -78,6 +78,9 @@ function saveNote(){
             }
         },
         error: function(xhr, ajaxOptions, thrownError){
+            chrome.tabs.create({
+                url: 'http://localhost:8000/accounts/signin'
+            });
             alert(xhr.status);
             alert(thrownError);
         }

@@ -1,3 +1,4 @@
+$orange: #f07707;
 * {
   margin: 0;
   padding: 0;
@@ -24,4 +25,9 @@ a {
 
 input:focus {
   outline: none;
+}
+
+#signup-error-notice{
+  color:$orange;
+  margin-bottom:5px;
 }

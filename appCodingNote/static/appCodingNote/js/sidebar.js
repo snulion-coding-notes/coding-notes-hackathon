@@ -1,12 +1,28 @@
 const activateToggle = (element) => {
-  // 토글 스위치를 회전시켜줌
   const buttonElement = document.getElementById(`${element}-dropdown-btn`);
   buttonElement.classList.toggle("active");
 
-  // 토글 목록을 보여줌
   const toggleElements = document.getElementsByClassName(`${element}-dropdown`);
   [...toggleElements].forEach((element) => {
     if (element.style.display === "none") element.style.display = "flex";
     else element.style.display = "none";
   })
+}
+
+// TODO : Bookmark도 추가
+window.onload = () => {
+  const currentPath = window.location.pathname;
+  console.log(currentPath);
+  let currentPageElement;
+
+  if (currentPath === '/codingnote/dashboard/') {
+    currentPageElement = document.getElementById('dashboard-menu');
+    currentPageElement.classList.add('current-page');
+  } else if (currentPath.includes('readfolder')) {
+    currentPageElement = document.getElementById('folders-menu');
+    currentPageElement.classList.add('current-page');
+  } else if (currentPath.includes('readtag')) {
+    currentPageElement = document.getElementById('tags-menu');
+    currentPageElement.classList.add('current-page');
+  }
 }

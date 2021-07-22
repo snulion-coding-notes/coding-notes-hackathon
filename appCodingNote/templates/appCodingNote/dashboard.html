@@ -8,7 +8,9 @@
   <link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/dashboard.scss' %}">
 {% endblock style %}
 {% block js %}
+  <script src="{% static 'appCodingNote/js/dashboard.js' %}"></script>
 {% endblock js %}
+
 {% block content_dashboard %}
   <main id="main">
     <!-- Search Bar -->
@@ -47,13 +49,14 @@
           {% endfor %}
 
           <!-- New Folder -->
-          <form action ="{% url 'appCodingNote:create_folder' %}" method="POST">
-            {% csrf_token %}
-            <button type="submit">
+          {% comment %} <form action ="{% url 'appCodingNote:create_folder' %}" method="POST"> {% endcomment %}
+          <div class="new-folder-container">
+            {% comment %} {% csrf_token %} {% endcomment %}
+            <button onclick="checkInput()">
               <img src="{% static 'img/add-folder.png' %}" alt="add folder">
             </button>
-            <input class ="folder-new-input" type="text" placeholder="새 폴더명" name="folderName"/>
-          </form>
+            <input id="folder-new-input" class ="folder-new-input" type="text" placeholder="새 폴더명" name="folderName"/>
+          </div>
         </div>
       </div>
     </div>
@@ -66,11 +69,6 @@
               <p>{{ tag.tag_name }}</p>
             </a>
           {% endfor %}
-          <!-- sample tag -->
-          {% comment %} <div class="tag-content">
-            <p>샘플 태그</p>
-          </div> {% endcomment %}
-          <!-- sample tag -->
         </div>
       </div>
     </div>

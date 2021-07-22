@@ -1,4 +1,4 @@
-from django.http.response import JsonResponse
+from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from .models import Folder, Note, Bookmark, Tag
 from django.views.decorators.csrf import csrf_exempt
@@ -18,6 +18,7 @@ def index(request):
     else:
         return render(request, 'appCodingNote/index.html')
 
+
 @csrf_exempt
 def result(request):
     notes = Note.objects.all()
@@ -25,6 +26,7 @@ def result(request):
     if(search_keyword):
         search_note_list=notes.filter(Q (note_name=search_keyword) | Q (tags__tag_name=search_keyword))
         return render(request, 'appCodingNote/index-search.html', {'notes':search_note_list})
+
     return render(request, 'appCodingNote/index.html')
     # 인덱스 - 검색 결과 템플릿 위해 추가
 
@@ -45,8 +47,16 @@ class FolderCRUD:
     def create_folder(request):
         if request.method == 'POST':
             folder_name = request.POST['folderName']
-            Folder.objects.create(folder_name=folder_name, author=request.user)
-        return redirect('appCodingNote:dashboard')
+
+            try:
+                Folder.objects.get(folder_name=folder_name,
+                                   author=request.user)
+                return JsonResponse({'message': '중복된 폴더명입니다'})
+
+            except:
+                Folder.objects.create(
+                    folder_name=folder_name, author=request.user)
+                return HttpResponse()
 
     def read_folder(request, fid):
         folder = Folder.objects.get(id=fid)
@@ -102,7 +112,7 @@ class NoteCRUD:
             
             notes = Note.objects.filter(folder_id=fid)
             notesNum = notes.count()
-            return JsonResponse({'notesNum': notesNum, 'note_link_title': note_link_title, 'note_link':note_link})
+            return JsonResponse({'notesNum': notesNum, 'note_link_title': note_link_title, 'note_link': note_link})
         else:
             return redirect(f'/dashboard/{fid}/readfolder/')
 
@@ -182,7 +192,8 @@ class Search:
                 if search_type == 'name-and-tag':
                     search_note_list=note_list.filter(Q (note_name=search_keyword) | Q (tags__tag_name=search_keyword))
                 elif search_type == 'name':
-                    search_note_list=note_list.filter(note_name=search_keyword)
+                    search_note_list = note_list.filter(
+                        note_name=search_keyword)
                 elif search_type == 'tag':
                     search_note_list=note_list.filter(tags__tag_name=search_keyword)
                 my_search_note_list=search_note_list.filter(author=request.user)

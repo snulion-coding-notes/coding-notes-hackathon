@@ -66,7 +66,7 @@
             <p class="note-name">{{ note.note_name }}</p>
             <p class="note-comment">{{ note.note_comment }}</p>
             <!-- TODO : 태그 여러 개일 경우 태그를 보여줘야 함 -->
-            {% comment %} <p class="note-tag">{{ note.tag_set.all }}</p> {% endcomment %}
+            <p class="note-tag">{{ note.tag_set.all }}</p>
           </div>
         </section>
       {% endfor %}

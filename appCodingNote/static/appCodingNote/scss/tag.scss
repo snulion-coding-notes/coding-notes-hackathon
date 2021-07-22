@@ -32,7 +32,8 @@ main {
     background: none;
     border-bottom: solid;
     border-color: $yellow;
-    width: 300px;
+    width: 16vw;
+    min-width: 250px;
 
     & ::placeholder {
       color: black;
@@ -55,26 +56,28 @@ h2 {
 }
 
 .tag-edit-btn {
-  background-image: url(../../img/edit.png);
+  background-image: url(../../img/edit.svg);
   margin: 0 5px;
 }
 
 .tag-delete-btn {
-  background-image: url(../../img/delete.png);
+  background-image: url(../../img/delete.svg);
   margin: 0 5px 2px 5px;
 }
 
 .edit-done-btn {
-  background-image: url(../../img/save-update.png);
+  background-image: url(../../img/save-update.svg);
 }
 
 .hide {
   visibility: hidden;
 }
 
-.edit-delete-btn {
+.edit-delete-btn,
+.edit-done-btn {
   &:hover {
-    filter: opacity(0.5) drop-shadow(0 0 0 $orange);
+    filter: invert(51%) sepia(17%) saturate(5809%) hue-rotate(2deg)
+      brightness(98%) contrast(95%);
   }
 }
 
@@ -87,8 +90,10 @@ h2 {
 .card-content {
   display: flex;
   flex-direction: column;
-  width: 300px;
-  height: 400px;
+  width: 16vw;
+  height: 21vw;
+  min-width: 250px;
+  min-height: 333px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   margin: 0 25px 40px 25px;
 }
@@ -129,6 +134,7 @@ h2 {
   flex-direction: column;
   justify-content: center;
   background-color: $light-gray;
+  padding: 10px 0;
 
   p {
     overflow: hidden;

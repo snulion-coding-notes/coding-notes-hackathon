@@ -8,6 +8,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Coding Notes" />
+    <meta property="og:description" content="개발자를 위한 최고의 지식 저장소" />
+    <meta property="og:image" content="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" />
     <title>Coding Notes</title>
     <link rel="icon" href="{% static 'img/favicon.png' %}">
     <link rel="shortcut icon" href="{% static 'img/favicon.png' %}">
@@ -73,7 +76,7 @@
           </div>
         </section>
       </div>
-      <div id="tab-shadow" class="hide"></div>
+      <div id="tab-shadow" class="no-display"></div>
     {% endif %}
     {% block content %}{% endblock %}
 

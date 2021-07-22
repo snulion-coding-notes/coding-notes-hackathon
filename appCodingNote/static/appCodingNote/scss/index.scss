@@ -1,4 +1,4 @@
-@import "./colors.scss";
+@import './colors.scss';
 
 #main {
   height: calc(100vh - 100px);
@@ -171,5 +171,11 @@
     position: fixed;
     bottom: 0;
     width: 100%;
+  }
+}
+
+@media screen and (max-height: 820px) {
+  .sub-image {
+    display: none;
   }
 }

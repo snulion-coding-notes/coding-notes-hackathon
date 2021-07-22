@@ -58,7 +58,7 @@ function saveNote(){
         type: "POST",
         data : {
             noteName: document.getElementById("noteName").value,
-            noteTag: document.getElementById("noteTag").value,
+            tag: document.getElementById("noteTag").value,
             noteComment: document.getElementById("noteComment").value,
             file: document.getElementById("File").value,
             noteLink: url,
@@ -78,8 +78,17 @@ function saveNote(){
             }
         },
         error: function(xhr, ajaxOptions, thrownError){
-            alert(xhr.status);
-            alert(thrownError);
+            if(xhr.status==500){
+                chrome.tabs.create({
+                    url: 'http://localhost:8000/accounts/signin'
+                });
+                alert("서비스 사용을 위해 홈페이지에 로그인 해주세요.");
+            }
+            else{
+                alert(xhr.status);
+                alert(thrownError);
+            }
+
         }
     })
 

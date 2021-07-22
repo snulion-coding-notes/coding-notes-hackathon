@@ -1,14 +1,14 @@
-const showBtns = () => {
+const showTitleActionBtns = () => {
   const tagTitleBtns = document.getElementsByClassName('edit-delete-btn');
   [...tagTitleBtns].forEach((btn) => {
-    btn.classList.remove('hide');
+    btn.classList.remove('no-visibility');
   })
 }
 
-const hideBtns = () => {
+const hideTitleActionBtns = () => {
   const tagTitleBtns = document.getElementsByClassName('edit-delete-btn');
   [...tagTitleBtns].forEach((btn) => {
-    btn.classList.add('hide');
+    btn.classList.add('no-visibility');
   })
 }
 
@@ -27,7 +27,7 @@ const editTagName = (tagName) => {
   })
 
   const editDoneBtn = document.getElementById('edit-done-btn');
-  editDoneBtn.classList.remove('hide');
+  editDoneBtn.classList.remove('no-visibility');
 }
 
 // TODO : 태그 모델 완성 후 update tag, delete tag 함수 완성

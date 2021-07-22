@@ -9,13 +9,14 @@
 {% endblock style %}
 {% block js %}
   <script defer type="text/javascript" src="{% static 'appCodingNote/js/tag.js' %}"></script>
+  <script defer type="text/javascript" src="{% static 'appCodingNote/js/viewRelated.js' %}"></script>
 {% endblock js %}
 
 {% block content_dashboard %}
   <main id="main">
     <!-- Search Bar -->
     <div class="dashboard-header">
-      <div class="search-container">
+      <form action="{% url 'appCodingNote:login_search' %}" method="POST" class="search-container">
         <div class="search-bar">
           {% csrf_token %}
           <select name="search-option" class="search-option">
@@ -23,12 +24,12 @@
             <option value="name">제목</option>
             <option value="tag">태그</option>
           </select>
-          <input id="keyword" type="text" placeholder="검색어를 입력하세요">
-          <button onclick="loginSearch()">
+          <input name="keyword" id="keyword" type="text" placeholder="검색어를 입력하세요">
+          <button value="submit" type="submit">
             <img src="{% static 'img/search.png' %}" alt="search icon">
           </button>
         </div>
-      </div>
+      </form>
       <div class="greeting">
         <p>{{ user.username }}님, 안녕하세요!</p>
       </div>
@@ -36,18 +37,83 @@
     <!-- dashboard-header.scss 파일이랑 같이 복붙하기 -->
 
     <!-- Tag 섹션 -->
-    <div class="title-header" onmouseover="showBtns()" onmouseout="hideBtns()">
-      <div id="tag-title" class="tag-title">
+    <div class="title-header">
+      <div id="tag-title" class="tag-title" onmouseover="showTitleActionBtns()" onmouseout="hideTitleActionBtns()">
         <h2 id="tag-name">{{ tag_name }}</h2>
-        <button class="tag-edit-btn edit-delete-btn hide" onclick="editTagName('{{ tag_name }}')"></button>
+        <button class="tag-edit-btn edit-delete-btn no-visibility" onclick="editTagName('{{ tag_name }}')"></button>
         <!-- Tag Update, Tag Delete 함수 만들어서 연결 -->
-        <button class="tag-delete-btn edit-delete-btn hide" onclick="deleteTag('{{ tag_name }}')"></button>
-        <button id="edit-done-btn" class="edit-done-btn tag-title-btn hide" onclick="updateTag()"></button>
+        <button class="tag-delete-btn edit-delete-btn no-visibility" onclick="deleteTag('{{ tag_name }}')"></button>
+        <button id="edit-done-btn" class="edit-done-btn tag-title-btn no-visibility" onclick="updateTag()"></button>
+      </div>
+      <!-- 리스트뷰, 카드뷰 전환 -->
+      <div class="change-view">
+        <button id ="view-select" class="view-select" onClick="onClickViewButton(event)">
+          <img id="list-view" src="{% static 'img/list-view-on.png' %}"/>
+          <img id="card-view" class="no-display" src="{% static 'img/card-view-on.png' %}"/>
+        </button>
       </div>
     </div>
 
+    <!-- Tag 리스트 -->
+    <div id="list-container" class="list-container">
+      <!-- 노트 개수 -->
+      <div class="content-note-num">
+        <span id="content-note-num">{{ tagged_notes.count }} notes</span>
+      </div>
+
+      <!-- 노트 테이블 -->
+      <table class="table data">
+        <thead>
+          <tr>
+            <th class="thead-name">노트 제목</th>
+            <th class="thead-comment">코멘트</th>
+            <th class="thead-website">웹사이트</th>
+            <th class="thead-tag">태그</th>
+            <th class="thead-action">
+            </th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+          {% for note in tagged_notes %}
+            <tr id="each-note-{{ note.id }}" onmouseover="showNoteActionBtns({{ note.id }})" onmouseout="hideNoteActionBtns({{ note.id }})">
+              <td id="note-name-{{ note.id }}" class="col-1">{{ note.note_name }}</td>
+              <td id="note-comment-{{ note.id }}" class="col-2">{{ note.note_comment }}</td>
+              <td id="note-link-{{ note.id }}" class="col-3"><a href="{{ note.note_link }}" target="_blank">{{ note.note_link_title }}</td><a>
+              <td id="note-tag-{{ note.id }}" class="col-4">
+                {% for tag in note.tags.all %}
+                  <span class="tag-style tag-span">{{ tag.tag_name }}</span>
+                {% endfor %}
+              </td>
+              <td id="note-action-{{ note.id }}" class="note-action">
+                <button
+                  class="edit no-visibility"
+                  id="{{ note.id }}-edit-btn"
+                  onclick="editNote({{ note.id }}, '{{ note.note_name }}', '{{ note.note_comment }}', '{{ note.note_link_title }}')"
+                >
+                  <img class="edit-img" src="{% static 'img/edit.svg' %}" />
+                </button>
+                <button
+                  class="delete no-visibility"
+                  id="{{note.id}}-delete-btn"
+                  onclick="deleteNote({{ note.folder.id }}, {{ note.id }})"
+                >
+                  <img class="delete-img" src="{% static 'img/delete.svg' %}" />
+                </button>
+                <button id="{{ note.id }}-update-btn" class="update no-display" onclick="updateNote({{ note.folder.id }}, {{ note.id }})">
+                  <img class="update-img" src="{% static 'img/save-update.svg' %}"/>
+                </button>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+        <tfoot>
+          <tr></tr>
+        </tfoot>
+      </table>
+    </div>
+
     <!-- Tag 카드 -->
-    <div class="card-container">
+    <div id="card-container" class="card-container no-display">
       {% for note in tagged_notes %}
         <section class="card-content">
           <div class="bookmark-section">
@@ -65,8 +131,11 @@
           <div class="note-info">
             <p class="note-name">{{ note.note_name }}</p>
             <p class="note-comment">{{ note.note_comment }}</p>
-            <!-- TODO : 태그 여러 개일 경우 태그를 보여줘야 함 -->
-            <p class="note-tag">{{ note.tag_set.all }}</p>
+            <div class="note-tag">
+              {% for tag in note.tags.all %}
+                <span class="tag-style">{{ tag.tag_name }}</span>
+              {% endfor %}
+            </div>
           </div>
         </section>
       {% endfor %}

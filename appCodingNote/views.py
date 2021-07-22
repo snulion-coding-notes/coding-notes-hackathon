@@ -31,7 +31,7 @@ def dashboard(request):
     all_notes = Note.objects.all()
     all_tags = Tag.objects.all()
     my_folders = Folder.objects.filter(author=request.user)
-    my_tags = Tag.objects.filter(user=request.user)
+    my_tags = Tag.objects.filter(notes__author=request.user)
     return render(request, 'appCodingNote/dashboard.html', {'all_notes': all_notes, 'all_tags': all_tags, 'my_folders': my_folders, 'my_tags': my_tags})
 
 
@@ -89,7 +89,7 @@ class NoteCRUD:
 
             note_comment = request.POST['noteComment']
             newNote = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title,
-                                          note_link_image=note_link_image, note_comment=note_comment, author=request.user)
+                                    note_link_image=note_link_image, note_comment=note_comment, author=request.user)
             nid = newNote.id
             Tagging.create_tag(nid)
             notes = Note.objects.filter(folder_id=fid)
@@ -138,7 +138,7 @@ class Tagging:
     def create_tag(request, nid):
         note = Note.objects.get(id=nid)
         Tag.objects.create(user=request.user, note=note,
-                           tag_name=request.POST['tagName'])
+                        tag_name=request.POST['tagName'])
 
     def read_tag(request, tid):
         tag = Tag.objects.get(id=tid)

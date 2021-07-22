@@ -12,7 +12,7 @@ const onClickAddButton = (folderId) =>{
   newTableWebsite.innerHTML=`<input id="table-website-${folderId}" type="text", placeholder="(필수)url을 입력해주세요.", name="link-title"></input>`
   let newTableTag=document.createElement('td');
   newTableTag.setAttribute("id","new-tag-row");
-  newTableTag.innerHTML=`<input id="table-tag-${folderId}" type="text", placeholder="(선택)태그를 입력해주세요.", name="tag"></input>`;
+  newTableTag.innerHTML=`<input id="table-tag-${folderId}" type="text", placeholder="(선택)태그를 입력해주세요.", name="tag"  ></input>`;
   let newTableAction=document.createElement('td');
   let newTableSaveButton=document.createElement('button');
   newTableSaveButton.setAttribute("class","save");

@@ -18,11 +18,14 @@ class Folder(models.Model):
     def __str__(self):
         return self.folder_name
     
+class Tag(models.Model):
+    tag_name = models.CharField(max_length=30)
+
 
 class Note(models.Model):
     author = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     bookmark_users = models.ManyToManyField(User, blank=True, related_name='bookmark_notes', through='Bookmark')
-    tag_users = models.ManyToManyField(User, blank=True, related_name='tag_notes', through='Tag')
+    tags = models.ManyToManyField(Tag, blank=True, related_name='notes')
     folder = models.ForeignKey(Folder, on_delete=models.CASCADE, related_name='notes')
     note_name = models.CharField(max_length=256)
     note_link = models.URLField()
@@ -39,10 +42,6 @@ class Note(models.Model):
     def __str__(self):
         return self.note_name
 
-class Tag(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    note = models.ForeignKey(Note, on_delete=models.CASCADE)
-    tag_name = models.CharField(max_length=30)
 
 class Bookmark(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

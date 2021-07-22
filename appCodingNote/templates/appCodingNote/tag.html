@@ -79,12 +79,16 @@
               <td id="note-name-{{ note.id }}" class="col-1">{{ note.note_name }}</td>
               <td id="note-comment-{{ note.id }}" class="col-2">{{ note.note_comment }}</td>
               <td id="note-link-{{ note.id }}" class="col-3"><a href="{{ note.note_link }}">{{ note.note_link_title }}</td><a>
-              <td id="note-tag-{{ note.id }}" class="col-4">노트 태그</td>
+              <td id="note-tag-{{ note.id }}" class="col-4">
+                {% for tag in note.tags.all %}
+                  <span class="tag-style tag-span">{{ tag.tag_name }}</span>
+                {% endfor %}
+              </td>
               <td id="note-action-{{ note.id }}" class="note-action">
                 <button
                   class="edit no-visibility"
                   id="{{ note.id }}-edit-btn"
-                  onclick="editNote({{ note.folder.id }}, {{ note.id }}, '{{ note.note_name }}', '{{ note.note_comment }}', '{{ note.note_link_title }}')"
+                  onclick="editNote({{ note.id }}, '{{ note.note_name }}', '{{ note.note_comment }}', '{{ note.note_link_title }}')"
                 >
                   <img class="edit-img" src="{% static 'img/edit.svg' %}" />
                 </button>
@@ -135,8 +139,11 @@
           <div class="note-info">
             <p class="note-name">{{ note.note_name }}</p>
             <p class="note-comment">{{ note.note_comment }}</p>
-            <!-- TODO : 태그 여러 개일 경우 태그를 보여줘야 함 -->
-            <p class="note-tag">{{ note.tag_set.all }}</p>
+            <div class="note-tag">
+              {% for tag in note.tags.all %}
+                <span class="tag-style">{{ tag.tag_name }}</span>
+              {% endfor %}
+            </div>
           </div>
         </section>
       {% endfor %}

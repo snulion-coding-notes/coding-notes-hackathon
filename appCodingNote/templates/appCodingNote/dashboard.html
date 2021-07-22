@@ -49,9 +49,7 @@
           {% endfor %}
 
           <!-- New Folder -->
-          {% comment %} <form action ="{% url 'appCodingNote:create_folder' %}" method="POST"> {% endcomment %}
           <div class="new-folder-container">
-            {% comment %} {% csrf_token %} {% endcomment %}
             <button onclick="checkInput()">
               <img src="{% static 'img/add-folder.png' %}" alt="add folder">
             </button>
@@ -65,7 +63,7 @@
         <h2>태그</h2>
         <div class = "tag-container">
           {% for tag in my_tags %}
-            <a class="tag-content" href="#">
+            <a class="tag-content" href="{% url 'appCodingNote:read_tag' tag.id %}">
               <p>{{ tag.tag_name }}</p>
             </a>
           {% endfor %}

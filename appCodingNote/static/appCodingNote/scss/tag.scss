@@ -183,6 +183,7 @@ h2 {
       overflow: hidden;
       border-bottom: solid 0.2mm $medium-gray;
       height: 50px;
+      word-break: keep-all;
     }
 
     input {
@@ -233,11 +234,11 @@ h2 {
 }
 
 .col-1 {
-  width: 30%;
+  width: 20%;
 }
 
 .col-2 {
-  width: 25%;
+  width: 30%;
 }
 
 .col-3 {
@@ -245,7 +246,7 @@ h2 {
 }
 
 .col-4 {
-  width: 15%;
+  width: 20%;
 }
 
 // 태그 카드뷰 CSS
@@ -310,6 +311,18 @@ h2 {
     white-space: nowrap;
     margin: 0 20px 10px 20px;
   }
+}
+
+.note-tag {
+  margin: 0 20px 10px 20px;
+}
+
+.tag-style {
+  padding: 5px 10px;
+  background-color: $yellow;
+  border-radius: 20px;
+  display: inline-block;
+  margin: 2px 3px;
 }
 
 .note-name {

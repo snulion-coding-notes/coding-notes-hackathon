@@ -126,7 +126,7 @@ class NoteCRUD:
         note = Note.objects.filter(id=nid)
         note.update(note_name=request.POST['noteName'],
                     note_link_title=request.POST['noteLinkTitle'], note_comment=request.POST['noteComment'])
-        tag=Tagging.create_tag(request)
+        tag = Tagging.create_tag(request)
         note.tags.add(tag)
 
         updated_note = Note.objects.get(id=nid)
@@ -162,15 +162,18 @@ class Tagging:
             return Tag.objects.get(tag_name=request.POST['tag'])
         else:
             return Tag.objects.create(tag_name=request.POST['tag'])
-            
+
 
     def read_tag(request, tid):
         tag = Tag.objects.get(id=tid)
         tag_name = tag.tag_name
         tagged_notes = Note.objects.filter(
-            tag__tag_name=tag_name, author=request.user)
+            tags__tag_name=tag_name, author=request.user)
         my_folders = Folder.objects.filter(author=request.user)
-        my_tags = Tag.objects.filter(user=request.user)
+        my_note=Note.objects.filter(author=request.user)
+        my_tags=Tag.objects.none()
+        for note in my_note:
+            my_tags=my_tags.union(note.tags.all())
         return render(request, 'appCodingNote/tag.html', {'tagged_notes': tagged_notes, 'tag_name': tag_name, 'my_folders': my_folders, 'my_tags': my_tags})
 
     def update_tag(request, fid, nid, tid):

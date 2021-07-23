@@ -4,12 +4,13 @@
     background: #9B9898;
     border-radius: 7px;
     margin:8px;
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 13px;
-    line-height: 15px;
-    color: #FFFFFF;
+}
+
+.comment{
+    width: 190px;
+    height: 50px;
+    background: #9B9898;
+    margin:8px;
 }
 
 #submit{
@@ -18,6 +19,14 @@
     background: #FFDD29;
     border-radius: 7px;
     margin:8px;
+}
+
+#saveFolder select{
+    width: 195px;
+    height: 37px;
+    background: #9B9898;
+    border-radius: 7px;
+    margin: 8px;
 }
 
 .font{

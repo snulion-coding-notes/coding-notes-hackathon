@@ -126,6 +126,11 @@ h2 {
 
 .overflow-img {
   width: 30px;
+
+  &:hover {
+    filter: invert(51%) sepia(17%) saturate(5809%) hue-rotate(2deg)
+      brightness(98%) contrast(95%);
+  }
 }
 
 .update-img,

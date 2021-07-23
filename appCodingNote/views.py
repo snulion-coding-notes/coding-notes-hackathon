@@ -67,11 +67,11 @@ class FolderCRUD:
         notes = Note.objects.filter(folder__id=fid)
         my_folders = Folder.objects.filter(author=request.user)
         my_tags = Tag.objects.filter(notes__author=request.user)
-        my_note=Note.objects.filter(author=request.user)
+        my_note = Note.objects.filter(author=request.user)
 
-        my_tags=Tag.objects.none()
+        my_tags = Tag.objects.none()
         for note in my_note:
-            my_tags=my_tags.union(note.tags.all())
+            my_tags = my_tags.union(note.tags.all())
         
         return render(request, 'appCodingNote/folder.html', {'folder': folder, 'notes': notes, 'my_folders': my_folders, 'my_tags': my_tags})
 
@@ -106,7 +106,7 @@ class NoteCRUD:
                 og_title = soup.select_one('meta[property="og:title"]')
                 note_link_title = og_title['content']   # note_link_title 얻기
             else:
-                note_link_title = ""                    # note_link_title 정보를 가져 올 수 없을 경우 처리
+                note_link_title = note_link                    # note_link_title 정보를 가져 올 수 없을 경우 처리
 
             if soup.select_one('meta[property="og:image"]') is not None:
                 og_image = soup.select_one('meta[property="og:image"]')
@@ -163,7 +163,8 @@ class NoteCRUD:
             og_title = soup.select_one('meta[property="og:title"]')
             note_link_title = og_title['content']   # note_link_title 얻기
         else:
-            note_link_title = note_link                  # note_link_title 정보를 가져 올 수 없을 경우 처리
+            note_link_title = note_link
+            print(note_link_title)                  # note_link_title 정보를 가져 올 수 없을 경우 처리
 
         if soup.select_one('meta[property="og:image"]') is not None:
             og_image = soup.select_one('meta[property="og:image"]')

@@ -56,8 +56,10 @@ const hideNoteActionBtns = (noteId) => {
   }
 };
 
-const getTagNames = () => {
-  const tagsSpanElements = document.getElementsByClassName('tag-span');
+const getTagNames = (noteId) => {
+  const tagsSpanElements = document.getElementsByClassName(
+    `tag-span-${noteId}`
+  );
   const tagsArray = [];
   [...tagsSpanElements].forEach((span) => {
     tagsArray.push(span.innerHTML);
@@ -66,21 +68,21 @@ const getTagNames = () => {
   return tagsArray.join(' ');
 };
 
-const makeTagElements = (str) => {
-  // if (str != '') {
-  const tagArray = str.split(' ');
-  const spanElements = [];
-  tagArray.forEach((string) => {
-    const newTag = document.createElement('span');
-    newTag.classList.add('tag-style');
-    newTag.classList.add('tag-span');
-    newTag.innerHTML = string;
-    spanElements.push(newTag);
-  });
-  // }
+// const makeTagElements = (str) => {
+//   // if (str != '') {
+//   const tagArray = str.split(' ');
+//   const spanElements = [];
+//   tagArray.forEach((string) => {
+//     const newTag = document.createElement('span');
+//     newTag.classList.add('tag-style');
+//     newTag.classList.add(`tag-span`);
+//     newTag.innerHTML = string;
+//     spanElements.push(newTag);
+//   });
+//   // }
 
-  return spanElements;
-};
+//   return spanElements;
+// };
 
 // 리스트뷰에서 노트 수정, 삭제
 const editNote = (noteId, noteName, noteComment, noteLink) => {
@@ -94,7 +96,9 @@ const editNote = (noteId, noteName, noteComment, noteLink) => {
   linkElement.innerHTML = `<input id="edit-link-${noteId}" type="text", value="${noteLink}" name="link-title"></input>`;
 
   const tagElement = document.getElementById(`note-tag-${noteId}`);
-  tagElement.innerHTML = `<input id="edit-tag-${noteId}" type="text", value="${getTagNames()}" name="tag"></input>`;
+  tagElement.innerHTML = `<input id="edit-tag-${noteId}" type="text", value="${getTagNames(
+    noteId
+  )}" name="tag"></input>`;
 
   // 업데이트 버튼 나오고 edit delete 버튼 안 나오게
   document

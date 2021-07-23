@@ -102,10 +102,10 @@ const updateNote = async (folderId, noteId) => {
   if (editNameElement.value === '') {
     alert('노트 이름을 필수로 입력해주세요.');
   }
-  const reg_editurl =
+  const reg_editUrl =
     /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|www\.)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/;
 
-  if (reg_editurl.test(editLinkElement.value)) {
+  if (reg_editUrl.test(editLinkElement.value)) {
     let data = new FormData();
     data.append('noteName', editNameElement.value);
     data.append('noteComment', editCommentElement.value);
@@ -116,10 +116,10 @@ const updateNote = async (folderId, noteId) => {
       await axios.post(`/dashboard/${folderId}/${noteId}/updatenote/`, data);
       window.location.reload();
     } catch (e) {
-      alert('유효한 url을 입력해주세요.');
+      alert('유효한 URL을 입력해주세요.');
     }
   } else {
-    alert('유효한 url을 입력해주세요.');
+    alert('유효한 URL을 입력해주세요.');
   }
 };
 
@@ -192,11 +192,12 @@ const saveNote = async (folderId) => {
     `table-website-${folderId}`
   );
   const newTagElement = document.getElementById(`table-tag-${folderId}`);
-  const reg_url =
+  const reg_URL =
     /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|www\.)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/;
+
   if (newNameElement.value === '') {
     alert('노트 이름을 필수로 입력해주세요.');
-  } else if (reg_url.test(newWebsiteElement.value)) {
+  } else if (reg_URL.test(newWebsiteElement.value)) {
     let data = new FormData();
     data.append('noteName', newNameElement.value);
     data.append('noteComment', newCommentElement.value);
@@ -207,9 +208,9 @@ const saveNote = async (folderId) => {
 
       window.location.reload();
     } catch (e) {
-      alert('유효한 url을 입력해주세요.');
+      alert('유효한 URL을 입력해주세요.');
     }
   } else {
-    alert('유효한 url을 입력해주세요.');
+    alert('유효한 URL을 입력해주세요.');
   }
 };

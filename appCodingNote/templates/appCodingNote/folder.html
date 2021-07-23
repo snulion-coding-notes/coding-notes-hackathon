@@ -78,7 +78,11 @@
             <tr id="each-note-{{note.id}}" onmouseover="showNoteActionBtns({{ note.id }})" onmouseout="hideNoteActionBtns({{ note.id }})">
               <td id="note-name-{{note.id}}" class="col-1">{{ note.note_name }}</td>
               <td id="note-comment-{{note.id}}" class="col-2">{{ note.note_comment }}</td>
-              <td id="note-link-{{note.id}}" class="col-3"><a href="{{ note.note_link }}" target="_blank">{{ note.note_link_title }}</td><a>
+              <td id="note-link-{{note.id}}" class="col-3">
+                <a class="link-anchor" href="{{ note.note_link }}" target="_blank">
+                  <p>{{ note.note_link_title }}</p>
+                </a>
+              </td>
               <td id="note-tag-{{ note.id }}" class="col-4">
                 {% for tag in note.tags.all %}
                   <span class="tag-style tag-span-{{ note.id }}">{{ tag.tag_name }}</span>

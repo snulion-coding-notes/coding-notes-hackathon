@@ -294,17 +294,16 @@ class Search:
         if search_keyword :
             if len(search_keyword) > 1 :
                 if search_type == 'name-and-tag':
-                    search_note_list=note_list.filter(note_name=search_keyword)
-                    search_note_list2=note_list.filter(tags__tag_name=search_keyword)
+                    search_note_list=note_list.filter(note_name__icontains=search_keyword)
+                    search_note_list2=note_list.filter(tags__tag_name__icontains=search_keyword)
                     search_note_list.union(search_note_list2)
                     if not search_note_list:
                         search_note_list=search_note_list2
-                    print(search_note_list)
                 elif search_type == 'name':
                     search_note_list = note_list.filter(
-                        note_name=search_keyword)
+                        note_name__icontains=search_keyword)
                 elif search_type == 'tag':
-                    search_note_list=note_list.filter(tags__tag_name=search_keyword)
+                    search_note_list=note_list.filter(tags__tag_name__icontains=search_keyword)
                 my_search_note_list=search_note_list.filter(author=request.user)
                 other_search_note_list=search_note_list.exclude(author=request.user)
                 return render(request, 'appCodingNote/login-search.html', {'myNote': my_search_note_list, 'otherNote': other_search_note_list, 'my_folders': my_folders, 'my_tags': my_tags})

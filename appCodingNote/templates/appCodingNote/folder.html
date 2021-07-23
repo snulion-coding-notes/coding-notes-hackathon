@@ -89,7 +89,8 @@
                 {% endfor %}
               </td>
               <td id="note-action-{{ note.id }}" class="note-action">
-                <button
+                <div style="display: flex">
+                  <button
                   class="edit no-visibility"
                   id="{{ note.id }}-edit-btn"
                   onclick="editNote({{ note.id }},'{{ note.note_name }}','{{ note.note_comment }}','{{ note.note_link }}')"
@@ -103,9 +104,13 @@
                 >
                   <img class="delete-img" src="{% static 'img/delete.svg' %}" />
                 </button>
+                <button id="{{ note.id }}-overflow-btn" class="no-visibility" onclick="window.open('{{ note.note_overflow_link }}')">
+                  <img class="overflow-img" src="{% static 'img/stack-overflow.png' %}" alt="stackoverflow logo">
+                </button>
                 <button id="{{ note.id }}-update-btn" class="update no-display" onclick="updateNote({{ note.folder.id }}, {{ note.id }})">
                   <img class="update-img" src="{% static 'img/save-update.svg' %}"/>
                 </button>
+                </div>
               </td>
             </tr>
           {% endfor %}

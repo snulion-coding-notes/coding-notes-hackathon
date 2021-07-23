@@ -27,12 +27,19 @@ const showNoteActionBtns = (noteId) => {
   const deleteHasHide = document
     .getElementById(`${noteId}-delete-btn`)
     .classList.contains('no-visibility');
-  if (editHasHide && deleteHasHide) {
+  const overflowHasHide = document
+    .getElementById(`${noteId}-overflow-btn`)
+    .classList.contains('no-visibility');
+
+  if (editHasHide && deleteHasHide && overflowHasHide) {
     document
       .getElementById(`${noteId}-edit-btn`)
       .classList.remove('no-visibility');
     document
       .getElementById(`${noteId}-delete-btn`)
+      .classList.remove('no-visibility');
+    document
+      .getElementById(`${noteId}-overflow-btn`)
       .classList.remove('no-visibility');
   }
 };
@@ -44,12 +51,19 @@ const hideNoteActionBtns = (noteId) => {
   const deleteHasHide = document
     .getElementById(`${noteId}-delete-btn`)
     .classList.contains('no-visibility');
-  if (!editHasHide && !deleteHasHide) {
+  const overflowHasHide = document
+    .getElementById(`${noteId}-overflow-btn`)
+    .classList.contains('no-visibility');
+
+  if (!editHasHide && !deleteHasHide && !overflowHasHide) {
     document
       .getElementById(`${noteId}-edit-btn`)
       .classList.add('no-visibility');
     document
       .getElementById(`${noteId}-delete-btn`)
+      .classList.add('no-visibility');
+    document
+      .getElementById(`${noteId}-overflow-btn`)
       .classList.add('no-visibility');
   }
 };
@@ -91,6 +105,7 @@ const editNote = (noteId, noteName, noteComment, noteLink) => {
     .classList.remove('no-display');
   document.getElementById(`${noteId}-edit-btn`).classList.add('no-display');
   document.getElementById(`${noteId}-delete-btn`).classList.add('no-display');
+  document.getElementById(`${noteId}-overflow-btn`).classList.add('no-display');
 };
 
 const updateNote = async (folderId, noteId) => {

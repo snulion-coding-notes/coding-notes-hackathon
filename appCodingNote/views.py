@@ -9,6 +9,7 @@ import os
 import sys
 import urllib.request
 import ssl
+import json
 
 # TODO : Tag 모델 수정 후 my_tags 있는 부분 수정 필요할 시 수정해야 함 for sidebar (210721)
 
@@ -111,6 +112,9 @@ class NoteCRUD:
             if soup.select_one('meta[property="og:image"]') is not None:
                 og_image = soup.select_one('meta[property="og:image"]')
                 note_link_image = og_image['content']   # note_link_image 얻기
+                is_error = note_link_image.getcode()
+                if is_error == 400 or is_error == 404 :
+                    note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
             else:
                 # note_link_image 정보를 가져 올 수 없을 경우 처리, 디폴트 이미지 필요
                 note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
@@ -129,6 +133,8 @@ class NoteCRUD:
             new_note_link = new_note.note_link
             new_note_link_title = new_note.note_link_title
             new_note_tags = ' '.join(tag_name_array)
+
+            Crawl.translation(request)
 
             return JsonResponse({
                 'notesNum': notesNum,
@@ -333,7 +339,7 @@ class chromeExtension:
 
     
 class Crawl:
-    def tlansation(request):
+    def translation(request):
         context = ssl._create_unverified_context()
         client_id = '0ur6n190qb'
         client_secret = 'Dnl4YIhneF6UzIP1W0XzMmVpE1vBjpbgzwNLkj5W'
@@ -347,6 +353,7 @@ class Crawl:
         rescode = response.getcode()
         if(rescode==200):
             response_body = response.read()
-            print(response_body.decode('utf-8'))
+            str_index = response_body.decode('utf-8').find('translatedText')
+            trans_result = response_body.decode('utf-8')[str_index+17:-4]
         else:
             print("Error Code:" + rescode)

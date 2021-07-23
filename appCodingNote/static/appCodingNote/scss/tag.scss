@@ -106,6 +106,7 @@ h2 {
 .save,
 .edit,
 .delete,
+.overflow,
 .update {
   & .hide {
     visibility: hidden;
@@ -116,6 +117,15 @@ h2 {
 .delete-img {
   width: 20px;
   margin: 0 4px;
+
+  &:hover {
+    filter: invert(51%) sepia(17%) saturate(5809%) hue-rotate(2deg)
+      brightness(98%) contrast(95%);
+  }
+}
+
+.overflow-img {
+  width: 30px;
 
   &:hover {
     filter: invert(51%) sepia(17%) saturate(5809%) hue-rotate(2deg)
@@ -257,7 +267,7 @@ h2 {
 }
 
 .note-action {
-  min-width: 75px;
+  min-width: 120px;
   width: 100px;
 }
 
@@ -352,4 +362,10 @@ h2 {
 .note-name {
   font-size: 23px;
   font-weight: 700;
+}
+
+.no-bookmark {
+  font-weight: 500;
+  font-size: 22px;
+  margin-left: 60px;
 }

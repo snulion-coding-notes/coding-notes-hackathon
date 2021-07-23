@@ -38,36 +38,41 @@
     <!-- dashboard-header.scss 파일이랑 같이 복붙하기 -->
 
     <div class="title-header">
-      <div id="tag-title" class="tag-title" onmouseover="showTitleActionBtns()" onmouseout="hideTitleActionBtns()">
+      <div id="tag-title" class="tag-title">
         <h2 id="tag-name">내 북마크</h2>
       </div>
     </div>
-    <div id="card-container" class="card-container">
-      {% for bookmark in my_bookmarks %}
-        <section class="card-content">
-          <div class="bookmark-section">
-            <button id="bookmark-star-btn" class="bookmark-btn" onclick="createBookmark({{ bookmark.note.id }})">
-              {% if user in bookmark.note.bookmark_users.all %}
-                <img id="bookmark-star-{{ bookmark.note.id }}" src="{% static 'img/star-fill.png' %}" alt="bookmark">
-              {% else %}
-                <img id="bookmark-star-{{ bookmark.note.id }}" src="{% static 'img/star-empty.png' %}" alt="bookmark">
-              {% endif %}
-            </button>
-          </div>
-          <a class="note-image" href={{ bookmark.note.note_link }} target="_blank">
-            <img src={{ bookmark.note.note_link_image }} alt="note image">
-          </a>
-          <div class="note-info">
-            <p class="note-name">{{ bookmark.note.note_name }}</p>
-            <p class="note-comment">{{ bookmark.note.note_comment }}</p>
-            <div class="note-tag">
-              {% for tag in bookmark.note.tags.all %}
-                <span class="tag-style">{{ tag.tag_name }}</span>
-              {% endfor %}
+    {% if my_bookmarks.count == 0 %}
+      <h3 id="tag-name" class="no-bookmark">북마크가 하나도 없어요 &#129394</h3>
+    {% else %}
+      <div id="card-container" class="card-container">
+        {% for bookmark in my_bookmarks %}
+          <section class="card-content">
+            <div class="bookmark-section">
+              <button id="bookmark-star-btn" class="bookmark-btn" onclick="createBookmark({{ bookmark.note.id }})">
+                {% if user in bookmark.note.bookmark_users.all %}
+                  <img id="bookmark-star-{{ bookmark.note.id }}" src="{% static 'img/star-fill.png' %}" alt="bookmark">
+                {% else %}
+                  <img id="bookmark-star-{{ bookmark.note.id }}" src="{% static 'img/star-empty.png' %}" alt="bookmark">
+                {% endif %}
+              </button>
             </div>
-          </div>
-        </section>
-      {% endfor %}
-    </div>
+            <a class="note-image" href={{ bookmark.note.note_link }} target="_blank">
+              <img src={{ bookmark.note.note_link_image }} alt="note image">
+            </a>
+            <div class="note-info">
+              <p class="note-name">{{ bookmark.note.note_name }}</p>
+              <p class="note-comment">{{ bookmark.note.note_comment }}</p>
+              <div class="note-tag">
+                {% for tag in bookmark.note.tags.all %}
+                  <span class="tag-style">{{ tag.tag_name }}</span>
+                {% endfor %}
+              </div>
+            </div>
+          </section>
+        {% endfor %}
+      </div>
+    {% endif %}
+    
   </main>
 {% endblock content_dashboard %}

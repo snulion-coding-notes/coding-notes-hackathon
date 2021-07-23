@@ -168,7 +168,7 @@ const addNote = (folderId) => {
 
   const newTableWebsite = document.createElement('td');
   newTableWebsite.setAttribute('id', 'new-website-row');
-  newTableWebsite.innerHTML = `<input id="table-website-${folderId}" type="text", placeholder="(필수)url을 입력해주세요.", name="link-title"></input>`;
+  newTableWebsite.innerHTML = `<input id="table-website-${folderId}" type="text", placeholder="(필수)url을 입력해주세요.", name="link"></input>`;
 
   const newTableTag = document.createElement('td');
   newTableTag.setAttribute('id', 'new-tag-row');

@@ -82,14 +82,14 @@
               <td id="note-link-{{note.id}}" class="col-3"><a href="{{ note.note_link }}" target="_blank">{{ note.note_link_title }}</td><a>
               <td id="note-tag-{{ note.id }}" class="col-4">
                 {% for tag in note.tags.all %}
-                  <span class="tag-style tag-span">{{ tag.tag_name }}</span>
+                  <span class="tag-style tag-span-{{ note.id }}">{{ tag.tag_name }}</span>
                 {% endfor %}
               </td>
               <td id="note-action-{{ note.id }}" class="note-action">
                 <button
                   class="edit no-visibility"
                   id="{{ note.id }}-edit-btn"
-                  onclick="editNote({{ folder.id }},{{ note.id }},'{{ note.note_name }}','{{ note.note_comment }}','{{ note.note_link_title }}')"
+                  onclick="editNote({{ note.id }},'{{ note.note_name }}','{{ note.note_comment }}','{{ note.note_link }}')"
                 >
                   <img class="edit-img" src="{% static 'img/edit.svg' %}" />
                 </button>

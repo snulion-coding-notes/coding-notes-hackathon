@@ -46,7 +46,7 @@
         <button class="tab-close" onclick="closeTab('signin')"><img src="{% static 'img/close.png' %}"></button>
         <section>
           <p>Sign In</p>
-          <form method="POST" action="{% url 'signin' %}">
+          <form method="POST" action="{% url 'signin' %}" id="signin-form">
             {% csrf_token %}
             <input id="signin-username" name="signin-username" type="text" placeholder="Username" autocomplete="on">
             <input id="signin-password" name="signin-password" type="password" placeholder="Password" autocomplete="on">
@@ -64,7 +64,8 @@
           <p>Sign Up</p>
           <form id="signup-form" method="POST" action="{%url 'signup' %}">
             {% csrf_token %}
-            <input name="username" type="text" placeholder="Username" autocomplete="on">
+            <input id="username" name="username" type="text" placeholder="Username" autocomplete="on" oninput="prevalidateUsername()">
+            <div id="signup-username-notice"></div>
             <input name="email" type="text" placeholder="Email" autocomplete="on">
             <input name="password1" type="password" placeholder="Password" autocomplete="on">
             <input name="password2" type="password" placeholder="Check Password" autocomplete="on">
@@ -81,6 +82,6 @@
     {% block content %}{% endblock %}
 
   </body>
-  <script src="{% static 'appCodingNote/js/signup.js' %}"></script>
+  <script defer src="{% static 'appCodingNote/js/signup.js' %}"></script>
 
 </html>

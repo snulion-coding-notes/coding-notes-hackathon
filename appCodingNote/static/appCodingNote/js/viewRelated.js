@@ -66,25 +66,25 @@ const getTagNames = (noteId) => {
   return tagsArray.join(' ');
 };
 
-const editNote = (noteId, noteName, noteComment, noteLink) => {
+const editNote = (folderId, noteId, noteName, noteComment, noteLink) => {
   const nameElement = document.getElementById(`note-name-${noteId}`);
-  nameElement.innerHTML = `<input id="edit-name-${noteId}" type="text", value="${noteName}", name="name", placeholder="(필수)제목을 입력해주세요."></input>`;
+  nameElement.innerHTML = `<input id="edit-name-${noteId}" type="text", value="${noteName}", name="name", placeholder="(필수)제목을 입력해주세요." onKeypress="javascript:if(event.keyCode==13) {updateNote(${folderId}, ${noteId})}"></input>`;
 
   const newInputElement = document.getElementById(`edit-name-${noteId}`);
   newInputElement.setSelectionRange(noteName.length, noteName.length);
   newInputElement.focus();
 
   const commentElement = document.getElementById(`note-comment-${noteId}`);
-  commentElement.innerHTML = `<input id="edit-comment-${noteId}" type="text", value="${noteComment}" name="comment" placeholder="(선택)코멘트를 입력해주세요."></input>`;
+  commentElement.innerHTML = `<input id="edit-comment-${noteId}" type="text", value="${noteComment}" name="comment" placeholder="(선택)코멘트를 입력해주세요." onKeypress="javascript:if(event.keyCode==13) {updateNote(${folderId}, ${noteId})}"></input>`;
   document.getElementById(`edit-comment-${noteId}`);
 
   const linkElement = document.getElementById(`note-link-${noteId}`);
-  linkElement.innerHTML = `<input id="edit-link-${noteId}" type="text", value="${noteLink}" name="link-title" placeholder="(필수)URL을 입력해주세요."></input>`;
+  linkElement.innerHTML = `<input id="edit-link-${noteId}" type="text", value="${noteLink}" name="link-title" placeholder="(필수)URL을 입력해주세요." onKeypress="javascript:if(event.keyCode==13) {updateNote(${folderId}, ${noteId})}"></input>`;
 
   const tagElement = document.getElementById(`note-tag-${noteId}`);
   tagElement.innerHTML = `<input id="edit-tag-${noteId}" type="text", value="${getTagNames(
     noteId
-  )}" name="tag" placeholder="(선택)태그를 입력해주세요."></input>`;
+  )}" name="tag" placeholder="(선택)태그를 입력해주세요." onKeypress="javascript:if(event.keyCode==13) {updateNote(${folderId}, ${noteId})}"></input>`;
 
   document
     .getElementById(`${noteId}-update-btn`)
@@ -141,19 +141,19 @@ const addNote = (folderId) => {
   const newTabletr = document.createElement('tr');
   const newTableName = document.createElement('td');
   newTableName.setAttribute('id', 'new-name-row');
-  newTableName.innerHTML = `<input id="table-name-${folderId}" type="text", placeholder="(필수)제목을 입력해주세요.", name="name"></input>`;
+  newTableName.innerHTML = `<input id="table-name-${folderId}" type="text", placeholder="(필수)제목을 입력해주세요.", name="name" onKeypress="javascript:if(event.keyCode==13) {saveNote(${folderId})}"></input>`;
 
   const newTableComment = document.createElement('td');
   newTableComment.setAttribute('id', 'new-comment-row');
-  newTableComment.innerHTML = `<input id="table-comment-${folderId}" type="text", placeholder="(선택)코멘트를 입력해주세요.", name="comment"></input>`;
+  newTableComment.innerHTML = `<input id="table-comment-${folderId}" type="text", placeholder="(선택)코멘트를 입력해주세요.", name="comment" onKeypress="javascript:if(event.keyCode==13) {saveNote(${folderId})}"></input>`;
 
   const newTableWebsite = document.createElement('td');
   newTableWebsite.setAttribute('id', 'new-website-row');
-  newTableWebsite.innerHTML = `<input id="table-website-${folderId}" type="text", placeholder="(필수)URL을 입력해주세요.", name="link"></input>`;
+  newTableWebsite.innerHTML = `<input id="table-website-${folderId}" type="text", placeholder="(필수)URL을 입력해주세요.", name="link" onKeypress="javascript:if(event.keyCode==13) {saveNote(${folderId})}"></input>`;
 
   const newTableTag = document.createElement('td');
   newTableTag.setAttribute('id', 'new-tag-row');
-  newTableTag.innerHTML = `<input id="table-tag-${folderId}" type="text", placeholder="(선택)태그를 입력해주세요.", name="tag"></input>`;
+  newTableTag.innerHTML = `<input id="table-tag-${folderId}" type="text", placeholder="(선택)태그를 입력해주세요.", name="tag" onKeypress="javascript:if(event.keyCode==13) {saveNote(${folderId})}"></input>`;
 
   const newTableAction = document.createElement('td');
   const newTableSaveButton = document.createElement('button');

@@ -98,7 +98,7 @@ const validateUsername = async (username) => {
   };
   let data = new FormData();
   data.append("username", username);
-  const response = await axios.post("accounts/checkusername/", data);
+  const response = await axios.post("/accounts/checkusername/", data);
   console.log(isFilledUsername(username));
   console.log(response.data.result);
   console.log(isFilledUsername(username) && response.data.result)
@@ -148,7 +148,7 @@ const handleSignin=async (e) =>{
   let data=new FormData();
   data.append('username',signinUsername);
   data.append('password',signinPassword);
-  const response = await axios.post("accounts/checksignin/", data);
+  const response = await axios.post("/accounts/checksignin/", data);
 
   if (response.data.result){
     console.log("Valid Signup form!");

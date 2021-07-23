@@ -39,6 +39,8 @@ def signin(request):
         user = User.objects.get(username=request.POST['signin-username'])
         auth.login(request, user)
         return redirect('/codingnote/dashboard')
+    else:
+        return render(request, 'appCodingNote/index.html')
 
 def signout(request):
     if request.method == "GET":

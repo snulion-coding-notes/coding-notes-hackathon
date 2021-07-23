@@ -5,7 +5,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 import requests
 from bs4 import BeautifulSoup
-
+import os
+import sys
+import urllib.request
+import ssl
 
 # TODO : Tag 모델 수정 후 my_tags 있는 부분 수정 필요할 시 수정해야 함 for sidebar (210721)
 
@@ -13,7 +16,7 @@ from bs4 import BeautifulSoup
 def index(request):
     cur_user = request.user
     if cur_user.is_authenticated:
-        return render(request, 'appCodingNote/dashboard.html')
+        return redirect(f'/codingnote/dashboard')
     else:
         return render(request, 'appCodingNote/index.html')
 
@@ -64,6 +67,11 @@ class FolderCRUD:
         notes = Note.objects.filter(folder__id=fid)
         my_folders = Folder.objects.filter(author=request.user)
         my_tags = Tag.objects.filter(notes__author=request.user)
+        my_note = Note.objects.filter(author=request.user)
+
+        my_tags = Tag.objects.none()
+        for note in my_note:
+            my_tags = my_tags.union(note.tags.all())
         
         return render(request, 'appCodingNote/folder.html', {'folder': folder, 'notes': notes, 'my_folders': my_folders, 'my_tags': my_tags})
 
@@ -82,7 +90,9 @@ class NoteCRUD:
     def create_note(request, fid):
         if request.method == 'POST':
             note_name = request.POST['noteName']
+            note_comment = request.POST['noteComment']
             note_link = request.POST['noteLink']
+
             if not note_link.startswith('https://'):
                 note_link = 'https://' + note_link
 
@@ -96,7 +106,7 @@ class NoteCRUD:
                 og_title = soup.select_one('meta[property="og:title"]')
                 note_link_title = og_title['content']   # note_link_title 얻기
             else:
-                note_link_title = ""                    # note_link_title 정보를 가져 올 수 없을 경우 처리
+                note_link_title = note_link                    # note_link_title 정보를 가져 올 수 없을 경우 처리
 
             if soup.select_one('meta[property="og:image"]') is not None:
                 og_image = soup.select_one('meta[property="og:image"]')
@@ -105,15 +115,29 @@ class NoteCRUD:
                 # note_link_image 정보를 가져 올 수 없을 경우 처리, 디폴트 이미지 필요
                 note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
 
-            note_comment = request.POST['noteComment']
-            tagMass=Tagging.create_tag(request)
-            newNote = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user)
+            new_note = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user)
+
+            tagMass = Tagging.create_tag(request)
+            tag_name_array = []
             for tag in tagMass:
-                newNote.tags.add(tag)
+                new_note.tags.add(tag)
+                tag_name_array.append(tag.tag_name)
             
-            notes = Note.objects.filter(folder_id=fid)
-            notesNum = notes.count()
-            return JsonResponse({'notesNum': notesNum, 'note_link_title': note_link_title, 'note_link': note_link})
+            notesNum = Note.objects.filter(folder_id=fid).count()
+            new_note_name = new_note.note_name
+            new_note_comment = new_note.note_comment
+            new_note_link = new_note.note_link
+            new_note_link_title = new_note.note_link_title
+            new_note_tags = ' '.join(tag_name_array)
+
+            return JsonResponse({
+                'notesNum': notesNum,
+                'newNoteName': new_note_name,
+                'newNoteComment': new_note_comment,
+                'newNoteLink': new_note_link,
+                'newNoteLinkTitle': new_note_link_title,
+                'newNoteTags': new_note_tags
+                })
         else:
             return redirect(f'/dashboard/{fid}/readfolder/')
 
@@ -125,9 +149,35 @@ class NoteCRUD:
 
     def update_note(request, fid, nid):
         note = Note.objects.filter(id=nid)
-        note.update(note_name=request.POST['noteName'],
-                    note_link_title=request.POST['noteLink'], note_comment=request.POST['noteComment'])
+        note_link = request.POST['noteLink']
 
+        if not note_link.startswith('https://'):
+                note_link = 'https://' + note_link
+
+        headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
+        data = requests.get(note_link, headers=headers)
+        soup = BeautifulSoup(data.text, 'html.parser')
+
+        if soup.select_one('meta[property="og:title"]') is not None:
+            og_title = soup.select_one('meta[property="og:title"]')
+            note_link_title = og_title['content']   # note_link_title 얻기
+        else:
+            note_link_title = note_link
+            print(note_link_title)                  # note_link_title 정보를 가져 올 수 없을 경우 처리
+
+        if soup.select_one('meta[property="og:image"]') is not None:
+            og_image = soup.select_one('meta[property="og:image"]')
+            note_link_image = og_image['content']   # note_link_image 얻기
+        else:
+            # note_link_image 정보를 가져 올 수 없을 경우 처리, 디폴트 이미지 필요
+            note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
+
+        note.update(note_name=request.POST['noteName'],
+                    note_link=note_link, note_link_title=note_link_title, note_comment=request.POST['noteComment'], note_link_image=note_link_image)
+
+        # 태그 
+        
         tag_mass = Tagging.create_tag(request)
         tag_name_array = []
         for tag in tag_mass:
@@ -137,9 +187,17 @@ class NoteCRUD:
         updated_note = Note.objects.get(id=nid)
         updated_note_title = updated_note.note_name
         updated_note_comment = updated_note.note_comment
+        updated_note_link = updated_note.note_link
         updated_note_link_title = updated_note.note_link_title
         updated_note_tags = ' '.join(tag_name_array)
-        return JsonResponse({'updatedNoteName': updated_note_title, 'updatedNoteComment': updated_note_comment, 'updatedNoteLinkTitle': updated_note_link_title, 'updatedNoteTags': updated_note_tags})
+
+        return JsonResponse({
+            'updatedNoteName': updated_note_title,
+            'updatedNoteComment': updated_note_comment,
+            'updatedNoteLink': updated_note_link,
+            'updatedNoteLinkTitle': updated_note_link_title,
+            'updatedNoteTags': updated_note_tags
+            })
 
 
     def delete_note(request, fid, nid):
@@ -162,6 +220,12 @@ class Bookmarking:
             user_id=request.user.id).count()
 
         return JsonResponse({'isBookmarking': is_bookmarking})
+
+    def read_bookmark(request, nid):
+        note = Note.objects.get(id=nid)
+        bookmark = note.bookmark_set.filter(user_id=request.user.id)
+        if bookmark :
+            return render(request, '#', {'note':note})
 
 
 class Tagging:
@@ -230,31 +294,59 @@ class Search:
 class chromeExtension:
     @csrf_exempt
     def create_note(request):
-        note_name = request.POST['noteName']
-        note_link_title = request.POST['noteTitle']
-        note_link = request.POST['noteLink']
-        note_comment = request.POST['noteComment']
-        folder_name = request.POST['file']
-        try:
-            fid = Folder.objects.get(folder_name=folder_name).id
-        except:
-            Folder.objects.create(folder_name=folder_name, author=request.user)
-            fid = Folder.objects.get(folder_name=folder_name).id
-
-        headers = {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
-        data = requests.get(note_link, headers=headers)
-        soup = BeautifulSoup(data.text, 'html.parser')
-        
-        if soup.select_one('meta[property="og:image"]') is not None:
-            og_image = soup.select_one('meta[property="og:image"]')
-            note_link_image = og_image['content']   # note_link_image 얻기
+        if request.method=="GET":
+            folder_mass=Folder.objects.filter(author=request.user)
+            folder_name_array=[]
+            for folder in folder_mass:
+                folder_name_array.append(folder.folder_name)
+            return  JsonResponse({'result': folder_name_array})
         else:
-            # note_link_image 정보를 가져 올 수 없을 경우 처리, 디폴트 이미지 필요
-            note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
-        
-        tagMass=Tagging.create_tag(request)
-        newNote = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user)
-        for tag in tagMass:
-            newNote.tags.add(tag)
-        return render(request, 'appCodingNote/index.html')
+            note_name = request.POST['noteName']
+            note_link_title = request.POST['noteTitle']
+            note_link = request.POST['noteLink']
+            note_comment = request.POST['noteComment']
+            folder_name = request.POST['file']
+            try:
+                fid = Folder.objects.get(folder_name=folder_name).id
+            except:
+                Folder.objects.create(folder_name=folder_name, author=request.user)
+                fid = Folder.objects.get(folder_name=folder_name).id
+
+            headers = {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
+            data = requests.get(note_link, headers=headers)
+            soup = BeautifulSoup(data.text, 'html.parser')
+            
+            if soup.select_one('meta[property="og:image"]') is not None:
+                og_image = soup.select_one('meta[property="og:image"]')
+                note_link_image = og_image['content']   # note_link_image 얻기
+            else:
+                # note_link_image 정보를 가져 올 수 없을 경우 처리, 디폴트 이미지 필요
+                note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
+            
+            tagMass=Tagging.create_tag(request)
+            newNote = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user)
+            for tag in tagMass:
+                newNote.tags.add(tag)
+            return render(request, 'appCodingNote/index.html')
+
+
+    
+class Crawl:
+    def tlansation(request):
+        context = ssl._create_unverified_context()
+        client_id = '0ur6n190qb'
+        client_secret = 'Dnl4YIhneF6UzIP1W0XzMmVpE1vBjpbgzwNLkj5W'
+        encText = urllib.parse.quote("안녕하세요")
+        data = "source=ko&target=en&text=" + encText
+        url = "https://naveropenapi.apigw.ntruss.com/nmt/v1/translation"
+        requests = urllib.request.Request(url)
+        requests.add_header("X-NCP-APIGW-API-KEY-ID",client_id)
+        requests.add_header("X-NCP-APIGW-API-KEY",client_secret)
+        response = urllib.request.urlopen(requests, data=data.encode("utf-8"), context=context)
+        rescode = response.getcode()
+        if(rescode==200):
+            response_body = response.read()
+            print(response_body.decode('utf-8'))
+        else:
+            print("Error Code:" + rescode)

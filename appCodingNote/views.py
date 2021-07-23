@@ -16,7 +16,7 @@ import ssl
 def index(request):
     cur_user = request.user
     if cur_user.is_authenticated:
-        return render(request, 'appCodingNote/dashboard.html')
+        return redirect(f'/codingnote/dashboard')
     else:
         return render(request, 'appCodingNote/index.html')
 

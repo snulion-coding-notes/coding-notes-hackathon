@@ -84,7 +84,7 @@
                   <button
                   class="edit no-visibility"
                   id="{{ note.id }}-edit-btn"
-                  onclick="editNote({{ note.id }},'{{ note.note_name }}','{{ note.note_comment }}','{{ note.note_link }}')"
+                  onclick="editNote({{folder.id}}, {{ note.id }},'{{ note.note_name }}','{{ note.note_comment }}','{{ note.note_link }}')"
                 >
                   <img class="edit-img" src="{% static 'img/edit.svg' %}" />
                 </button>

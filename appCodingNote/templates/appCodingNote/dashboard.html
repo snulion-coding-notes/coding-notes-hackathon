@@ -48,7 +48,7 @@
             <button onclick="checkInput()">
               <img src="{% static 'img/add-folder.png' %}" alt="add folder">
             </button>
-            <input id="folder-new-input" class ="folder-new-input" type="text" placeholder="새 폴더명" name="folderName"/>
+            <input id="folder-new-input" class ="folder-new-input" type="text" placeholder="새 폴더명" name="folderName" onKeypress="javascript:if(event.keyCode==13) {checkInput()}">
           </div>
         </div>
       </div>

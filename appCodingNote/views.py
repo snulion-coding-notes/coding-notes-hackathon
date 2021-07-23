@@ -20,13 +20,23 @@ def index(request):
 
 @csrf_exempt
 def result(request):
-    notes = Note.objects.all()
-    search_keyword = request.POST.get('keyword', '')
-    if(search_keyword):
-        search_note_list=notes.filter(Q (note_name=search_keyword) | Q (tags__tag_name=search_keyword))
-        return render(request, 'appCodingNote/index-search.html', {'notes':search_note_list})
-
-    return render(request, 'appCodingNote/index.html')
+        note_list = Note.objects.all()
+        search_keyword = request.POST.get('keyword', '')
+        search_type = request.POST.get('search-option', '')
+        if search_keyword :
+            if search_type == 'name-and-tag':
+                search_note_list_ids = list(note_list.filter(note_name__icontains=search_keyword).values_list('id', flat=True))
+                search_note_list2_ids = list(note_list.filter(tags__tag_name__icontains=search_keyword).values_list('id',flat=True))
+                ids_list = search_note_list_ids + search_note_list2_ids
+                search_note_list=Note.objects.filter(id__in=ids_list)
+            elif search_type == 'name':
+                search_note_list = note_list.filter(
+                    note_name__icontains=search_keyword)
+            elif search_type == 'tag':
+                search_note_list=note_list.filter(tags__tag_name__icontains=search_keyword)
+            return render(request, 'appCodingNote/index-search.html', {'notes': search_note_list})
+        else:
+            return render(request, 'appCodingNote/index.html')
 
 
 def dashboard(request):

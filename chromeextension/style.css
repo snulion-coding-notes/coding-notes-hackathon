@@ -1,7 +1,7 @@
 .input{
     width: 200px;
     height: 31px;
-    background: #FFFFFF;
+    background: #DEDEDE;
     border-radius: 7px;
     margin:8px;
     border:0;
@@ -11,11 +11,14 @@
 .comment{
     width: 200px;
     height: 50px;
-    background: #FFFFFF;
+    background: #DEDEDE;
     margin:8px;
     border:0;
     outline:0;
     border-radius: 7px;
+}
+.one{
+    margin:8px;
 }
 
 #submit{
@@ -34,7 +37,7 @@
 #saveFolder select{
     width: 205px;
     height: 37px;
-    background: #FFFFFF;
+    background: #DEDEDE;
     border-radius: 7px;
     margin: 8px;
     border:0;
@@ -47,7 +50,7 @@
     font-weight: bolder;
     font-size: 13px;
     line-height: 15px;
-    color: #FFFFFF;
+    color: #DEDEDE;
 }
 
 
@@ -56,5 +59,5 @@
     font-weight: bolder;
     font-size: 14px;
     line-height: 15px;
-    color: #FFDD29;
+    color: #DEDEDE;
 }

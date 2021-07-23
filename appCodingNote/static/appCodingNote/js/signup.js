@@ -98,7 +98,7 @@ const validateUsername = async (username) => {
   };
   let data = new FormData();
   data.append("username", username);
-  const response = await axios.post("accounts/checkusername/", data);
+  const response = await axios.post("/accounts/checkusername/", data);
   console.log(isFilledUsername(username));
   console.log(response.data.result);
   console.log(isFilledUsername(username) && response.data.result)
@@ -148,5 +148,20 @@ const handleSignin=async (e) =>{
   let data=new FormData();
   data.append('username',signinUsername);
   data.append('password',signinPassword);
-  const response = await axios.post("accounts/checkusername/", data);
+  const response = await axios.post("/accounts/checksignin/", data);
+
+  if (response.data.result){
+    console.log("Valid Signup form!");
+    submitTarget(e);
+  }
+
+  else{
+    console.log("Invalid Signup form!");
+    dismissSignIn();
+  }
+}
+
+const dismissSignIn=()=>{
+  const signinErrorNotice = document.getElementById("signin-error-notice");
+  signinErrorNotice.innerHTML="&#128557 아이디/비밀번호가 올바르지 않습니다."
 }

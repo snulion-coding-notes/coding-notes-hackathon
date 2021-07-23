@@ -22,29 +22,25 @@ def signup(request):
     return render(request, 'appCodingNote/index.html')
 
 
-def signin(request):
+def checksignin(request):
     if request.method == "POST":
         try:
             user = User.objects.get(username=request.POST['username'])
-
         except:
             user = None
-
         if user:
-            if user.check_password(request.POST['password']):
-                auth.login(request, user)
-                return JsonResponse({result})
-            else:
-                message = "패스워드가 올바르지 않습니다."
-                return render(request, 'appCodingNote/index.html', {'message': message})
-                # return JsonResponse({'message': message})
+            result = user.check_password(request.POST['password'])
+            return JsonResponse({'result':result})
         else:
-            message = "존재하지 않는 아이디입니다."
-            return render(request, 'appCodingNote/index.html', {'message': message})
-            # return JsonResponse({'message': message})
+            return JsonResponse({'result':False})
+
+def signin(request):
+    if request.method == "POST":
+        user = User.objects.get(username=request.POST['signin-username'])
+        auth.login(request, user)
+        return redirect('/codingnote/dashboard')
     else:
         return render(request, 'appCodingNote/index.html')
-
 
 def signout(request):
     if request.method == "GET":

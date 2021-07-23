@@ -40,10 +40,9 @@
     <div class="title-header">
       <div id="tag-title" class="tag-title" onmouseover="showTitleActionBtns()" onmouseout="hideTitleActionBtns()">
         <h2 id="tag-name">{{ tag_name }}</h2>
-        <button class="tag-edit-btn edit-delete-btn no-visibility" onclick="editTag('{{ tag_name }}')"></button>
-        <!-- Tag Update, Tag Delete 함수 만들어서 연결 -->
+        {% comment %} <button class="tag-edit-btn edit-delete-btn no-visibility" onclick="editTag('{{ tag_name }}')"></button>
         <button class="tag-delete-btn edit-delete-btn no-visibility" onclick="deleteTag('{{ tag_name }}')"></button>
-        <button id="edit-done-btn" class="edit-done-btn tag-title-btn no-visibility" onclick="updateTag()"></button>
+        <button id="edit-done-btn" class="edit-done-btn tag-title-btn no-visibility" onclick="updateTag()"></button> {% endcomment %}
       </div>
       <!-- 리스트뷰, 카드뷰 전환 -->
       <div class="change-view">

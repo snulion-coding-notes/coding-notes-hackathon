@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
         <head>
                     <meta charset="utf-8">
                     <title>Coding note </title>
@@ -9,16 +9,22 @@
                     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
                     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100&display=swap" rel="stylesheet">
         </head>
-        <body bgcolor="#282828"> 
-            <div class=font>
-                제목 : <input id="noteName" type="text" class="input"/>
-                코멘트 : <input id="noteComment" type="text" class="input"/>
-                태그 : <input id="noteTag" type="text" class="input"/>
-                저장할 폴더 : <input id="File" type=text" class="input"/>
+        <body bgcolor="#282828">
+            <div id="header">
             </div>
-            <div class=save>
+            <hr class="one">
+        <div class="font">
+            &nbsp;&nbsp;&nbsp;제목 : <input id="noteName" type="text" class="input"/>
+            &nbsp;&nbsp;&nbsp;저장할 폴더 :
+            <div id="saveFolder">
+            </div>
+            <hr class="one">
+            &nbsp;&nbsp;&nbsp;태그 : <input id="noteTag" type="text" class="input" placeholder="  스페이스로 구분"/>
+            &nbsp;&nbsp;&nbsp;코멘트 : <input id="noteComment" type="text" class="comment"/>
+            <div class="save">
                 <button id="submit">save</button>
             </div>
+        </div>
             <script src="main.js"></script>     
         </body>
 </html>

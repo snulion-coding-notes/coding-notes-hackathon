@@ -6,13 +6,20 @@ if(click){
     click.addEventListener("click", saveNote);
 }
 
+
 //chrome api 사용 current tab url, title 받아오기
 var url;
 var title;
 chrome.tabs.query({active: true, lastFocusedWindow: true}, tabs => {
     url=tabs[0].url;
     title=tabs[0].title;
+    header=document.getElementById("header");
+    exTitle=document.createElement('div');
+    exTitle.innerHTML=title;
+    header.append(exTitle);
+
 });
+
 
 //csrftoken 받아오기. 
 function getCookie(name) {
@@ -39,8 +46,54 @@ function csrfSafeMethod(method) {
 }
 
 
-
+var userFolder;
 //ajax 통신, 이상하게 xml이나 html에서 form 방식으로 제출하는 것은 안 된다. 크롬 익스텐션 js 코드 전체가 비동기로 돌아간다는 것과 관련이 있나. 모르겠네.
+
+var userFolder=[];
+$.ajax({
+    url: 'http://localhost:8000/extension/',
+    type: "GET",
+    async: "false",
+    success: function (result) {
+        switch (result) {
+            case true:
+                userFolder=Object.values(result);
+                for(let i=0; i<userFolder.length; i++)
+                    console.log(userFolder[i]);
+                break;
+            default:
+                userFolder=Object.values(result);
+                console.log(userFolder);
+                const saveFolder = document.getElementById('saveFolder');
+                const selector = document.createElement('select');
+                selector.setAttribute('id', "folder");
+                saveFolder.append(selector)
+                let option;
+                for(let i=0; i<userFolder[0].length; i++){
+                    option=document.createElement('option');
+                    option.innerHTML=userFolder[0][i];
+                    option.setAttribute('value', userFolder[0][i]);
+                    selector.append(option);
+                }
+                    
+                
+                
+        }
+    },
+    error: function(xhr, ajaxOptions, thrownError){
+        if(xhr.status==500){
+            chrome.tabs.create({
+                url: 'http://localhost:8000/accounts/signin'
+            });
+            alert("서비스 사용을 위해 홈페이지에 로그인 해주세요.");
+        }
+        else{
+            alert(xhr.status);
+            alert(thrownError);
+        }
+    }
+})
+
 
 
 
@@ -58,9 +111,9 @@ function saveNote(){
         type: "POST",
         data : {
             noteName: document.getElementById("noteName").value,
-            noteTag: document.getElementById("noteTag").value,
+            tag: document.getElementById("noteTag").value,
             noteComment: document.getElementById("noteComment").value,
-            file: document.getElementById("File").value,
+            file: document.getElementById("folder").value,
             noteLink: url,
             noteTitle: title
         },
@@ -78,8 +131,17 @@ function saveNote(){
             }
         },
         error: function(xhr, ajaxOptions, thrownError){
-            alert(xhr.status);
-            alert(thrownError);
+            if(xhr.status==500){
+                chrome.tabs.create({
+                    url: 'http://localhost:8000/accounts/signin'
+                });
+                alert("서비스 사용을 위해 홈페이지에 로그인 해주세요.");
+            }
+            else{
+                alert(xhr.status);
+                alert(thrownError);
+            }
+
         }
     })
 

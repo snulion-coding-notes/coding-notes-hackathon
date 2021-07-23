@@ -99,3 +99,19 @@
 .dropdown-container:hover {
   background-color: $hover-gray;
 }
+
+.current-page {
+  background-color: $yellow !important;
+
+  a {
+    color: black !important;
+  }
+
+  button {
+    color: black !important;
+
+    img {
+      filter: brightness(0);
+    }
+  }
+}

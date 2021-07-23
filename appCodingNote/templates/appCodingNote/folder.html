@@ -1,116 +1,133 @@
-{% extends 'sidebar.html' %} 
-{% load static %} 
-{% load sass_tags %} 
+{% extends 'sidebar.html' %}
+
+{% load static %}
+{% load sass_tags %}
+
 {% block style %}
-<link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/folder.scss' %}"/>
+<link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/tag.scss' %}"/>
 <link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/dashboard-header.scss' %}">
 {% endblock style %} 
+{% block js %}
+  <script defer type="text/javascript" src="{% static 'appCodingNote/js/folder.js' %}"></script>
+  <script defer type="text/javascript" src="{% static 'appCodingNote/js/viewRelated.js' %}"></script>
+  <script defer type="text/javascript" src="{% static 'appCodingNote/js/bookmark.js' %}"></script>
+{% endblock js %}
+
 {% block content_dashboard %}
-<main>
-  <!-- Search Bar -->
-    <div class="dashboard-header">
-      <div class="search-container">
-        <div class="search-bar">
-          {% csrf_token %}
-          <select name="search-option" class="search-option">
-            <option value="name-and-tag">제목 + 태그</option>
-            <option value="name">제목</option>
-            <option value="tag">태그</option>
-          </select>
-          <input id="keyword" type="text" placeholder="검색어를 입력하세요">
-          <button onclick="loginSearch()">
-            <img src="{% static 'img/search.png' %}" alt="search icon">
+  <main>
+    <!-- Search Bar -->
+      <div class="dashboard-header">
+        <form action="{% url 'appCodingNote:login_search' %}" method="POST" class="search-container">
+          <div class="search-bar">
+            {% csrf_token %}
+            <select name="search-option" class="search-option">
+              <option value="name-and-tag">제목 + 태그</option>
+              <option value="name">제목</option>
+              <option value="tag">태그</option>
+            </select>
+            <input name="keyword" id="keyword" type="text" placeholder="검색어를 입력하세요">
+            <button value="submit" type="submit">
+              <img src="{% static 'img/search.png' %}" alt="search icon">
+            </button>
+          </div>
+        </form>
+        <div class="greeting">
+          <p>{{ user.username }}님, 안녕하세요!</p>
+        </div>
+      </div>
+      <!-- dashboard-header.scss 파일이랑 같이 복붙하기 -->
+
+      <!-- Folder 섹션 -->
+      <div class="title-header">
+        <div id="tag-title" class="tag-title" onmouseover="showTitleActionBtns()" onmouseout="hideTitleActionBtns()">
+          <h2 id="tag-name">{{ folder.folder_name }}</h2>
+          <button class="tag-edit-btn edit-delete-btn no-visibility" onclick="editFolder('{{ folder.folder_name }}')"></button>
+          <button class="tag-delete-btn edit-delete-btn no-visibility" onclick="deleteFolder({{ folder.id }})"></button>
+          <button id="edit-done-btn" class="edit-done-btn tag-title-btn no-visibility" onclick="updateFolder({{ folder.id }})"></button>
+        </div>
+        <!-- 리스트뷰, 카드뷰 전환 -->
+        <div class="change-view">
+          <button id ="view-select" class="view-select" onClick="onClickViewButton(event)">
+            <img id="list-view" src="{% static 'img/list-view-on.png' %}"/>
+            <img id="card-view" class="no-display" src="{% static 'img/card-view-on.png' %}"/>
           </button>
         </div>
       </div>
-      <div class="greeting">
-        <p>{{ user.username }}님, 안녕하세요!</p>
-      </div>
-    </div>
-    <!-- dashboard-header.scss 파일이랑 같이 복붙하기 -->
-  <!--본문 head-->
-  <div class="content-head-container">
-  <!--폴더 이름, 편집, 삭제-->
-    <div class="content-head-folder" onmouseover="folderShowButton()" onmouseout="folderHideButton()">
-      <h2 id="folder-name">{{folder.folder_name}}</h2>
-      <div id ="folder-action">
-        <button class="edit" id="folder-edit-btn" onClick="onClickFolderEditButton({{folder.id}},'{{folder.folder_name}}')"><img class="folder-edit-img" src="{% static 'img/edit.svg' %}"/></button>
-        <button class="delete" id="folder-delete-btn" onClick="onClickFolderDeleteButton({{folder.id}})"><img class="folder-delete-img" src="{% static 'img/delete.svg' %}"/></button>
-        <button class="update hide" id="folder-update-btn" onclick="onClickFolderUpdateButton({{folder.id}})"><img class="folder-update-img" src="{% static 'img/save-update.svg' %}" /></button>
-      </div>
-    </div>
-  <!-- 리스트 카드 뷰 선택-->
-    <div class="content-head-view">
-      <button id ="view-select" class="view-select" onClick="onClickViewButton(event)"><img class="view-select-img" id="list-view" src="{%static 'img/list-view-on.png' %}"/><img class="view-select-img hide" id="card-view" src="{%static 'img/card-view-on.png' %}"/></button>
-    </div>
-  <!-- 노트 개수 안내-->
-    <div class="content-head-notesNum">
-      <span id="content-note-num"> {{notes.count}} notes </span>
-    </div>
-  </div>
 
-  <!--본문 body-->
-  <div class="content-body-container list-container">
-  <!--리스트 뷰-->
-  <table class="table data">
-    <thead>
-      <tr>
-        <th class="thead-name">Name</th>
-        <th class="thead-comment">Comment</th>
-        <th class="thead-website">Website</th>
-        <th class="thead-tag">Tags</th>
-        <th class="thead-action">
-        </th>
-      </tr>
-    </thead>
-    <tbody id="table-body">
-      {% for note in notes%}
-      <tr id="each-note-{{note.id}}" onmouseover="showButton({{note.id}})" onmouseout="hideButton({{note.id}})">
-        <td id="note-name-{{note.id}}">{{note.note_name}}</td>
-        <td id="note-comment-{{note.id}}">{{note.note_comment}}</td>
-        <td id="note-link-{{note.id}}"><a href="{{note.note_link}}">{{note.note_link_title}}</td><a>
-        <td id="note-tag-{{note.id}}">#Tags</td>
-        <td id="note-action-{{note.id}}">
-        
-          <button
-            class="edit hide"
-            id="{{note.id}}-edit-btn"
-            onclick="onClickEditButton({{folder.id}},{{note.id}},'{{note.note_name}}','{{note.note_comment}}','{{note.note_link_title}}')"
-          >
-            <img class="edit-img" src="{% static 'img/edit.svg' %}" />
-          </button>
-          <button
-            class="delete hide"
-            id="{{note.id}}-delete-btn"
-            onclick="onClickDeleteButton({{folder.id}},{{note.id}})"
-          >
-            <img class="delete-img" src="{% static 'img/delete.svg' %}" />
-          </button>
-          
-        </td>
-      </tr>
-      {% endfor %}
-      </tbody>
-      <tfoot>
-      <tr id="new-btn-row" onmouseover="#" onmouseout="#">
-      <td><span class="add" onclick="onClickAddButton({{folder.id}})">
-            + New
-          </span></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      </tr>
-      </tfoot>
-  </table>
-  </div>
+      <!-- Folder 리스트뷰 -->
+      <div id="list-container" class="list-container">
+        <!-- 노트 개수 -->
+        <div class="content-note-num">
+          <span id="content-note-num">{{ notes.count }} notes</span>
+        </div>
 
-  <!--카드뷰-->
-  <div class="content-body-container card-container hide">
+      <!-- 노트 테이블 -->
+      <table class="table data">
+        <thead>
+          <tr>
+            <th class="thead-name">노트 제목</th>
+            <th class="thead-comment">코멘트</th>
+            <th class="thead-website">웹사이트</th>
+            <th class="thead-tag">태그</th>
+            <th class="thead-action">
+            </th>
+          </tr>
+        </thead>
+        <tbody id="table-body">
+          {% for note in notes %}
+            <tr id="each-note-{{note.id}}" onmouseover="showNoteActionBtns({{ note.id }})" onmouseout="hideNoteActionBtns({{ note.id }})">
+              <td id="note-name-{{note.id}}" class="col-1">{{ note.note_name }}</td>
+              <td id="note-comment-{{note.id}}" class="col-2">{{ note.note_comment }}</td>
+              <td id="note-link-{{note.id}}" class="col-3"><a href="{{ note.note_link }}" target="_blank">{{ note.note_link_title }}</td><a>
+              <td id="note-tag-{{ note.id }}" class="col-4">
+                {% for tag in note.tags.all %}
+                  <span class="tag-style tag-span-{{ note.id }}">{{ tag.tag_name }}</span>
+                {% endfor %}
+              </td>
+              <td id="note-action-{{ note.id }}" class="note-action">
+                <button
+                  class="edit no-visibility"
+                  id="{{ note.id }}-edit-btn"
+                  onclick="editNote({{ note.id }},'{{ note.note_name }}','{{ note.note_comment }}','{{ note.note_link }}')"
+                >
+                  <img class="edit-img" src="{% static 'img/edit.svg' %}" />
+                </button>
+                <button
+                  class="delete no-visibility"
+                  id="{{ note.id }}-delete-btn"
+                  onclick="deleteNote({{ folder.id }}, {{ note.id }})"
+                >
+                  <img class="delete-img" src="{% static 'img/delete.svg' %}" />
+                </button>
+                <button id="{{ note.id }}-update-btn" class="update no-display" onclick="updateNote({{ note.folder.id }}, {{ note.id }})">
+                  <img class="update-img" src="{% static 'img/save-update.svg' %}"/>
+                </button>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+        <tfoot>
+          <tr id="new-btn-row">
+            <td>
+              <span id="add-note-btn" class="add" onclick="addNote({{ folder.id }})">
+              + New
+              </span>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <!-- Tag 카드 -->
+    <div id="card-container" class="card-container no-display">
       {% for note in notes %}
         <section class="card-content">
           <div class="bookmark-section">
-            <button id="bookmark-star-btn" class="bookmark-btn" onclick="onClickBookmarking({{ note.folder.id }}, {{ note.id }})">
+            <button id="bookmark-star-btn" class="bookmark-btn" onclick="createBookmark({{ note.id }})">
               {% if user in note.bookmark_users.all %}
                 <img id="bookmark-star-{{ note.id }}" src="{% static 'img/star-fill.png' %}" alt="bookmark">
               {% else %}
@@ -124,15 +141,14 @@
           <div class="note-info">
             <p class="note-name">{{ note.note_name }}</p>
             <p class="note-comment">{{ note.note_comment }}</p>
-            <!-- TODO : 태그 여러 개일 경우 태그를 보여줘야 함 -->
-            {% comment %} <p class="note-tag">{{ note.tag_set.all }}</p> {% endcomment %}
+            <div class="note-tag">
+              {% for tag in note.tags.all %}
+                <span class="tag-style">{{ tag.tag_name }}</span>
+              {% endfor %}
+            </div>
           </div>
         </section>
       {% endfor %}
-  </div>
-  </div>
-
-  <script src="//code.jquery.com/jquery.min.js"></script>
-  <script src="{% static 'appCodingNote/js/folder.js' %}"></script>
-  {%endblock%}
-</main>
+    </div>
+  </main>
+{% endblock %}

@@ -37,10 +37,12 @@
     </div>
     <!-- dashboard-header.scss 파일이랑 같이 복붙하기 -->
 
-    <!-- Tag 섹션 -->
     <div class="title-header">
       <div id="tag-title" class="tag-title" onmouseover="showTitleActionBtns()" onmouseout="hideTitleActionBtns()">
-        <h2 id="tag-name">{{ tag_name }}</h2>
+        <h2 id="tag-name">내 북마크</h2>
+        {% comment %} <button class="tag-edit-btn edit-delete-btn no-visibility" onclick="editTag('{{ tag_name }}')"></button>
+        <button class="tag-delete-btn edit-delete-btn no-visibility" onclick="deleteTag('{{ tag_name }}')"></button>
+        <button id="edit-done-btn" class="edit-done-btn tag-title-btn no-visibility" onclick="updateTag()"></button> {% endcomment %}
       </div>
       <!-- 리스트뷰, 카드뷰 전환 -->
       <div class="change-view">
@@ -58,63 +60,12 @@
         <span id="content-note-num">{{ tagged_notes.count }} notes</span>
       </div>
 
-      <!-- 노트 테이블 -->
-      <table class="table data">
-        <thead>
-          <tr>
-            <th class="thead-name">노트 제목</th>
-            <th class="thead-comment">코멘트</th>
-            <th class="thead-website">웹사이트</th>
-            <th class="thead-tag">태그</th>
-            <th class="thead-action">
-            </th>
-          </tr>
-        </thead>
-        <tbody id="table-body">
-          {% for note in tagged_notes %}
-            <tr id="each-note-{{ note.id }}" onmouseover="showNoteActionBtns({{ note.id }})" onmouseout="hideNoteActionBtns({{ note.id }})">
-              <td id="note-name-{{ note.id }}" class="col-1">{{ note.note_name }}</td>
-              <td id="note-comment-{{ note.id }}" class="col-2">{{ note.note_comment }}</td>
-              <td id="note-link-{{ note.id }}" class="col-3"><a href="{{ note.note_link }}" target="_blank">{{ note.note_link_title }}</td><a>
-              <td id="note-tag-{{ note.id }}" class="col-4">
-                {% for tag in note.tags.all %}
-                  <span class="tag-style tag-span-{{ note.id }}">{{ tag.tag_name }}</span>
-                {% endfor %}
-              </td>
-              <td id="note-action-{{ note.id }}" class="note-action">
-                <button
-                  class="edit no-visibility"
-                  id="{{ note.id }}-edit-btn"
-                  onclick="editNote({{ note.id }}, '{{ note.note_name }}', '{{ note.note_comment }}', '{{ note.note_link }}')"
-                >
-                  <img class="edit-img" src="{% static 'img/edit.svg' %}" />
-                </button>
-                <button
-                  class="delete no-visibility"
-                  id="{{note.id}}-delete-btn"
-                  onclick="deleteNote({{ note.folder.id }}, {{ note.id }})"
-                >
-                  <img class="delete-img" src="{% static 'img/delete.svg' %}" />
-                </button>
-                <button id="{{ note.id }}-update-btn" class="update no-display" onclick="updateNote({{ note.folder.id }}, {{ note.id }})">
-                  <img class="update-img" src="{% static 'img/save-update.svg' %}"/>
-                </button>
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-        <tfoot class="tag-list-tfoot">
-          <tr></tr>
-        </tfoot>
-      </table>
-    </div>
-
     <!-- Tag 카드 -->
     <div id="card-container" class="card-container no-display">
       {% for note in tagged_notes %}
         <section class="card-content">
           <div class="bookmark-section">
-            <button id="bookmark-star-btn" class="bookmark-btn" onclick="createBookmark({{ note.id }})">
+            <button id="bookmark-star-btn" class="bookmark-btn" onclick="createBookmark({{ note.folder.id }}, {{ note.id }})">
               {% if user in note.bookmark_users.all %}
                 <img id="bookmark-star-{{ note.id }}" src="{% static 'img/star-fill.png' %}" alt="bookmark">
               {% else %}

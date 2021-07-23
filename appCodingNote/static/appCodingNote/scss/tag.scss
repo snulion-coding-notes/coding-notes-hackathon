@@ -1,4 +1,4 @@
-@import "./colors.scss";
+@import './colors.scss';
 
 main {
   display: flex;
@@ -10,8 +10,25 @@ main {
 }
 
 .title-header {
-  margin-bottom: 20px;
-  margin-left: 60px;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 60px 20px 60px;
+  height: 40px;
+}
+
+.change-view {
+  display: flex;
+  align-items: flex-end;
+  height: 40px;
+
+  button {
+    display: flex;
+    img {
+      min-width: 70px;
+      width: 5vw;
+      max-width: 100px;
+    }
+  }
 }
 
 .tag-title-header {
@@ -32,9 +49,10 @@ main {
     background: none;
     border-bottom: solid;
     border-color: $yellow;
-    width: 300px;
+    width: 16vw;
+    min-width: 250px;
 
-    & ::placeholder {
+    &::placeholder {
       color: black;
     }
   }
@@ -55,29 +73,188 @@ h2 {
 }
 
 .tag-edit-btn {
-  background-image: url(../../img/edit.png);
+  background-image: url(../../img/edit.svg);
   margin: 0 5px;
 }
 
 .tag-delete-btn {
-  background-image: url(../../img/delete.png);
+  background-image: url(../../img/delete.svg);
   margin: 0 5px 2px 5px;
 }
 
 .edit-done-btn {
-  background-image: url(../../img/save-update.png);
+  background-image: url(../../img/save-update.svg);
 }
 
-.hide {
-  visibility: hidden;
+.no-visibility {
+  visibility: hidden !important;
 }
 
-.edit-delete-btn {
+.no-display {
+  display: none !important;
+}
+
+.edit-delete-btn,
+.edit-done-btn {
   &:hover {
-    filter: opacity(0.5) drop-shadow(0 0 0 $edit-btn-orange);
+    filter: invert(51%) sepia(17%) saturate(5809%) hue-rotate(2deg)
+      brightness(98%) contrast(95%);
   }
 }
 
+// 태그 리스트뷰 CSS
+.save,
+.edit,
+.delete,
+.update {
+  & .hide {
+    visibility: hidden;
+  }
+}
+
+.edit-img,
+.delete-img {
+  width: 20px;
+  margin: 0 4px;
+
+  &:hover {
+    filter: invert(51%) sepia(17%) saturate(5809%) hue-rotate(2deg)
+      brightness(98%) contrast(95%);
+  }
+}
+
+.update-img,
+.save-img {
+  width: 20px;
+  margin-bottom: 5px;
+
+  &:hover {
+    filter: invert(51%) sepia(17%) saturate(5809%) hue-rotate(2deg)
+      brightness(98%) contrast(95%);
+  }
+}
+.content-note-num {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-bottom: 10px;
+
+  span {
+    font-size: 18px;
+  }
+}
+
+.list-container {
+  margin: 0 60px;
+}
+
+.content-body-container {
+  margin-top: 40px;
+  width: 90%;
+  margin-left: 35px;
+}
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 0 0 40px 0;
+  padding: 0;
+
+  thead {
+    th {
+      margin-top: 5px;
+      padding: 10px 10px;
+      background: none;
+      font-size: 22px;
+      vertical-align: middle;
+      color: $black-gray;
+      font-weight: bold;
+      text-align: left;
+      border-top: solid 3px $black-gray;
+      border-bottom: solid 3px $black-gray;
+    }
+  }
+  tbody {
+    td {
+      padding: 5px 0 5px 10px;
+      background: none;
+      font-size: 18px;
+      vertical-align: middle;
+      overflow: hidden;
+      border-bottom: solid 0.2mm $medium-gray;
+      word-break: keep-all;
+      height: 100px;
+    }
+
+    input {
+      border: none;
+      border-bottom: 1px solid $medium-gray;
+      outline: none;
+      cursor: default;
+      margin: auto;
+      height: 30px;
+      width: 100%;
+      font-size: 18px;
+
+      &:focus {
+        border: none;
+        border-bottom: 2px solid $yellow;
+        transition: 0.3s;
+      }
+    }
+  }
+}
+
+#new-btn-row {
+  td {
+    height: 60px;
+    border-bottom: 3px solid $medium-gray;
+  }
+}
+
+.tag-list-tfoot {
+  border: solid 3px $black-gray;
+}
+
+.add {
+  margin-left: 20px;
+  margin-top: 30px;
+  font-size: 20px;
+  height: 25px;
+  line-height: 75%;
+  background: none;
+  color: $medium-gray;
+  font-weight: 700;
+
+  &:hover {
+    color: $dark-gray;
+    font-weight: 700;
+    cursor: pointer;
+  }
+}
+
+.col-1 {
+  width: 20%;
+}
+
+.col-2 {
+  width: 30%;
+}
+
+.col-3 {
+  width: 20%;
+}
+
+.col-4 {
+  width: 20%;
+}
+
+.note-action {
+  min-width: 75px;
+  width: 100px;
+}
+
+// 태그 카드뷰 CSS
 .card-container {
   display: flex;
   flex-wrap: wrap;
@@ -87,8 +264,11 @@ h2 {
 .card-content {
   display: flex;
   flex-direction: column;
-  width: 300px;
-  height: 400px;
+  justify-content: space-between;
+  width: 16vw;
+  height: 21vw;
+  min-width: 250px;
+  min-height: 333px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   margin: 0 25px 40px 25px;
 }
@@ -114,7 +294,6 @@ h2 {
   display: flex;
   overflow: hidden;
   align-items: center;
-  height: 260px;
   background-color: white;
   margin-top: -40px;
 
@@ -129,6 +308,7 @@ h2 {
   flex-direction: column;
   justify-content: center;
   background-color: $light-gray;
+  padding: 10px 0;
 
   p {
     overflow: hidden;
@@ -136,6 +316,18 @@ h2 {
     white-space: nowrap;
     margin: 0 20px 10px 20px;
   }
+}
+
+.note-tag {
+  margin: 0 20px 10px 20px;
+}
+
+.tag-style {
+  padding: 5px 10px;
+  background-color: $yellow;
+  border-radius: 20px;
+  display: inline-block;
+  margin: 2px 3px;
 }
 
 .note-name {

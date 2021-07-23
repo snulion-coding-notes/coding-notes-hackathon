@@ -178,6 +178,20 @@ const saveNote = async (folderId) => {
     `table-website-${folderId}`
   );
   const newTagElement = document.getElementById(`table-tag-${folderId}`);
+  if (newNameElement.value === ''){
+    alert('노트 이름을 필수로 입력해주세요.');
+  }
+  const reg_url=/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|www\.)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/;
+  if(reg_url.test(newWebsiteElement.value)){
+    try{
+      await axios.post(`/dashboard/${folderId}/createnote`)
+    } catch(e){
+      alert('유효한 url을 입력해주세요.');
+    }
+  }
+  else{
+    alert('유효한 url을 입력해주세요.');
+  }
 
   let data = new FormData();
   data.append('noteName', newNameElement.value);
@@ -185,7 +199,7 @@ const saveNote = async (folderId) => {
   data.append('noteLink', newWebsiteElement.value);
   data.append('tag', newTagElement.value);
 
-  await axios.post(`/codingnote/dashboard/${folderId}/createnote/`, data);
+  // await axios.post(`/codingnote/dashboard/${folderId}/createnote/`, data);
 
-  window.location.reload();
+  // window.location.reload();
 };

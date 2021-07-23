@@ -232,11 +232,28 @@ class Bookmarking:
 
         return JsonResponse({'isBookmarking': is_bookmarking})
 
-    def read_bookmark(request, nid):
-        note = Note.objects.get(id=nid)
-        bookmark = note.bookmark_set.filter(user_id=request.user.id)
-        if bookmark :
-            return render(request, '#', {'note':note})
+    def read_bookmark(request):
+        my_bookmarks = Bookmark.objects.filter(user=request.user)
+
+        my_folders = Folder.objects.filter(author=request.user)
+        my_tags = Tag.objects.filter(notes__author=request.user)
+        my_note = Note.objects.filter(author=request.user)
+
+        my_tags = Tag.objects.none()
+        for note in my_note:
+            my_tags = my_tags.union(note.tags.all())
+
+        # if my_bookmarks:
+        #     print('bookmark exists')
+        #     print(my_bookmarks)
+        #     return render(request, 'appCodingNote/bookmark.html', {'my_folders': my_folders, 'my_tags': my_tags, 'my_bookmarks': my_bookmarks})
+        # else:
+        #     print('bookmark doesnt exists')
+        #     print(my_bookmarks)
+        #     return render(request, 'appCodingNote/no-bookmark.html', {'my_folders': my_folders, 'my_tags': my_tags})
+
+        return render(request, 'appCodingNote/bookmark.html', {'my_folders': my_folders, 'my_tags': my_tags, 'my_bookmarks': my_bookmarks})
+        
 
 
 class Tagging:

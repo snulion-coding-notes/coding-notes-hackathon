@@ -2,7 +2,6 @@ from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from .models import Folder, Note, Bookmark, Tag
 from django.views.decorators.csrf import csrf_exempt
-from django.db.models import Q
 import requests
 from bs4 import BeautifulSoup
 import os
@@ -308,7 +307,9 @@ class Search:
         if search_keyword :
             if len(search_keyword) > 1 :
                 if search_type == 'name-and-tag':
-                    search_note_list=note_list.filter(Q (note_name=search_keyword) | Q (tags__tag_name=search_keyword))
+                    search_note_list=note_list.filter(note_name=search_keyword)
+                    search_note_list2=note_list.filter(tags__tag_name=search_keyword)
+                    search_note_list.union(search_note_list2)
                 elif search_type == 'name':
                     search_note_list = note_list.filter(
                         note_name=search_keyword)

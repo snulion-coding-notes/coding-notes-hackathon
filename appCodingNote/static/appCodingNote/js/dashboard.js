@@ -5,7 +5,7 @@ const checkInput =  async () => {
     let data = new FormData();
     data.append('folderName', newFolderName);
 
-    const response = await axios.post('/codingnote/dashboard/createfolder/', data);
+    const response = await axios.post('/dashboard/createfolder/', data);
 
     if (response.data.message) {
       alert(response.data.message);

@@ -16,7 +16,7 @@ import json
 def index(request):
     cur_user = request.user
     if cur_user.is_authenticated:
-        return redirect(f'/codingnote/dashboard')
+        return redirect(f'/dashboard')
     else:
         return render(request, 'appCodingNote/index.html')
 
@@ -78,12 +78,12 @@ class FolderCRUD:
     def update_folder(request, fid):
         folder = Folder.objects.filter(id=fid)
         folder.update(folder_name=request.POST['folderName'])
-        return redirect(f'/codingnote/dashboard/{fid}/readfolder/')
+        return redirect(f'/dashboard/{fid}/readfolder/')
 
     def delete_folder(request, fid):
         folder = Folder.objects.get(id=fid)
         folder.delete()
-        return redirect(f'/dashboard/')
+        return redirect(f'/')
 
 
 class NoteCRUD:
@@ -149,7 +149,7 @@ class NoteCRUD:
                 'newNoteTags': new_note_tags
                 })
         else:
-            return redirect(f'/dashboard/{fid}/readfolder/')
+            return redirect(f'/{fid}/readfolder/')
 
     def read_note(request, fid, nid):
         folder = Folder.objects.get(id=fid)
@@ -171,30 +171,36 @@ class NoteCRUD:
 
         if soup.select_one('meta[property="og:title"]') is not None:
             og_title = soup.select_one('meta[property="og:title"]')
-            note_link_title = og_title['content']   # note_link_title 얻기
+            note_link_title = og_title['content']
         else:
             note_link_title = note_link
-            print(note_link_title)                  # note_link_title 정보를 가져 올 수 없을 경우 처리
+            print(note_link_title)
 
         if soup.select_one('meta[property="og:image"]') is not None:
             og_image = soup.select_one('meta[property="og:image"]')
-            note_link_image = og_image['content']   # note_link_image 얻기
+            note_link_image = og_image['content']
+            try : 
+                is_error = note_link_image.getcode()
+                if is_error == 400 or is_error == 404 :
+                    note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
+            except:
+                note_link_image = og_image['content']
         else:
-            # note_link_image 정보를 가져 올 수 없을 경우 처리, 디폴트 이미지 필요
             note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
         
         note.update(note_name=request.POST['noteName'],
                     note_link=note_link, note_link_title=note_link_title, note_comment=request.POST['noteComment'], note_link_image=note_link_image)
 
         # 태그 
-        
         tag_mass = Tagging.create_tag(request)
         tag_name_array = []
         updated_note = Note.objects.get(id=nid)
         updated_note.tags.clear()
+
         for tag in tag_mass:
                 Note.objects.get(id=nid).tags.add(tag)
                 tag_name_array.append(tag.tag_name)
+
         updated_note_title = updated_note.note_name
         updated_note_comment = updated_note.note_comment
         updated_note_link = updated_note.note_link
@@ -244,15 +250,6 @@ class Bookmarking:
         for note in my_note:
             my_tags = my_tags.union(note.tags.all())
 
-        # if my_bookmarks:
-        #     print('bookmark exists')
-        #     print(my_bookmarks)
-        #     return render(request, 'appCodingNote/bookmark.html', {'my_folders': my_folders, 'my_tags': my_tags, 'my_bookmarks': my_bookmarks})
-        # else:
-        #     print('bookmark doesnt exists')
-        #     print(my_bookmarks)
-        #     return render(request, 'appCodingNote/no-bookmark.html', {'my_folders': my_folders, 'my_tags': my_tags})
-
         return render(request, 'appCodingNote/bookmark.html', {'my_folders': my_folders, 'my_tags': my_tags, 'my_bookmarks': my_bookmarks})
         
 
@@ -282,16 +279,6 @@ class Tagging:
         for note in my_note:
             my_tags=my_tags.union(note.tags.all())
         return render(request, 'appCodingNote/tag.html', {'tagged_notes': tagged_notes, 'tag_name': tag_name, 'my_folders': my_folders, 'my_tags': my_tags})
-
-    def update_tag(request, fid, nid, tid):
-        tag = Tag.objects.get(id=tid)
-        tag.update(tag_name=request.POST['tagName'])
-        return redirect(f'/dashboard/{fid}/{nid}/readnote/')
-
-    def delete_tag(request, fid, nid, tid):
-        tag = Tag.objects.get(id=tid)
-        tag.delete()
-        return redirect(f'/dashboard/{fid}/{nid}/readnote/')
 
 
 class Search:

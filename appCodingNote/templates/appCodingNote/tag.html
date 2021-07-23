@@ -40,7 +40,7 @@
     <div class="title-header">
       <div id="tag-title" class="tag-title" onmouseover="showTitleActionBtns()" onmouseout="hideTitleActionBtns()">
         <h2 id="tag-name">{{ tag_name }}</h2>
-        <button class="tag-edit-btn edit-delete-btn no-visibility" onclick="editTagName('{{ tag_name }}')"></button>
+        <button class="tag-edit-btn edit-delete-btn no-visibility" onclick="editTag('{{ tag_name }}')"></button>
         <!-- Tag Update, Tag Delete 함수 만들어서 연결 -->
         <button class="tag-delete-btn edit-delete-btn no-visibility" onclick="deleteTag('{{ tag_name }}')"></button>
         <button id="edit-done-btn" class="edit-done-btn tag-title-btn no-visibility" onclick="updateTag()"></button>
@@ -54,7 +54,7 @@
       </div>
     </div>
 
-    <!-- Tag 리스트 -->
+    <!-- Tag 리스트뷰 -->
     <div id="list-container" class="list-container">
       <!-- 노트 개수 -->
       <div class="content-note-num">
@@ -81,14 +81,14 @@
               <td id="note-link-{{ note.id }}" class="col-3"><a href="{{ note.note_link }}" target="_blank">{{ note.note_link_title }}</td><a>
               <td id="note-tag-{{ note.id }}" class="col-4">
                 {% for tag in note.tags.all %}
-                  <span class="tag-style tag-span">{{ tag.tag_name }}</span>
+                  <span class="tag-style tag-span-{{ note.id }}">{{ tag.tag_name }}</span>
                 {% endfor %}
               </td>
               <td id="note-action-{{ note.id }}" class="note-action">
                 <button
                   class="edit no-visibility"
                   id="{{ note.id }}-edit-btn"
-                  onclick="editNote({{ note.id }}, '{{ note.note_name }}', '{{ note.note_comment }}', '{{ note.note_link_title }}')"
+                  onclick="editNote({{ note.id }}, '{{ note.note_name }}', '{{ note.note_comment }}', '{{ note.note_link }}')"
                 >
                   <img class="edit-img" src="{% static 'img/edit.svg' %}" />
                 </button>
@@ -106,7 +106,7 @@
             </tr>
           {% endfor %}
         </tbody>
-        <tfoot>
+        <tfoot class="tag-list-tfoot">
           <tr></tr>
         </tfoot>
       </table>

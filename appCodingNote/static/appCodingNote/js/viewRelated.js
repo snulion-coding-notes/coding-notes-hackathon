@@ -67,6 +67,7 @@ const getTagNames = () => {
 };
 
 const makeTagElements = (str) => {
+  // if (str != '') {
   const tagArray = str.split(' ');
   const spanElements = [];
   tagArray.forEach((string) => {
@@ -76,12 +77,13 @@ const makeTagElements = (str) => {
     newTag.innerHTML = string;
     spanElements.push(newTag);
   });
+  // }
 
   return spanElements;
 };
 
 // 리스트뷰에서 노트 수정, 삭제
-const editNote = (noteId, noteName, noteComment, noteLinkTitle) => {
+const editNote = (noteId, noteName, noteComment, noteLink) => {
   const nameElement = document.getElementById(`note-name-${noteId}`);
   nameElement.innerHTML = `<input id="edit-name-${noteId}" type="text", value="${noteName}", name="name"></input>`;
 
@@ -89,7 +91,7 @@ const editNote = (noteId, noteName, noteComment, noteLinkTitle) => {
   commentElement.innerHTML = `<input id="edit-comment-${noteId}" type="text", value="${noteComment}" name="comment"></input>`;
 
   const linkElement = document.getElementById(`note-link-${noteId}`);
-  linkElement.innerHTML = `<input id="edit-link-${noteId}" type="text", value="${noteLinkTitle}" name="link-title"></input>`;
+  linkElement.innerHTML = `<input id="edit-link-${noteId}" type="text", value="${noteLink}" name="link-title"></input>`;
 
   const tagElement = document.getElementById(`note-tag-${noteId}`);
   tagElement.innerHTML = `<input id="edit-tag-${noteId}" type="text", value="${getTagNames()}" name="tag"></input>`;
@@ -103,37 +105,26 @@ const editNote = (noteId, noteName, noteComment, noteLinkTitle) => {
 };
 
 const updateNote = async (folderId, noteId) => {
+  // editNote 함수로 인해 생성된 input 엘리먼트들 선택
   const editNameElement = document.getElementById(`edit-name-${noteId}`);
   const editCommentElement = document.getElementById(`edit-comment-${noteId}`);
   const editLinkElement = document.getElementById(`edit-link-${noteId}`);
   const editTagElement = document.getElementById(`edit-tag-${noteId}`);
 
-
+  // 각 input 엘리먼트의 value 값들을 데이터에 담아줌
   let data = new FormData();
   data.append('noteName', editNameElement.value);
   data.append('noteComment', editCommentElement.value);
   data.append('noteLink', editLinkElement.value);
+  // TODO : 태그 input이 비어있지 않을 때만 데이터 보내도록 하기
   data.append('tag', editTagElement.value);
 
-  const response = await axios.post(`/codingnote/dashboard/${folderId}/${noteId}/updatenote/`, data);
-  console.log(response.data);
+  await axios.post(
+    `/codingnote/dashboard/${folderId}/${noteId}/updatenote/`,
+    data
+  );
 
-  document.getElementById(`note-name-${noteId}`).innerHTML = response.data.updatedNoteName;
-  document.getElementById(`note-comment-${noteId}`).innerHTML = response.data.updatedNoteComment;
-  document.getElementById(`note-link-${noteId}`).innerHTML = response.data.updatedNoteLinkTitle;
-
-  const newTagElements = makeTagElements(response.data.updatedNoteTags);
-
-  newTagElements.forEach((span) => {
-    document.getElementById(`note-tag-${noteId}`).appendChild(span);
-  });
-
-  document.getElementById(`${noteId}-update-btn`).classList.add('no-display');
-  document.getElementById(`${noteId}-edit-btn`).classList.remove('no-display');
-  document
-    .getElementById(`${noteId}-delete-btn`)
-    .classList.remove('no-display');
-  document.getElementById(`edit-tag-${noteId}`).remove();
+  window.location.reload();
 };
 
 const deleteNote = async (folderId, noteId) => {
@@ -163,7 +154,7 @@ const addNote = (folderId) => {
 
   const newTableWebsite = document.createElement('td');
   newTableWebsite.setAttribute('id', 'new-website-row');
-  newTableWebsite.innerHTML = `<input id="table-website-${folderId}" type="text", placeholder="(필수)url을 입력해주세요.", name="link-title"></input>`;
+  newTableWebsite.innerHTML = `<input id="table-website-${folderId}" type="text", placeholder="(필수)url을 입력해주세요.", name="link"></input>`;
 
   const newTableTag = document.createElement('td');
   newTableTag.setAttribute('id', 'new-tag-row');
@@ -177,6 +168,9 @@ const addNote = (folderId) => {
   newTableSaveButton.innerHTML =
     '<img class="save-img" src="/static/img/save-update.svg" />';
 
+  // TODO : 노트 제목에 focus 가도록
+
+  // 정보를 넣을 수 있는 input 값 추가
   newTableAction.append(newTableSaveButton);
   noteElement.appendChild(newTabletr);
   newTabletr.append(
@@ -186,6 +180,14 @@ const addNote = (folderId) => {
     newTableTag,
     newTableAction
   );
+
+  // Add 노트를 완료하기 전 새로운 노트를 Add 하지 못하도록 함
+  const addBtn = document.getElementById('add-note-btn');
+  addBtn.setAttribute('onclick', 'deactivateAddBtn()');
+};
+
+const deactivateAddBtn = () => {
+  alert('노트 생성을 완료해주세요.');
 };
 
 const saveNote = async (folderId) => {
@@ -204,20 +206,32 @@ const saveNote = async (folderId) => {
   data.append('noteLink', newWebsiteElement.value);
   data.append('tag', newTagElement.value);
 
-  const response = await axios.post(
-    `/codingnote/dashboard/${folderId}/createnote/`,
-    data
-  );
+  await axios.post(`/codingnote/dashboard/${folderId}/createnote/`, data);
 
-  document.getElementById('new-name-row').innerHTML = newNameElement.value;
-  document.getElementById('new-comment-row').innerHTML =
-    newCommentElement.value;
-  document.getElementById(
-    'new-website-row'
-  ).innerHTML = `<a href= "${response.data.note_link}">${response.data.note_link_title}</a>`;
-  document.getElementById('new-tag-row').innerHTML = newTagElement.value;
-  document.getElementById(
-    'content-note-num'
-  ).innerHTML = `${response.data.notesNum}개`;
-  document.getElementById(`${folderId}-save-btn`).classList.add('no-display');
+  // document.getElementById('new-name-row').innerHTML = response.data.newNoteName;
+  // document.getElementById('new-comment-row').innerHTML =
+  //   response.data.newNoteComment;
+
+  // const newNoteLinkElement = document.createElement('a');
+  // newNoteLinkElement.setAttribute('href', `${response.data.newNoteLink}`);
+  // newNoteLinkElement.innerHTML = response.data.newNoteLinkTitle;
+  // document.getElementById('new-website-row').appendChild(newNoteLinkElement);
+  // document.getElementById(`table-website-${folderId}`).remove();
+
+  // const newTagElements = makeTagElements(response.data.newNoteTags);
+  // newTagElements.forEach((span) => {
+  //   document.getElementById('new-tag-row').appendChild(span);
+  // });
+  // document.getElementById(`table-tag-${folderId}`).remove();
+
+  // document.getElementById(
+  //   'content-note-num'
+  // ).innerHTML = `${response.data.notesNum} notes`;
+
+  // document.getElementById(`${folderId}-save-btn`).classList.add('no-display');
+
+  // const addBtn = document.getElementById('add-note-btn');
+  // addBtn.setAttribute('onclick', `addNote(${folderId})`);
+
+  window.location.reload();
 };

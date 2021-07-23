@@ -10,6 +10,7 @@
 {% block js %}
   <script defer type="text/javascript" src="{% static 'appCodingNote/js/tag.js' %}"></script>
   <script defer type="text/javascript" src="{% static 'appCodingNote/js/viewRelated.js' %}"></script>
+  <script defer type="text/javascript" src="{% static 'appCodingNote/js/bookmark.js' %}"></script>
 {% endblock js %}
 
 {% block content_dashboard %}
@@ -64,7 +65,7 @@
       {% for note in tagged_notes %}
         <section class="card-content">
           <div class="bookmark-section">
-            <button id="bookmark-star-btn" class="bookmark-btn" onclick="onClickBookmarking({{ note.folder.id }}, {{ note.id }})">
+            <button id="bookmark-star-btn" class="bookmark-btn" onclick="createBookmark({{ note.folder.id }}, {{ note.id }})">
               {% if user in note.bookmark_users.all %}
                 <img id="bookmark-star-{{ note.id }}" src="{% static 'img/star-fill.png' %}" alt="bookmark">
               {% else %}

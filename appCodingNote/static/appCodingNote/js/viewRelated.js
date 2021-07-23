@@ -1,4 +1,3 @@
-// 리스트뷰, 카드뷰 토글 관련
 const listOn = () => {
   document.getElementById('list-container').classList.remove('no-display');
   document.getElementById('card-container').classList.add('no-display');
@@ -21,7 +20,6 @@ const onClickViewButton = (event) => {
   x < imgWidth / 2 ? listOn() : cardOn();
 };
 
-// 리스트뷰 노트 edit, delete 관련
 const showNoteActionBtns = (noteId) => {
   const editHasHide = document
     .getElementById(`${noteId}-edit-btn`)
@@ -68,23 +66,6 @@ const getTagNames = (noteId) => {
   return tagsArray.join(' ');
 };
 
-// const makeTagElements = (str) => {
-//   // if (str != '') {
-//   const tagArray = str.split(' ');
-//   const spanElements = [];
-//   tagArray.forEach((string) => {
-//     const newTag = document.createElement('span');
-//     newTag.classList.add('tag-style');
-//     newTag.classList.add(`tag-span`);
-//     newTag.innerHTML = string;
-//     spanElements.push(newTag);
-//   });
-//   // }
-
-//   return spanElements;
-// };
-
-// 리스트뷰에서 노트 수정, 삭제
 const editNote = (noteId, noteName, noteComment, noteLink) => {
   const nameElement = document.getElementById(`note-name-${noteId}`);
   nameElement.innerHTML = `<input id="edit-name-${noteId}" type="text", value="${noteName}", name="name"></input>`;
@@ -100,7 +81,6 @@ const editNote = (noteId, noteName, noteComment, noteLink) => {
     noteId
   )}" name="tag"></input>`;
 
-  // 업데이트 버튼 나오고 edit delete 버튼 안 나오게
   document
     .getElementById(`${noteId}-update-btn`)
     .classList.remove('no-display');
@@ -109,13 +89,11 @@ const editNote = (noteId, noteName, noteComment, noteLink) => {
 };
 
 const updateNote = async (folderId, noteId) => {
-  // editNote 함수로 인해 생성된 input 엘리먼트들 선택
   const editNameElement = document.getElementById(`edit-name-${noteId}`);
   const editCommentElement = document.getElementById(`edit-comment-${noteId}`);
   const editLinkElement = document.getElementById(`edit-link-${noteId}`);
   const editTagElement = document.getElementById(`edit-tag-${noteId}`);
 
-  // 각 input 엘리먼트의 value 값들을 데이터에 담아줌
   let data = new FormData();
   data.append('noteName', editNameElement.value);
   data.append('noteComment', editCommentElement.value);
@@ -144,7 +122,6 @@ const deleteNote = async (folderId, noteId) => {
   }
 };
 
-// TODO : 아래 수정하기
 const addNote = (folderId) => {
   const noteElement = document.getElementById('table-body');
   const newTabletr = document.createElement('tr');
@@ -174,7 +151,6 @@ const addNote = (folderId) => {
 
   // TODO : 노트 제목에 focus 가도록
 
-  // 정보를 넣을 수 있는 input 값 추가
   newTableAction.append(newTableSaveButton);
   noteElement.appendChild(newTabletr);
   newTabletr.append(
@@ -185,7 +161,6 @@ const addNote = (folderId) => {
     newTableAction
   );
 
-  // Add 노트를 완료하기 전 새로운 노트를 Add 하지 못하도록 함
   const addBtn = document.getElementById('add-note-btn');
   addBtn.setAttribute('onclick', 'deactivateAddBtn()');
 };
@@ -212,45 +187,5 @@ const saveNote = async (folderId) => {
 
   await axios.post(`/codingnote/dashboard/${folderId}/createnote/`, data);
 
-  // document.getElementById('new-name-row').innerHTML = response.data.newNoteName;
-  // document.getElementById('new-comment-row').innerHTML =
-  //   response.data.newNoteComment;
-
-  // const newNoteLinkElement = document.createElement('a');
-  // newNoteLinkElement.setAttribute('href', `${response.data.newNoteLink}`);
-  // newNoteLinkElement.innerHTML = response.data.newNoteLinkTitle;
-  // document.getElementById('new-website-row').appendChild(newNoteLinkElement);
-  // document.getElementById(`table-website-${folderId}`).remove();
-
-  // const newTagElements = makeTagElements(response.data.newNoteTags);
-  // newTagElements.forEach((span) => {
-  //   document.getElementById('new-tag-row').appendChild(span);
-  // });
-  // document.getElementById(`table-tag-${folderId}`).remove();
-
-  // document.getElementById(
-  //   'content-note-num'
-  // ).innerHTML = `${response.data.notesNum} notes`;
-
-  // document.getElementById(`${folderId}-save-btn`).classList.add('no-display');
-
-  // const addBtn = document.getElementById('add-note-btn');
-  // addBtn.setAttribute('onclick', `addNote(${folderId})`);
-
   window.location.reload();
-};
-
-const onClickBookmarking = async (folderId, noteId) => {
-  const bookmarkStarElement = document.getElementById(
-    `bookmark-star-${noteId}`
-  );
-  const response = await axios.get(
-    `/codingnote/dashboard/${folderId}/${noteId}/`
-  );
-
-  if (response.data.isBookmarking === 1) {
-    bookmarkStarElement.src = '/static/img/star-fill.png';
-  } else {
-    bookmarkStarElement.src = '/static/img/star-empty.png';
-  }
 };

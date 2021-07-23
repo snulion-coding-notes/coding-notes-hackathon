@@ -219,8 +219,10 @@ class NoteCRUD:
 
 
 class Bookmarking:
-    def create_bookmark(request, fid, nid):
-        note = Note.objects.get(id=nid)
+    def create_bookmark(request):
+        note_id = request.POST['noteId']
+
+        note = Note.objects.get(id=note_id)
 
         if note.bookmark_set.filter(user_id=request.user.id).count():
             note.bookmark_set.get(user=request.user).delete()

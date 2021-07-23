@@ -137,7 +137,9 @@ class NoteCRUD:
             new_note_link_title = new_note.note_link_title
             new_note_tags = ' '.join(tag_name_array)
 
-            Crawl.translation(request)
+            # stackoverflow 검색 결과 노출
+            stackoverflow_search_result = Crawl.stackoverflow_search_result(request, new_note_name)
+            print(stackoverflow_search_result)
 
             return JsonResponse({
                 'notesNum': notesNum,
@@ -342,11 +344,11 @@ class chromeExtension:
 
     
 class Crawl:
-    def translation(request):
+    def stackoverflow_search_result(request, new_note_name):
         context = ssl._create_unverified_context()
         client_id = '0ur6n190qb'
         client_secret = 'Dnl4YIhneF6UzIP1W0XzMmVpE1vBjpbgzwNLkj5W'
-        encText = urllib.parse.quote("장고 로그인")
+        encText = urllib.parse.quote(new_note_name)
         data = "source=ko&target=en&text=" + encText
         url = "https://naveropenapi.apigw.ntruss.com/nmt/v1/translation"
         transrequests = urllib.request.Request(url)
@@ -358,10 +360,7 @@ class Crawl:
             response_body = response.read()
             str_index = response_body.decode('utf-8').find('translatedText')
             trans_result = response_body.decode('utf-8')[str_index+17:-4]
-            google_search = f'https://www.google.com/search?q={trans_result}'
-            headers = {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
-            data = requests.get(google_search, headers=headers)
-            
+            stackoverflow_search = f'https://stackoverflow.com/search?q={trans_result}'
+            return stackoverflow_search
         else:
             print("Error Code:" + rescode)

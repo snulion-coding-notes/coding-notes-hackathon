@@ -291,11 +291,10 @@ class Search:
         if search_keyword :
             if len(search_keyword):
                 if search_type == 'name-and-tag':
-                    search_note_list=note_list.filter(note_name__icontains=search_keyword)
-                    search_note_list2=note_list.filter(tags__tag_name__icontains=search_keyword)
-                    search_note_list.union(search_note_list2)
-                    if not search_note_list:
-                        search_note_list=search_note_list2
+                    search_note_list_ids = list(note_list.filter(note_name__icontains=search_keyword).values_list('id', flat=True))
+                    search_note_list2_ids = list(note_list.filter(tags__tag_name__icontains=search_keyword).values_list('id',flat=True))
+                    ids_list = search_note_list_ids + search_note_list2_ids
+                    search_note_list=Note.objects.filter(id__in=ids_list)
                 elif search_type == 'name':
                     search_note_list = note_list.filter(
                         note_name__icontains=search_keyword)

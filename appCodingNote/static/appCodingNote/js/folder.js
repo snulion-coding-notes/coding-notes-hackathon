@@ -1,23 +1,57 @@
-const editFolder = (folderId, folderName) => {
-  const folderNameElement = document.getElementById('folder-name');
-  folderNameElement.innerHTML = `<input id="folder-new-name" type="text", value="${folderName}", name="folderName"></input>`;
-
-  document.getElementById('folder-edit-btn').classList.add('no-display');
-  document.getElementById('folder-delete-btn').classList.add('no-display');
-  document.getElementById('folder-update-btn').classList.remove('no-display');
+const showTitleActionBtns = () => {
+  const tagTitleBtns = document.getElementsByClassName('edit-delete-btn');
+  [...tagTitleBtns].forEach((btn) => {
+    btn.classList.remove('no-visibility');
+  });
 };
 
-const updateFolder = (folderId) => {
-  const folderNameElement = document.getElementById('folder-new-name');
+const hideTitleActionBtns = () => {
+  const tagTitleBtns = document.getElementsByClassName('edit-delete-btn');
+  [...tagTitleBtns].forEach((btn) => {
+    btn.classList.add('no-visibility');
+  });
+};
+
+// const updateFolder = (folderId) => {
+//   const folderNameElement = document.getElementById('folder-new-name');
+
+//   let data = new FormData();
+//   data.append('folderName', folderNameElement.value);
+//   axios.post(`/codingnote/dashboard/${folderId}/updatefolder/`, data);
+//   let pastFolderNameElement = document.getElementById('folder-name');
+//   pastFolderNameElement.innerHTML = folderNameElement.value;
+//   document.getElementById('folder-edit-btn').classList.remove('hide');
+//   document.getElementById('folder-delete-btn').classList.remove('hide');
+//   document.getElementById('folder-update-btn').classList.add('hide');
+// };
+
+const editFolder = (folderName) => {
+  const tagNameElement = document.getElementById('tag-name');
+  const newInputElement = document.createElement('input');
+  newInputElement.setAttribute('id', 'folder-name-input');
+  newInputElement.setAttribute('value', `${folderName}`);
+  newInputElement.setSelectionRange(folderName.length, folderName.length);
+  tagNameElement.parentNode.replaceChild(newInputElement, tagNameElement);
+  document.getElementById('folder-name-input').focus();
+
+  const folderTitleBtns = document.getElementsByClassName('edit-delete-btn');
+  [...folderTitleBtns].forEach((btn) => {
+    btn.style.display = 'none';
+  });
+
+  const editDoneBtn = document.getElementById('edit-done-btn');
+  editDoneBtn.classList.remove('no-visibility');
+};
+
+const updateFolder = async (folderId) => {
+  const folderNameElement = document.getElementById('folder-name-input');
 
   let data = new FormData();
   data.append('folderName', folderNameElement.value);
-  axios.post(`/codingnote/dashboard/${folderId}/updatefolder/`, data);
-  let pastFolderNameElement = document.getElementById('folder-name');
-  pastFolderNameElement.innerHTML = folderNameElement.value;
-  document.getElementById('folder-edit-btn').classList.remove('hide');
-  document.getElementById('folder-delete-btn').classList.remove('hide');
-  document.getElementById('folder-update-btn').classList.add('hide');
+
+  await axios.post(`/codingnote/dashboard/${folderId}/updatefolder/`, data);
+
+  window.location.reload();
 };
 
 const deleteFolder = (folderId) => {

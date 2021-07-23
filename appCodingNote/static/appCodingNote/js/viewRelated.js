@@ -239,3 +239,18 @@ const saveNote = async (folderId) => {
 
   window.location.reload();
 };
+
+const onClickBookmarking = async (folderId, noteId) => {
+  const bookmarkStarElement = document.getElementById(
+    `bookmark-star-${noteId}`
+  );
+  const response = await axios.get(
+    `/codingnote/dashboard/${folderId}/${noteId}/`
+  );
+
+  if (response.data.isBookmarking === 1) {
+    bookmarkStarElement.src = '/static/img/star-fill.png';
+  } else {
+    bookmarkStarElement.src = '/static/img/star-empty.png';
+  }
+};

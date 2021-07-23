@@ -5,7 +5,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 import requests
 from bs4 import BeautifulSoup
-
+import os
+import sys
+import urllib.request
+import ssl
 
 # TODO : Tag 모델 수정 후 my_tags 있는 부분 수정 필요할 시 수정해야 함 for sidebar (210721)
 
@@ -217,6 +220,12 @@ class Bookmarking:
 
         return JsonResponse({'isBookmarking': is_bookmarking})
 
+    def read_bookmark(request, nid):
+        note = Note.objects.get(id=nid)
+        bookmark = note.bookmark_set.filter(user_id=request.user.id)
+        if bookmark :
+            return render(request, '#', {'note':note})
+
 
 class Tagging:
     def create_tag(request):
@@ -319,3 +328,24 @@ class chromeExtension:
             for tag in tagMass:
                 newNote.tags.add(tag)
             return render(request, 'appCodingNote/index.html')
+
+
+    
+class Crawl:
+    def tlansation(request):
+        context = ssl._create_unverified_context()
+        client_id = '0ur6n190qb'
+        client_secret = 'Dnl4YIhneF6UzIP1W0XzMmVpE1vBjpbgzwNLkj5W'
+        encText = urllib.parse.quote("안녕하세요")
+        data = "source=ko&target=en&text=" + encText
+        url = "https://naveropenapi.apigw.ntruss.com/nmt/v1/translation"
+        requests = urllib.request.Request(url)
+        requests.add_header("X-NCP-APIGW-API-KEY-ID",client_id)
+        requests.add_header("X-NCP-APIGW-API-KEY",client_secret)
+        response = urllib.request.urlopen(requests, data=data.encode("utf-8"), context=context)
+        rescode = response.getcode()
+        if(rescode==200):
+            response_body = response.read()
+            print(response_body.decode('utf-8'))
+        else:
+            print("Error Code:" + rescode)

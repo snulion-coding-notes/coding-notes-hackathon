@@ -71,7 +71,7 @@ const editNote = (noteId, noteName, noteComment, noteLink) => {
   nameElement.innerHTML = `<input id="edit-name-${noteId}" type="text", value="${noteName}", name="name"></input>`;
 
   const newInputElement = document.getElementById(`edit-name-${noteId}`);
-  newInputElement.setAttribute('placeholder', '(필수) 제목을 입력해주세요.');
+  newInputElement.setAttribute('placeholder', '(필수)제목을 입력해주세요.');
   newInputElement.setSelectionRange(noteName.length, noteName.length);
   newInputElement.focus();
 

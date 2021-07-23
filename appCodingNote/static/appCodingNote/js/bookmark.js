@@ -7,7 +7,7 @@ const createBookmark = async (noteId) => {
   data.append('noteId', noteId);
 
   const response = await axios.post(
-    `/codingnote/dashboard/createbookmark/`,
+    `/dashboard/createbookmark/`,
     data
   );
 

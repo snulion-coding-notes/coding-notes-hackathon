@@ -102,7 +102,7 @@ const updateNote = async (folderId, noteId) => {
   data.append('tag', editTagElement.value);
 
   await axios.post(
-    `/codingnote/dashboard/${folderId}/${noteId}/updatenote/`,
+    `/dashboard/${folderId}/${noteId}/updatenote/`,
     data
   );
 
@@ -113,7 +113,7 @@ const deleteNote = async (folderId, noteId) => {
   const alert = window.confirm('해당 노트를 삭제하시겠습니까?');
   if (alert) {
     const response = await axios.delete(
-      `/codingnote/dashboard/${folderId}/${noteId}/deletenote`
+      `/dashboard/${folderId}/${noteId}/deletenote`
     );
     document.getElementById(`each-note-${noteId}`).remove();
     document.getElementById(
@@ -185,7 +185,7 @@ const saveNote = async (folderId) => {
   data.append('noteLink', newWebsiteElement.value);
   data.append('tag', newTagElement.value);
 
-  await axios.post(`/codingnote/dashboard/${folderId}/createnote/`, data);
+  await axios.post(`/dashboard/${folderId}/createnote/`, data);
 
   window.location.reload();
 };

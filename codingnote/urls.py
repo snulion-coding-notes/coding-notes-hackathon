@@ -25,8 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', appCodingNote.views.index, name='index'),
     path('extension/', appCodingNote.views.chromeExtension.create_note, name='chrome_extension'),
-    path('codingnote/', include('appCodingNote.urls', namespace='appCodingNote')),
+    path('dashboard/', include('appCodingNote.urls', namespace='appCodingNote')),
     path('accounts/', include('accounts.urls')),
-    # path('accounts/', include('django.contrib.auth.urls')),  # 확인 필요
-    path('accounts/signup/', accounts.views.signup, name='signup'),  # 확인 필요
+    path('accounts/signup/', accounts.views.signup, name='signup'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

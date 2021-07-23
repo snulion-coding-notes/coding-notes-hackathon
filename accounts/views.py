@@ -18,7 +18,7 @@ def signup(request):
             user = User.objects.create_user(
                 username=request.POST['username'], password=request.POST['password1'], email=request.POST['email'])
             auth.login(request, user)
-            return redirect('/codingnote/dashboard')
+            return redirect('/dashboard')
     return render(request, 'appCodingNote/index.html')
 
 
@@ -38,7 +38,7 @@ def signin(request):
     if request.method == "POST":
         user = User.objects.get(username=request.POST['signin-username'])
         auth.login(request, user)
-        return redirect('/codingnote/dashboard')
+        return redirect('/dashboard')
     else:
         return render(request, 'appCodingNote/index.html')
 

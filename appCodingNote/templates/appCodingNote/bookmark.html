@@ -40,47 +40,28 @@
     <div class="title-header">
       <div id="tag-title" class="tag-title" onmouseover="showTitleActionBtns()" onmouseout="hideTitleActionBtns()">
         <h2 id="tag-name">내 북마크</h2>
-        {% comment %} <button class="tag-edit-btn edit-delete-btn no-visibility" onclick="editTag('{{ tag_name }}')"></button>
-        <button class="tag-delete-btn edit-delete-btn no-visibility" onclick="deleteTag('{{ tag_name }}')"></button>
-        <button id="edit-done-btn" class="edit-done-btn tag-title-btn no-visibility" onclick="updateTag()"></button> {% endcomment %}
-      </div>
-      <!-- 리스트뷰, 카드뷰 전환 -->
-      <div class="change-view">
-        <button id ="view-select" class="view-select" onClick="onClickViewButton(event)">
-          <img id="list-view" src="{% static 'img/list-view-on.png' %}"/>
-          <img id="card-view" class="no-display" src="{% static 'img/card-view-on.png' %}"/>
-        </button>
       </div>
     </div>
-
-    <!-- Tag 리스트뷰 -->
-    <div id="list-container" class="list-container">
-      <!-- 노트 개수 -->
-      <div class="content-note-num">
-        <span id="content-note-num">{{ tagged_notes.count }} notes</span>
-      </div>
-
-    <!-- Tag 카드 -->
-    <div id="card-container" class="card-container no-display">
-      {% for note in tagged_notes %}
+    <div id="card-container" class="card-container">
+      {% for bookmark in my_bookmarks %}
         <section class="card-content">
           <div class="bookmark-section">
-            <button id="bookmark-star-btn" class="bookmark-btn" onclick="createBookmark({{ note.folder.id }}, {{ note.id }})">
-              {% if user in note.bookmark_users.all %}
-                <img id="bookmark-star-{{ note.id }}" src="{% static 'img/star-fill.png' %}" alt="bookmark">
+            <button id="bookmark-star-btn" class="bookmark-btn" onclick="createBookmark({{ bookmark.note.id }})">
+              {% if user in bookmark.note.bookmark_users.all %}
+                <img id="bookmark-star-{{ bookmark.note.id }}" src="{% static 'img/star-fill.png' %}" alt="bookmark">
               {% else %}
-                <img id="bookmark-star-{{ note.id }}" src="{% static 'img/star-empty.png' %}" alt="bookmark">
+                <img id="bookmark-star-{{ bookmark.note.id }}" src="{% static 'img/star-empty.png' %}" alt="bookmark">
               {% endif %}
             </button>
           </div>
-          <a class="note-image" href={{ note.note_link }} target="_blank">
-            <img src={{ note.note_link_image }} alt="note image">
+          <a class="note-image" href={{ bookmark.note.note_link }} target="_blank">
+            <img src={{ bookmark.note.note_link_image }} alt="note image">
           </a>
           <div class="note-info">
-            <p class="note-name">{{ note.note_name }}</p>
-            <p class="note-comment">{{ note.note_comment }}</p>
+            <p class="note-name">{{ bookmark.note.note_name }}</p>
+            <p class="note-comment">{{ bookmark.note.note_comment }}</p>
             <div class="note-tag">
-              {% for tag in note.tags.all %}
+              {% for tag in bookmark.note.tags.all %}
                 <span class="tag-style">{{ tag.tag_name }}</span>
               {% endfor %}
             </div>

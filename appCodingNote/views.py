@@ -310,6 +310,9 @@ class Search:
                     search_note_list=note_list.filter(note_name=search_keyword)
                     search_note_list2=note_list.filter(tags__tag_name=search_keyword)
                     search_note_list.union(search_note_list2)
+                    if not search_note_list:
+                        search_note_list=search_note_list2
+                    print(search_note_list)
                 elif search_type == 'name':
                     search_note_list = note_list.filter(
                         note_name=search_keyword)

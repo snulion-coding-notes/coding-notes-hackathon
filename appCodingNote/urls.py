@@ -21,5 +21,5 @@ urlpatterns = [
     path('dashboard/<int:tid>/readtag/', views.Tagging.read_tag, name='read_tag'),
     path('dashboard/<int:fid>/<int:nid>/<int:tid>/updatetag/', views.Tagging.update_tag, name='update_tag'),
     path('dashboard/<int:fid>/<int:nid>/<int:tid>/deletetag/', views.Tagging.delete_tag, name='delete_tag'),
-    path('dashboard/search/', views.Search.loginSearch, name='login_search')
+    path('dashboard/search/', views.Search.loginSearch, name='login_search'),
 ]

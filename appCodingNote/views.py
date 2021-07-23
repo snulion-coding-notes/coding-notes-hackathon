@@ -181,7 +181,7 @@ class NoteCRUD:
         else:
             # note_link_image 정보를 가져 올 수 없을 경우 처리, 디폴트 이미지 필요
             note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
-
+        
         note.update(note_name=request.POST['noteName'],
                     note_link=note_link, note_link_title=note_link_title, note_comment=request.POST['noteComment'], note_link_image=note_link_image)
 
@@ -189,11 +189,11 @@ class NoteCRUD:
         
         tag_mass = Tagging.create_tag(request)
         tag_name_array = []
+        updated_note = Note.objects.get(id=nid)
+        updated_note.tags.clear()
         for tag in tag_mass:
                 Note.objects.get(id=nid).tags.add(tag)
                 tag_name_array.append(tag.tag_name)
-
-        updated_note = Note.objects.get(id=nid)
         updated_note_title = updated_note.note_name
         updated_note_comment = updated_note.note_comment
         updated_note_link = updated_note.note_link

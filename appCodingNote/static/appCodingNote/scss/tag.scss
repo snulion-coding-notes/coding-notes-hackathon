@@ -126,7 +126,7 @@ h2 {
 .update-img,
 .save-img {
   width: 20px;
-  margin: 0px 0px 0px 5px;
+  margin-bottom: 5px;
 
   &:hover {
     filter: invert(51%) sepia(17%) saturate(5809%) hue-rotate(2deg)
@@ -157,8 +157,8 @@ h2 {
 .table {
   border-collapse: collapse;
   width: 100%;
-  margin: 0px;
-  padding: 0px;
+  margin: 0 0 40px 0;
+  padding: 0;
 
   thead {
     th {
@@ -176,7 +176,7 @@ h2 {
   }
   tbody {
     td {
-      padding: 5px 0px 5px 10px;
+      padding: 5px 0 5px 10px;
       background: none;
       font-size: 18px;
       vertical-align: middle;

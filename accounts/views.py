@@ -10,7 +10,6 @@ from django import forms
 # Create your views here.
 def checkusername(request):
     result = not User.objects.filter(username = request.POST['username']).exists()
-    print(result)
     return JsonResponse({'result':result})
 
 def signup(request):
@@ -34,13 +33,13 @@ def signin(request):
         if user:
             if user.check_password(request.POST['password']):
                 auth.login(request, user)
-                return redirect('/codingnote/dashboard')
+                return JsonResponse({result})
             else:
                 message = "패스워드가 올바르지 않습니다."
                 return render(request, 'appCodingNote/index.html', {'message': message})
                 # return JsonResponse({'message': message})
         else:
-            message = "아이디가 올바르지 않습니다."
+            message = "존재하지 않는 아이디입니다."
             return render(request, 'appCodingNote/index.html', {'message': message})
             # return JsonResponse({'message': message})
     else:

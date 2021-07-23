@@ -122,16 +122,6 @@ class NoteCRUD:
                 # note_link_image 정보를 가져 올 수 없을 경우 처리, 디폴트 이미지 필요
                 note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
 
-<<<<<<< HEAD
-            note_comment = request.POST['noteComment']
-            newNote = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title,
-                                    note_link_image=note_link_image, note_comment=note_comment, author=request.user)
-            nid = newNote.id
-            Tagging.create_tag(nid)
-            notes = Note.objects.filter(folder_id=fid)
-            notesNum = notes.count()
-            return JsonResponse({'notesNum': notesNum, 'note_link_title': note_link_title, 'note_link':note_link})
-=======
             new_note = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user)
 
             tagMass = Tagging.create_tag(request)
@@ -159,7 +149,6 @@ class NoteCRUD:
                 'newNoteLinkTitle': new_note_link_title,
                 'newNoteTags': new_note_tags
                 })
->>>>>>> f967235ccc35723a3c0b21b4b225073db0402970
         else:
             return redirect(f'/dashboard/{fid}/readfolder/')
 
@@ -270,12 +259,6 @@ class Bookmarking:
 
 
 class Tagging:
-<<<<<<< HEAD
-    def create_tag(request, nid):
-        note = Note.objects.get(id=nid)
-        Tag.objects.create(user=request.user, note=note,
-                        tag_name=request.POST['tagName'])
-=======
     def create_tag(request):
         tagMass=request.POST['tag']
         list_tag=tagMass.split(' ')
@@ -288,7 +271,6 @@ class Tagging:
                 returnTag=returnTag.union(Tag.objects.filter(tag_name=tag))
         return returnTag
 
->>>>>>> f967235ccc35723a3c0b21b4b225073db0402970
 
     def read_tag(request, tid):
         tag = Tag.objects.get(id=tid)

@@ -30,7 +30,7 @@ class Note(models.Model):
     bookmark_users = models.ManyToManyField(User, blank=True, related_name='bookmark_notes', through='Bookmark')
     tags = models.ManyToManyField(Tag, blank=True, related_name='notes')
     folder = models.ForeignKey(Folder, on_delete=models.CASCADE, related_name='notes')
-    note_name = models.TextField(blank=True, null=True) 
+    note_name = models.CharField(blank=True, null=True, max_length=200) 
     note_link = models.URLField()
     note_link_title = models.TextField(blank=True, null=True) 
     note_link_image = models.URLField(blank=True, null=True) 

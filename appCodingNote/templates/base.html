@@ -50,6 +50,7 @@
             {% csrf_token %}
             <input id="signin-username" name="signin-username" type="text" placeholder="Username" autocomplete="on">
             <input id="signin-password" name="signin-password" type="password" placeholder="Password" autocomplete="on">
+            <div id="signin-error-notice"></div>
             <button class="submit-button" type="submit">Sign In</button>
           </form>
           <div class="tab-button-container">
@@ -73,7 +74,7 @@
             <button class="submit-button" type="submit">Sign Up</button>
           </form>
           <div class="tab-button-container">
-            <button onclick="switchTab('signin')">Sign In</button>
+            <button onclick="switchTab('signin')">Sign Up</button>
           </div>
         </section>
       </div>

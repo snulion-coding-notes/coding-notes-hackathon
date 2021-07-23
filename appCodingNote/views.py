@@ -292,7 +292,7 @@ class Search:
         for note in my_note:
             my_tags=my_tags.union(note.tags.all())  
         if search_keyword :
-            if len(search_keyword) > 1 :
+            if len(search_keyword):
                 if search_type == 'name-and-tag':
                     search_note_list=note_list.filter(note_name__icontains=search_keyword)
                     search_note_list2=note_list.filter(tags__tag_name__icontains=search_keyword)

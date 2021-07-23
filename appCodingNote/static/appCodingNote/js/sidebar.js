@@ -14,7 +14,7 @@ window.onload = () => {
   const currentPath = window.location.pathname;
   let currentPageElement;
 
-  if (currentPath === '/codingnote/dashboard/') {
+  if (currentPath === '/dashboard/') {
     currentPageElement = document.getElementById('dashboard-menu');
     currentPageElement.classList.add('current-page');
   } else if (currentPath.includes('readfolder')) {

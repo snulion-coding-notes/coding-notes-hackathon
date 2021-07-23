@@ -225,7 +225,7 @@ const updateFolder = async (folderId) => {
   let data = new FormData();
   data.append('folderName', folderNameElement.value);
 
-  await axios.post(`/codingnote/dashboard/${folderId}/updatefolder/`, data);
+  await axios.post(`/dashboard/${folderId}/updatefolder/`, data);
 
   window.location.reload();
 };
@@ -235,9 +235,9 @@ const deleteFolder = (folderId) => {
     '폴더를 삭제하실 경우 하위 노트들도 모두 삭제됩니다.\n해당 폴더를 삭제하시겠습니까?'
   );
   if (alert) {
-    axios.delete(`/codingnote/dashboard/${folderId}/deletefolder/`);
+    axios.delete(`/dashboard/${folderId}/deletefolder/`);
     window.confirm('폴더가 삭제되었습니다.');
-    window.location.href = '/codingnote/dashboard/';
+    window.location.href = '/dashboard/';
   }
 };
 >>>>>>> f967235ccc35723a3c0b21b4b225073db0402970

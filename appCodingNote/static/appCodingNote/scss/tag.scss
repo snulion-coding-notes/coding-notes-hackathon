@@ -306,7 +306,8 @@ h2 {
 }
 
 .note-info {
-  height: 140px;
+  height: 45%;
+  max-height: 200px;
   display: flex;
   flex-direction: column;
   justify-content: center;

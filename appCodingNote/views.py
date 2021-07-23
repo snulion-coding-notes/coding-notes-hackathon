@@ -230,31 +230,38 @@ class Search:
 class chromeExtension:
     @csrf_exempt
     def create_note(request):
-        note_name = request.POST['noteName']
-        note_link_title = request.POST['noteTitle']
-        note_link = request.POST['noteLink']
-        note_comment = request.POST['noteComment']
-        folder_name = request.POST['file']
-        try:
-            fid = Folder.objects.get(folder_name=folder_name).id
-        except:
-            Folder.objects.create(folder_name=folder_name, author=request.user)
-            fid = Folder.objects.get(folder_name=folder_name).id
-
-        headers = {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
-        data = requests.get(note_link, headers=headers)
-        soup = BeautifulSoup(data.text, 'html.parser')
-        
-        if soup.select_one('meta[property="og:image"]') is not None:
-            og_image = soup.select_one('meta[property="og:image"]')
-            note_link_image = og_image['content']   # note_link_image 얻기
+        if request.method=="GET":
+            folder_mass=Folder.objects.filter(author=request.user)
+            folder_name_array=[]
+            for folder in folder_mass:
+                folder_name_array.append(folder.folder_name)
+            return  JsonResponse({'result': folder_name_array})
         else:
-            # note_link_image 정보를 가져 올 수 없을 경우 처리, 디폴트 이미지 필요
-            note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
-        
-        tagMass=Tagging.create_tag(request)
-        newNote = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user)
-        for tag in tagMass:
-            newNote.tags.add(tag)
-        return render(request, 'appCodingNote/index.html')
+            note_name = request.POST['noteName']
+            note_link_title = request.POST['noteTitle']
+            note_link = request.POST['noteLink']
+            note_comment = request.POST['noteComment']
+            folder_name = request.POST['file']
+            try:
+                fid = Folder.objects.get(folder_name=folder_name).id
+            except:
+                Folder.objects.create(folder_name=folder_name, author=request.user)
+                fid = Folder.objects.get(folder_name=folder_name).id
+
+            headers = {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
+            data = requests.get(note_link, headers=headers)
+            soup = BeautifulSoup(data.text, 'html.parser')
+            
+            if soup.select_one('meta[property="og:image"]') is not None:
+                og_image = soup.select_one('meta[property="og:image"]')
+                note_link_image = og_image['content']   # note_link_image 얻기
+            else:
+                # note_link_image 정보를 가져 올 수 없을 경우 처리, 디폴트 이미지 필요
+                note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
+            
+            tagMass=Tagging.create_tag(request)
+            newNote = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user)
+            for tag in tagMass:
+                newNote.tags.add(tag)
+            return render(request, 'appCodingNote/index.html')

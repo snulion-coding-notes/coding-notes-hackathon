@@ -15,7 +15,6 @@
 
 {% block content_dashboard %}
   <main>
-    <!-- Search Bar -->
       <div class="dashboard-header">
         <form action="{% url 'appCodingNote:login_search' %}" method="POST" class="search-container">
           <div class="search-bar">
@@ -35,9 +34,6 @@
           <p>{{ user.username }}님, 안녕하세요!</p>
         </div>
       </div>
-      <!-- dashboard-header.scss 파일이랑 같이 복붙하기 -->
-
-      <!-- Folder 섹션 -->
       <div class="title-header">
         <div id="tag-title" class="tag-title" onmouseover="showTitleActionBtns()" onmouseout="hideTitleActionBtns()">
           <h2 id="tag-name">{{ folder.folder_name }}</h2>
@@ -45,7 +41,6 @@
           <button class="tag-delete-btn edit-delete-btn no-visibility" onclick="deleteFolder({{ folder.id }})"></button>
           <button id="edit-done-btn" class="edit-done-btn tag-title-btn no-visibility" onclick="updateFolder({{ folder.id }})"></button>
         </div>
-        <!-- 리스트뷰, 카드뷰 전환 -->
         <div class="change-view">
           <button id ="view-select" class="view-select" onClick="onClickViewButton(event)">
             <img id="list-view" src="{% static 'img/list-view-on.png' %}"/>
@@ -53,15 +48,11 @@
           </button>
         </div>
       </div>
-
-      <!-- Folder 리스트뷰 -->
       <div id="list-container" class="list-container">
-        <!-- 노트 개수 -->
         <div class="content-note-num">
           <span id="content-note-num">{{ notes.count }} notes</span>
         </div>
-
-      <!-- 노트 테이블 -->
+      </div>
       <table class="table data">
         <thead>
           <tr>
@@ -130,8 +121,6 @@
         </tfoot>
       </table>
     </div>
-
-    <!-- Tag 카드 -->
     <div id="card-container" class="card-container no-display">
       {% for note in notes %}
         <section class="card-content">

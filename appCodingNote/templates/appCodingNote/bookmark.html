@@ -15,7 +15,6 @@
 
 {% block content_dashboard %}
   <main id="main">
-    <!-- Search Bar -->
     <div class="dashboard-header">
       <form action="{% url 'appCodingNote:login_search' %}" method="POST" class="search-container">
         <div class="search-bar">
@@ -35,8 +34,6 @@
         <p>{{ user.username }}님, 안녕하세요!</p>
       </div>
     </div>
-    <!-- dashboard-header.scss 파일이랑 같이 복붙하기 -->
-
     <div class="title-header">
       <div id="tag-title" class="tag-title">
         <h2 id="tag-name">내 북마크</h2>
@@ -73,6 +70,5 @@
         {% endfor %}
       </div>
     {% endif %}
-    
   </main>
 {% endblock content_dashboard %}

@@ -8,9 +8,6 @@ import os
 import sys
 import urllib.request
 import ssl
-import json
-
-# TODO : Tag 모델 수정 후 my_tags 있는 부분 수정 필요할 시 수정해야 함 for sidebar (210721)
 
 
 def index(request):
@@ -30,7 +27,6 @@ def result(request):
         return render(request, 'appCodingNote/index-search.html', {'notes':search_note_list})
 
     return render(request, 'appCodingNote/index.html')
-    # 인덱스 - 검색 결과 템플릿 위해 추가
 
 
 def dashboard(request):
@@ -119,21 +115,20 @@ class NoteCRUD:
 
             if soup.select_one('meta[property="og:title"]') is not None:
                 og_title = soup.select_one('meta[property="og:title"]')
-                note_link_title = og_title['content']   # note_link_title 얻기
+                note_link_title = og_title['content']
             else:
-                note_link_title = note_link                    # note_link_title 정보를 가져 올 수 없을 경우 처리
+                note_link_title = note_link
 
             if soup.select_one('meta[property="og:image"]') is not None:
                 og_image = soup.select_one('meta[property="og:image"]')
-                note_link_image = og_image['content']   # note_link_image 얻기
+                note_link_image = og_image['content']
                 try : 
                     is_error = note_link_image.getcode()
                     if is_error == 400 or is_error == 404 :
                         note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
                 except:
-                    note_link_image = og_image['content']   # note_link_image 얻기
+                    note_link_image = og_image['content']
             else:
-                # note_link_image 정보를 가져 올 수 없을 경우 처리, 디폴트 이미지 필요
                 note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
             stackoverflow_search_result = Crawl.stackoverflow_search_result(request, note_name)
             new_note = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user, note_overflow_link=stackoverflow_search_result)
@@ -362,9 +357,8 @@ class chromeExtension:
             
             if soup.select_one('meta[property="og:image"]') is not None:
                 og_image = soup.select_one('meta[property="og:image"]')
-                note_link_image = og_image['content']   # note_link_image 얻기
+                note_link_image = og_image['content']
             else:
-                # note_link_image 정보를 가져 올 수 없을 경우 처리, 디폴트 이미지 필요
                 note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
             
             stackoverflow_search_result = Crawl.stackoverflow_search_result(request, note_name)

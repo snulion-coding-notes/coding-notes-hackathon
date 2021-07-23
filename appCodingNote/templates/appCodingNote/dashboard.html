@@ -13,7 +13,6 @@
 
 {% block content_dashboard %}
   <main id="main">
-    <!-- Search Bar -->
     <div class="dashboard-header">
       <form action="{% url 'appCodingNote:login_search' %}" method="POST" class="search-container">
         <div class="search-bar">
@@ -33,8 +32,6 @@
         <p>{{ user.username }}님, 안녕하세요!</p>
       </div>
     </div>
-    <!-- dashboard-header.scss 파일이랑 같이 복붙하기 -->
-
     <div class="main-folder-content content">
       <div class="main-title">
         <h2>폴더</h2>
@@ -47,8 +44,6 @@
               <p>{{ folder.folder_name }}</p>
             </div>
           {% endfor %}
-
-          <!-- New Folder -->
           <div class="new-folder-container">
             <button onclick="checkInput()">
               <img src="{% static 'img/add-folder.png' %}" alt="add folder">
@@ -71,5 +66,4 @@
       </div>
     </div>
   </main>
-  
-    {% endblock content_dashboard %}
+{% endblock content_dashboard %}

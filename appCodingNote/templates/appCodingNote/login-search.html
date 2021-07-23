@@ -15,7 +15,6 @@
 
 {% block content_dashboard %}
     <main id="main">
-        <!-- Search Bar -->
         <div class="dashboard-header">
             <form action="{% url 'appCodingNote:login_search' %}" method="POST" class="search-container">
                 <div class="search-bar">
@@ -40,8 +39,6 @@
                 <h2 id="tag-name">내 노트</h2>
             </div>
         </div>
-    <!-- dashboard-header.scss 파일이랑 같이 복붙하기 -->
-    <!-- 내 노트 -->
         <div id="card-container" class="card-container">
             {% for note in myNote %}
                 <section class="card-content">
@@ -74,7 +71,6 @@
                 <h2 id="tag-name">전체 검색 결과</h2>
             </div>
         </div>
-    <!-- 다른 사람 노트 -->
         <div id="card-container" class="card-container">
             {% for note in otherNote %}
                 <section class="card-content">

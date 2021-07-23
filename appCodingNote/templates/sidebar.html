@@ -10,20 +10,15 @@
 {% endblock side_js %}
 
 {% block content %}
-  <!-- Sidebar -->
   <div id="mySidenav" class="sidenav">
     <div class ="menu-item-logo">
       <a href="/dashboard">
         <img src="{% static 'img/logo-white.png' %}">
       </a>
     </div>
-
-    <!-- Dashboard -->
     <div id="dashboard-menu" class="menu-item">
       <a href="/dashboard">Dashboard</a>
     </div>
-
-    <!-- Folders -->
     <div id="folders-menu" class="menu-item">
       <button class="dropdown-btn" onclick="activateToggle('folder')">
         <p>Folders</p>
@@ -35,8 +30,6 @@
         <a href={% url 'appCodingNote:read_folder' folder.id %}>{{ folder.folder_name }}</a>
       </div>
     {% endfor %}
-
-    <!-- Tags -->
     <div id="tags-menu" class="menu-item">
       <button class="dropdown-btn" onclick="activateToggle('tag')">
         <p>Tags</p>
@@ -48,8 +41,6 @@
         <a href={% url 'appCodingNote:read_tag' tag.id %}>{{ tag.tag_name }}</a>
       </div>
     {% endfor %}
-
-    <!-- Bookmarks -->
     <div id="bookmarks-menu" class="menu-item">
       <a href="{% url 'appCodingNote:read_bookmark' %}"}>Bookmarks</a>
     </div>

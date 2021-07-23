@@ -70,6 +70,11 @@ const editNote = (noteId, noteName, noteComment, noteLink) => {
   const nameElement = document.getElementById(`note-name-${noteId}`);
   nameElement.innerHTML = `<input id="edit-name-${noteId}" type="text", value="${noteName}", name="name"></input>`;
 
+  const newInputElement = document.getElementById(`edit-name-${noteId}`);
+  newInputElement.setAttribute('placeholder', '(필수) 제목을 입력해주세요.');
+  newInputElement.setSelectionRange(noteName.length, noteName.length);
+  newInputElement.focus();
+
   const commentElement = document.getElementById(`note-comment-${noteId}`);
   commentElement.innerHTML = `<input id="edit-comment-${noteId}" type="text", value="${noteComment}" name="comment"></input>`;
 
@@ -107,11 +112,10 @@ const updateNote = async (folderId, noteId) => {
     try{
       await axios.post(`/dashboard/${folderId}/${noteId}/updatenote/`,data);
       window.location.reload();
-    } catch(e){
+    } catch (e) {
       alert('유효한 url을 입력해주세요.');
     }
-  }
-  else{
+  } else {
     alert('유효한 url을 입력해주세요.');
   }
 };
@@ -185,11 +189,8 @@ const saveNote = async (folderId) => {
     `table-website-${folderId}`
   );
   const newTagElement = document.getElementById(`table-tag-${folderId}`);
-  const reg_url=/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|www\.)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/;
-  if (newNameElement.value === ''){
     alert('노트 이름을 필수로 입력해주세요.');
   }
-  else if(reg_url.test(newWebsiteElement.value)){
     let data = new FormData();
     data.append('noteName', newNameElement.value);
     data.append('noteComment', newCommentElement.value);

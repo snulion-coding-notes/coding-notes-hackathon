@@ -119,7 +119,10 @@ const updateNote = async (folderId, noteId) => {
   // TODO : 태그 input이 비어있지 않을 때만 데이터 보내도록 하기
   data.append('tag', editTagElement.value);
 
-  axios.post(`/codingnote/dashboard/${folderId}/${noteId}/updatenote/`, data);
+  await axios.post(
+    `/codingnote/dashboard/${folderId}/${noteId}/updatenote/`,
+    data
+  );
 
   window.location.reload();
 };
@@ -187,7 +190,7 @@ const deactivateAddBtn = () => {
   alert('노트 생성을 완료해주세요.');
 };
 
-const saveNote = (folderId) => {
+const saveNote = async (folderId) => {
   const newNameElement = document.getElementById(`table-name-${folderId}`);
   const newCommentElement = document.getElementById(
     `table-comment-${folderId}`
@@ -203,7 +206,7 @@ const saveNote = (folderId) => {
   data.append('noteLink', newWebsiteElement.value);
   data.append('tag', newTagElement.value);
 
-  axios.post(`/codingnote/dashboard/${folderId}/createnote/`, data);
+  await axios.post(`/codingnote/dashboard/${folderId}/createnote/`, data);
 
   // document.getElementById('new-name-row').innerHTML = response.data.newNoteName;
   // document.getElementById('new-comment-row').innerHTML =

@@ -11,7 +11,7 @@
 {% block js %}
   <script defer type="text/javascript" src="{% static 'appCodingNote/js/tag.js' %}"></script>
   <script defer type="text/javascript" src="{% static 'appCodingNote/js/viewRelated.js' %}"></script>
-  {% comment %} <script src="{% static 'appCodingNote/js/folder.js' %}"></script> {% endcomment %}
+  <script src="{% static 'appCodingNote/js/folder.js' %}"></script>
 {% endblock js %}
 
 {% block content_dashboard %}
@@ -42,9 +42,9 @@
       <div class="title-header">
         <div id="tag-title" class="tag-title" onmouseover="showTitleActionBtns()" onmouseout="hideTitleActionBtns()">
           <h2 id="tag-name">{{ folder.folder_name }}</h2>
-          <button class="tag-edit-btn edit-delete-btn no-visibility" onclick="onClickFolderEditButton({{ folder.id }},'{{ folder.folder_name }}')"></button>
-          <button class="tag-delete-btn edit-delete-btn no-visibility" onclick="onClickFolderDeleteButton({{ folder.id }})"></button>
-          <button id="edit-done-btn" class="edit-done-btn tag-title-btn no-visibility" onclick="onClickFolderUpdateButton({{ folder.id }})"></button>
+          <button class="tag-edit-btn edit-delete-btn no-visibility" onclick="editFolder({{ folder.id }},'{{ folder.folder_name }}')"></button>
+          <button class="tag-delete-btn edit-delete-btn no-visibility" onclick="deleteFolder({{ folder.id }})"></button>
+          <button id="edit-done-btn" class="edit-done-btn tag-title-btn no-visibility" onclick="updateFolder({{ folder.id }})"></button>
         </div>
         <!-- 리스트뷰, 카드뷰 전환 -->
         <div class="change-view">

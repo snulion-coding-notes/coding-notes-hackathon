@@ -64,6 +64,11 @@ class FolderCRUD:
         notes = Note.objects.filter(folder__id=fid)
         my_folders = Folder.objects.filter(author=request.user)
         my_tags = Tag.objects.filter(notes__author=request.user)
+        my_note=Note.objects.filter(author=request.user)
+
+        my_tags=Tag.objects.none()
+        for note in my_note:
+            my_tags=my_tags.union(note.tags.all())
         
         return render(request, 'appCodingNote/folder.html', {'folder': folder, 'notes': notes, 'my_folders': my_folders, 'my_tags': my_tags})
 
@@ -141,9 +146,34 @@ class NoteCRUD:
 
     def update_note(request, fid, nid):
         note = Note.objects.filter(id=nid)
-        note.update(note_name=request.POST['noteName'],
-                    note_link_title=request.POST['noteLink'], note_comment=request.POST['noteComment'])
+        note_link = request.POST['noteLink']
 
+        if not note_link.startswith('https://'):
+                note_link = 'https://' + note_link
+
+        headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
+        data = requests.get(note_link, headers=headers)
+        soup = BeautifulSoup(data.text, 'html.parser')
+
+        if soup.select_one('meta[property="og:title"]') is not None:
+            og_title = soup.select_one('meta[property="og:title"]')
+            note_link_title = og_title['content']   # note_link_title 얻기
+        else:
+            note_link_title = note_link                  # note_link_title 정보를 가져 올 수 없을 경우 처리
+
+        if soup.select_one('meta[property="og:image"]') is not None:
+            og_image = soup.select_one('meta[property="og:image"]')
+            note_link_image = og_image['content']   # note_link_image 얻기
+        else:
+            # note_link_image 정보를 가져 올 수 없을 경우 처리, 디폴트 이미지 필요
+            note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
+
+        note.update(note_name=request.POST['noteName'],
+                    note_link=note_link, note_link_title=note_link_title, note_comment=request.POST['noteComment'], note_link_image=note_link_image)
+
+        # 태그 
+        
         tag_mass = Tagging.create_tag(request)
         tag_name_array = []
         for tag in tag_mass:
@@ -153,11 +183,14 @@ class NoteCRUD:
         updated_note = Note.objects.get(id=nid)
         updated_note_title = updated_note.note_name
         updated_note_comment = updated_note.note_comment
+        updated_note_link = updated_note.note_link
         updated_note_link_title = updated_note.note_link_title
         updated_note_tags = ' '.join(tag_name_array)
+
         return JsonResponse({
             'updatedNoteName': updated_note_title,
             'updatedNoteComment': updated_note_comment,
+            'updatedNoteLink': updated_note_link,
             'updatedNoteLinkTitle': updated_note_link_title,
             'updatedNoteTags': updated_note_tags
             })

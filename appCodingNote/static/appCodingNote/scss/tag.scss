@@ -184,8 +184,9 @@ h2 {
       border-bottom: solid 0.2mm $medium-gray;
       word-break: keep-all;
       height: 100px;
-      a:hover{
-        font-weight:600;
+      max-height: 250px;
+      a:hover {
+        font-weight: 600;
       }
     }
 
@@ -258,6 +259,16 @@ h2 {
 .note-action {
   min-width: 75px;
   width: 100px;
+}
+
+.link-anchor {
+  p {
+    overflow: hidden;
+    line-break: anywhere;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
 }
 
 // 태그 카드뷰 CSS

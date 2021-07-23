@@ -191,19 +191,18 @@ const saveNote = async (folderId) => {
   }
   else if(reg_url.test(newWebsiteElement.value)){
     let data = new FormData();
-      data.append('noteName', newNameElement.value);
-      data.append('noteComment', newCommentElement.value);
-      data.append('noteLink', newWebsiteElement.value);
-      data.append('tag', newTagElement.value);
-    try{
-      await axios.post(`/dashboard/${folderId}/createnote/`,data);
-      
+    data.append('noteName', newNameElement.value);
+    data.append('noteComment', newCommentElement.value);
+    data.append('noteLink', newWebsiteElement.value);
+    data.append('tag', newTagElement.value);
+    try {
+      await axios.post(`/dashboard/${folderId}/createnote/`, data);
+
       window.location.reload();
-    } catch(e){
+    } catch (e) {
       alert('유효한 url을 입력해주세요.');
     }
-  }
-  else{
+  } else {
     alert('유효한 url을 입력해주세요.');
   }
 };

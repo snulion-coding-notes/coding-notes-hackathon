@@ -16,7 +16,7 @@ import json
 def index(request):
     cur_user = request.user
     if cur_user.is_authenticated:
-        return redirect(f'/dashboard')
+        return redirect('/dashboard')
     else:
         return render(request, 'appCodingNote/index.html')
 
@@ -61,10 +61,19 @@ class FolderCRUD:
                 Folder.objects.create(
                     folder_name=folder_name, author=request.user)
                 return HttpResponse()
+        else:
+            return redirect('/dashboard/')
 
     def read_folder(request, fid):
-        folder = Folder.objects.get(id=fid)
-        notes = Note.objects.filter(folder__id=fid)
+        try:
+            folder = Folder.objects.get(id=fid)
+        except:
+            return redirect('/dashboard')
+
+        if folder.author != request.user:
+            return redirect('/dashboard/')
+
+        notes = Note.objects.filter(folder__id=fid, author=request.user)
         my_folders = Folder.objects.filter(author=request.user)
         my_tags = Tag.objects.filter(notes__author=request.user)
         my_note = Note.objects.filter(author=request.user)
@@ -76,14 +85,20 @@ class FolderCRUD:
         return render(request, 'appCodingNote/folder.html', {'folder': folder, 'notes': notes, 'my_folders': my_folders, 'my_tags': my_tags})
 
     def update_folder(request, fid):
-        folder = Folder.objects.filter(id=fid)
-        folder.update(folder_name=request.POST['folderName'])
-        return redirect(f'/dashboard/{fid}/readfolder/')
+        if request.method == 'POST':
+            folder = Folder.objects.filter(id=fid)
+            folder.update(folder_name=request.POST['folderName'])
+            return redirect(f'/dashboard/{fid}/readfolder/')
+        else:
+            return redirect('/dashboard/')
 
     def delete_folder(request, fid):
-        folder = Folder.objects.get(id=fid)
-        folder.delete()
-        return redirect(f'/')
+        if request.method == 'DELETE':
+            folder = Folder.objects.get(id=fid)
+            folder.delete()
+            return redirect('/')
+        else:
+            return redirect('/dashboard/')
 
 
 class NoteCRUD:
@@ -134,6 +149,7 @@ class NoteCRUD:
             new_note_link = new_note.note_link
             new_note_link_title = new_note.note_link_title
             new_note_tags = ' '.join(tag_name_array)
+
             return JsonResponse({
                 'notesNum': notesNum,
                 'newNoteName': new_note_name,
@@ -143,79 +159,81 @@ class NoteCRUD:
                 'newNoteTags': new_note_tags
                 })
         else:
-            return redirect(f'/{fid}/readfolder/')
+            return redirect('/dashboard/')
 
-    def read_note(request, fid, nid):
-        folder = Folder.objects.get(id=fid)
-        note = Note.objects.get(id=nid)
-        tags = Tag.objects.filter(note__id=nid)
-        return render(request, 'appCodingNote/note.html', {'folder': folder, 'note': note, 'tags': tags})
 
     def update_note(request, fid, nid):
-        note = Note.objects.filter(id=nid)
-        note_link = request.POST['noteLink']
-        note_name= request.POST['noteName']
-        if not note_link.startswith('https://'):
-                note_link = 'https://' + note_link
+        if request.method == 'POST':
+            note = Note.objects.filter(id=nid)
+            note_link = request.POST['noteLink']
+            note_name= request.POST['noteName']
 
-        headers = {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
-        data = requests.get(note_link, headers=headers)
-        soup = BeautifulSoup(data.text, 'html.parser')
+            if not note_link.startswith('https://'):
+                    note_link = 'https://' + note_link
 
-        if soup.select_one('meta[property="og:title"]') is not None:
-            og_title = soup.select_one('meta[property="og:title"]')
-            note_link_title = og_title['content']
-        else:
-            note_link_title = note_link
-            print(note_link_title)
+            headers = {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
+            data = requests.get(note_link, headers=headers)
+            soup = BeautifulSoup(data.text, 'html.parser')
 
-        if soup.select_one('meta[property="og:image"]') is not None:
-            og_image = soup.select_one('meta[property="og:image"]')
-            note_link_image = og_image['content']
-            try : 
-                is_error = note_link_image.getcode()
-                if is_error == 400 or is_error == 404 :
-                    note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
-            except:
+            if soup.select_one('meta[property="og:title"]') is not None:
+                og_title = soup.select_one('meta[property="og:title"]')
+                note_link_title = og_title['content']
+            else:
+                note_link_title = note_link
+                print(note_link_title)
+
+            if soup.select_one('meta[property="og:image"]') is not None:
+                og_image = soup.select_one('meta[property="og:image"]')
                 note_link_image = og_image['content']
+                try : 
+                    is_error = note_link_image.getcode()
+                    if is_error == 400 or is_error == 404 :
+                        note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
+                except:
+                    note_link_image = og_image['content']
+            else:
+                note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
+            stackoverflow_search_result = Crawl.stackoverflow_search_result(request, note_name)
+            note.update(note_name=note_name,
+                        note_link=note_link, note_link_title=note_link_title, note_comment=request.POST['noteComment'], 
+                        note_link_image=note_link_image, note_overflow_link=stackoverflow_search_result)
+
+            # 태그 
+            tag_mass = Tagging.create_tag(request)
+            tag_name_array = []
+            updated_note = Note.objects.get(id=nid)
+            updated_note.tags.clear()
+
+            for tag in tag_mass:
+                    Note.objects.get(id=nid).tags.add(tag)
+                    tag_name_array.append(tag.tag_name)
+
+            updated_note_title = updated_note.note_name
+            updated_note_comment = updated_note.note_comment
+            updated_note_link = updated_note.note_link
+            updated_note_link_title = updated_note.note_link_title
+            updated_note_tags = ' '.join(tag_name_array)
+
+            return JsonResponse({
+                'updatedNoteName': updated_note_title,
+                'updatedNoteComment': updated_note_comment,
+                'updatedNoteLink': updated_note_link,
+                'updatedNoteLinkTitle': updated_note_link_title,
+                'updatedNoteTags': updated_note_tags
+                })
         else:
-            note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
-        stackoverflow_search_result = Crawl.stackoverflow_search_result(request, note_name)
-        note.update(note_name=note_name,
-                    note_link=note_link, note_link_title=note_link_title, note_comment=request.POST['noteComment'], 
-                    note_link_image=note_link_image, note_overflow_link=stackoverflow_search_result)
-
-        # 태그 
-        tag_mass = Tagging.create_tag(request)
-        tag_name_array = []
-        updated_note = Note.objects.get(id=nid)
-        updated_note.tags.clear()
-
-        for tag in tag_mass:
-                Note.objects.get(id=nid).tags.add(tag)
-                tag_name_array.append(tag.tag_name)
-
-        updated_note_title = updated_note.note_name
-        updated_note_comment = updated_note.note_comment
-        updated_note_link = updated_note.note_link
-        updated_note_link_title = updated_note.note_link_title
-        updated_note_tags = ' '.join(tag_name_array)
-
-        return JsonResponse({
-            'updatedNoteName': updated_note_title,
-            'updatedNoteComment': updated_note_comment,
-            'updatedNoteLink': updated_note_link,
-            'updatedNoteLinkTitle': updated_note_link_title,
-            'updatedNoteTags': updated_note_tags
-            })
+            return redirect('/dashboard/')
 
 
     def delete_note(request, fid, nid):
-        note = Note.objects.get(id=nid)
-        note.delete()
-        notes = Note.objects.filter(folder_id=fid)
-        return JsonResponse({'notesNum': notes.count()})
+        if request.method == 'DELETE':
+            note = Note.objects.get(id=nid)
+            note.delete()
+            notes = Note.objects.filter(folder_id=fid)
+            return JsonResponse({'notesNum': notes.count()})
+        else:
+            return redirect('/dashboard/')
 
 
 class Bookmarking:
@@ -266,10 +284,19 @@ class Tagging:
 
 
     def read_tag(request, tid):
-        tag = Tag.objects.get(id=tid)
+        
+        try:
+            tag = Tag.objects.get(id=tid)
+        except:
+            return redirect('/dashboard/')
+
         tag_name = tag.tag_name
         tagged_notes = Note.objects.filter(
             tags__tag_name=tag_name, author=request.user)
+
+        if tagged_notes.count() == 0:
+            return redirect('/dashboard/')
+        
         my_folders = Folder.objects.filter(author=request.user)
         my_note=Note.objects.filter(author=request.user)
         my_tags=Tag.objects.none()

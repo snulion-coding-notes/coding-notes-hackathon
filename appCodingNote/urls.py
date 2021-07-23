@@ -14,7 +14,6 @@ urlpatterns = [
     path('<int:fid>/updatefolder/', views.FolderCRUD.update_folder, name='update_folder'),
     path('<int:fid>/deletefolder/', views.FolderCRUD.delete_folder, name='delete_folder'),
     path('<int:fid>/createnote/', views.NoteCRUD.create_note, name='create_note'),
-    path('<int:fid>/<int:nid>/readnote/', views.NoteCRUD.read_note, name='read_note'),
     path('<int:fid>/<int:nid>/updatenote/', views.NoteCRUD.update_note, name='update_note'),
     path('<int:fid>/<int:nid>/deletenote/', views.NoteCRUD.delete_note, name='delete_note'),
     path('<int:tid>/readtag/', views.Tagging.read_tag, name='read_tag'),

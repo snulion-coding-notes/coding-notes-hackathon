@@ -120,9 +120,8 @@ class NoteCRUD:
             else:
                 # note_link_image 정보를 가져 올 수 없을 경우 처리, 디폴트 이미지 필요
                 note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
-
-            new_note = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user)
-
+            stackoverflow_search_result = Crawl.stackoverflow_search_result(request, note_name)
+            new_note = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user, note_overflow_link=stackoverflow_search_result)
             tagMass = Tagging.create_tag(request)
             tag_name_array = []
             for tag in tagMass:
@@ -135,11 +134,6 @@ class NoteCRUD:
             new_note_link = new_note.note_link
             new_note_link_title = new_note.note_link_title
             new_note_tags = ' '.join(tag_name_array)
-
-            # stackoverflow 검색 결과 노출
-            stackoverflow_search_result = Crawl.stackoverflow_search_result(request, new_note_name)
-            print(stackoverflow_search_result)
-
             return JsonResponse({
                 'notesNum': notesNum,
                 'newNoteName': new_note_name,
@@ -160,7 +154,7 @@ class NoteCRUD:
     def update_note(request, fid, nid):
         note = Note.objects.filter(id=nid)
         note_link = request.POST['noteLink']
-
+        note_name= request.POST['noteName']
         if not note_link.startswith('https://'):
                 note_link = 'https://' + note_link
 
@@ -187,9 +181,10 @@ class NoteCRUD:
                 note_link_image = og_image['content']
         else:
             note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
-        
-        note.update(note_name=request.POST['noteName'],
-                    note_link=note_link, note_link_title=note_link_title, note_comment=request.POST['noteComment'], note_link_image=note_link_image)
+        stackoverflow_search_result = Crawl.stackoverflow_search_result(request, note_name)
+        note.update(note_name=note_name,
+                    note_link=note_link, note_link_title=note_link_title, note_comment=request.POST['noteComment'], 
+                    note_link_image=note_link_image, note_overflow_link=stackoverflow_search_result)
 
         # 태그 
         tag_mass = Tagging.create_tag(request)
@@ -344,8 +339,11 @@ class chromeExtension:
                 # note_link_image 정보를 가져 올 수 없을 경우 처리, 디폴트 이미지 필요
                 note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
             
+            stackoverflow_search_result = Crawl.stackoverflow_search_result(request, note_name)
             tagMass=Tagging.create_tag(request)
-            newNote = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user)
+            newNote = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, 
+                                        note_link_title=note_link_title, note_link_image=note_link_image, 
+                                        note_comment=note_comment, author=request.user, note_overflow_link=stackoverflow_search_result)
             for tag in tagMass:
                 newNote.tags.add(tag)
             return render(request, 'appCodingNote/index.html')

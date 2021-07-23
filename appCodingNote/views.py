@@ -112,9 +112,12 @@ class NoteCRUD:
             if soup.select_one('meta[property="og:image"]') is not None:
                 og_image = soup.select_one('meta[property="og:image"]')
                 note_link_image = og_image['content']   # note_link_image 얻기
-                is_error = note_link_image.getcode()
-                if is_error == 400 or is_error == 404 :
-                    note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
+                try : 
+                    is_error = note_link_image.getcode()
+                    if is_error == 400 or is_error == 404 :
+                        note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
+                except:
+                    note_link_image = og_image['content']   # note_link_image 얻기
             else:
                 # note_link_image 정보를 가져 올 수 없을 경우 처리, 디폴트 이미지 필요
                 note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
@@ -343,17 +346,22 @@ class Crawl:
         context = ssl._create_unverified_context()
         client_id = '0ur6n190qb'
         client_secret = 'Dnl4YIhneF6UzIP1W0XzMmVpE1vBjpbgzwNLkj5W'
-        encText = urllib.parse.quote("안녕하세요")
+        encText = urllib.parse.quote("장고 로그인")
         data = "source=ko&target=en&text=" + encText
         url = "https://naveropenapi.apigw.ntruss.com/nmt/v1/translation"
-        requests = urllib.request.Request(url)
-        requests.add_header("X-NCP-APIGW-API-KEY-ID",client_id)
-        requests.add_header("X-NCP-APIGW-API-KEY",client_secret)
-        response = urllib.request.urlopen(requests, data=data.encode("utf-8"), context=context)
+        transrequests = urllib.request.Request(url)
+        transrequests.add_header("X-NCP-APIGW-API-KEY-ID",client_id)
+        transrequests.add_header("X-NCP-APIGW-API-KEY",client_secret)
+        response = urllib.request.urlopen(transrequests, data=data.encode("utf-8"), context=context)
         rescode = response.getcode()
         if(rescode==200):
             response_body = response.read()
             str_index = response_body.decode('utf-8').find('translatedText')
             trans_result = response_body.decode('utf-8')[str_index+17:-4]
+            google_search = f'https://www.google.com/search?q={trans_result}'
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
+            data = requests.get(google_search, headers=headers)
+            
         else:
             print("Error Code:" + rescode)

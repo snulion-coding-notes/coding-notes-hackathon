@@ -108,19 +108,24 @@ const updateNote = async (folderId, noteId) => {
   const editLinkElement = document.getElementById(`edit-link-${noteId}`);
   const editTagElement = document.getElementById(`edit-tag-${noteId}`);
 
-
   let data = new FormData();
   data.append('noteName', editNameElement.value);
   data.append('noteComment', editCommentElement.value);
   data.append('noteLink', editLinkElement.value);
   data.append('tag', editTagElement.value);
 
-  const response = await axios.post(`/codingnote/dashboard/${folderId}/${noteId}/updatenote/`, data);
+  const response = await axios.post(
+    `/codingnote/dashboard/${folderId}/${noteId}/updatenote/`,
+    data
+  );
   console.log(response.data);
 
-  document.getElementById(`note-name-${noteId}`).innerHTML = response.data.updatedNoteName;
-  document.getElementById(`note-comment-${noteId}`).innerHTML = response.data.updatedNoteComment;
-  document.getElementById(`note-link-${noteId}`).innerHTML = response.data.updatedNoteLinkTitle;
+  document.getElementById(`note-name-${noteId}`).innerHTML =
+    response.data.updatedNoteName;
+  document.getElementById(`note-comment-${noteId}`).innerHTML =
+    response.data.updatedNoteComment;
+  document.getElementById(`note-link-${noteId}`).innerHTML =
+    response.data.updatedNoteLinkTitle;
 
   const newTagElements = makeTagElements(response.data.updatedNoteTags);
 
@@ -177,6 +182,9 @@ const addNote = (folderId) => {
   newTableSaveButton.innerHTML =
     '<img class="save-img" src="/static/img/save-update.svg" />';
 
+  // TODO : 노트 제목에 focus 가도록
+
+  // 정보를 넣을 수 있는 input 값 추가
   newTableAction.append(newTableSaveButton);
   noteElement.appendChild(newTabletr);
   newTabletr.append(
@@ -186,6 +194,14 @@ const addNote = (folderId) => {
     newTableTag,
     newTableAction
   );
+
+  // Add 노트를 완료하기 전 새로운 노트를 Add 하지 못하도록 함
+  const addBtn = document.getElementById('add-note-btn');
+  addBtn.setAttribute('onclick', 'deactivateAddBtn()');
+};
+
+const deactivateAddBtn = () => {
+  alert('노트 생성을 완료해주세요.');
 };
 
 const saveNote = async (folderId) => {
@@ -209,15 +225,30 @@ const saveNote = async (folderId) => {
     data
   );
 
-  document.getElementById('new-name-row').innerHTML = newNameElement.value;
+  console.log(response.data);
+
+  document.getElementById('new-name-row').innerHTML = response.data.newNoteName;
   document.getElementById('new-comment-row').innerHTML =
-    newCommentElement.value;
-  document.getElementById(
-    'new-website-row'
-  ).innerHTML = `<a href= "${response.data.note_link}">${response.data.note_link_title}</a>`;
-  document.getElementById('new-tag-row').innerHTML = newTagElement.value;
+    response.data.newNoteComment;
+
+  const newNoteLinkElement = document.createElement('a');
+  newNoteLinkElement.setAttribute('href', `${response.data.newNoteLink}`);
+  newNoteLinkElement.innerHTML = response.data.newNoteLinkTitle;
+  document.getElementById('new-website-row').appendChild(newNoteLinkElement);
+  document.getElementById(`table-website-${folderId}`).remove();
+
+  const newTagElements = makeTagElements(response.data.newNoteTags);
+  newTagElements.forEach((span) => {
+    document.getElementById('new-tag-row').appendChild(span);
+  });
+  document.getElementById(`table-tag-${folderId}`).remove();
+
   document.getElementById(
     'content-note-num'
-  ).innerHTML = `${response.data.notesNum}개`;
+  ).innerHTML = `${response.data.notesNum} notes`;
+
   document.getElementById(`${folderId}-save-btn`).classList.add('no-display');
+
+  const addBtn = document.getElementById('add-note-btn');
+  addBtn.setAttribute('onclick', `addNote(${folderId})`);
 };

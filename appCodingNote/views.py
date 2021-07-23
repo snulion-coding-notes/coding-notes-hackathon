@@ -82,7 +82,9 @@ class NoteCRUD:
     def create_note(request, fid):
         if request.method == 'POST':
             note_name = request.POST['noteName']
+            note_comment = request.POST['noteComment']
             note_link = request.POST['noteLink']
+
             if not note_link.startswith('https://'):
                 note_link = 'https://' + note_link
 
@@ -105,15 +107,29 @@ class NoteCRUD:
                 # note_link_image 정보를 가져 올 수 없을 경우 처리, 디폴트 이미지 필요
                 note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
 
-            note_comment = request.POST['noteComment']
-            tagMass=Tagging.create_tag(request)
-            newNote = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user)
+            new_note = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user)
+
+            tagMass = Tagging.create_tag(request)
+            tag_name_array = []
             for tag in tagMass:
-                newNote.tags.add(tag)
+                new_note.tags.add(tag)
+                tag_name_array.append(tag.tag_name)
             
-            notes = Note.objects.filter(folder_id=fid)
-            notesNum = notes.count()
-            return JsonResponse({'notesNum': notesNum, 'note_link_title': note_link_title, 'note_link': note_link})
+            notesNum = Note.objects.filter(folder_id=fid).count()
+            new_note_name = new_note.note_name
+            new_note_comment = new_note.note_comment
+            new_note_link = new_note.note_link
+            new_note_link_title = new_note.note_link_title
+            new_note_tags = ' '.join(tag_name_array)
+
+            return JsonResponse({
+                'notesNum': notesNum,
+                'newNoteName': new_note_name,
+                'newNoteComment': new_note_comment,
+                'newNoteLink': new_note_link,
+                'newNoteLinkTitle': new_note_link_title,
+                'newNoteTags': new_note_tags
+                })
         else:
             return redirect(f'/dashboard/{fid}/readfolder/')
 
@@ -139,7 +155,12 @@ class NoteCRUD:
         updated_note_comment = updated_note.note_comment
         updated_note_link_title = updated_note.note_link_title
         updated_note_tags = ' '.join(tag_name_array)
-        return JsonResponse({'updatedNoteName': updated_note_title, 'updatedNoteComment': updated_note_comment, 'updatedNoteLinkTitle': updated_note_link_title, 'updatedNoteTags': updated_note_tags})
+        return JsonResponse({
+            'updatedNoteName': updated_note_title,
+            'updatedNoteComment': updated_note_comment,
+            'updatedNoteLinkTitle': updated_note_link_title,
+            'updatedNoteTags': updated_note_tags
+            })
 
 
     def delete_note(request, fid, nid):

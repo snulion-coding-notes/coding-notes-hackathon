@@ -203,14 +203,17 @@ h2 {
       }
     }
   }
+}
 
-  tfoot {
-    border: solid 3px $black-gray;
+#new-btn-row {
+  td {
+    height: 60px;
+    border-bottom: 3px solid $medium-gray;
   }
 }
 
-.note-action {
-  width: 100px;
+.tag-list-tfoot {
+  border: solid 3px $black-gray;
 }
 
 .add {
@@ -244,6 +247,11 @@ h2 {
 
 .col-4 {
   width: 20%;
+}
+
+.note-action {
+  min-width: 75px;
+  width: 100px;
 }
 
 // 태그 카드뷰 CSS

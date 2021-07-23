@@ -54,7 +54,7 @@
       </div>
     </div>
 
-    <!-- Tag 리스트 -->
+    <!-- Tag 리스트뷰 -->
     <div id="list-container" class="list-container">
       <!-- 노트 개수 -->
       <div class="content-note-num">
@@ -78,7 +78,7 @@
             <tr id="each-note-{{ note.id }}" onmouseover="showNoteActionBtns({{ note.id }})" onmouseout="hideNoteActionBtns({{ note.id }})">
               <td id="note-name-{{ note.id }}" class="col-1">{{ note.note_name }}</td>
               <td id="note-comment-{{ note.id }}" class="col-2">{{ note.note_comment }}</td>
-              <td id="note-link-{{ note.id }}" class="col-3"><a href="{{ note.note_link }}" target="_blank">{{ note.note_link_title }}</td><a>
+              <td id="note-link-{{ note.id }}" class="col-3"><a href="{{ note.note_link_title }}" target="_blank">{{ note.note_link_title }}</td><a>
               <td id="note-tag-{{ note.id }}" class="col-4">
                 {% for tag in note.tags.all %}
                   <span class="tag-style tag-span">{{ tag.tag_name }}</span>
@@ -106,7 +106,7 @@
             </tr>
           {% endfor %}
         </tbody>
-        <tfoot>
+        <tfoot class="tag-list-tfoot">
           <tr></tr>
         </tfoot>
       </table>

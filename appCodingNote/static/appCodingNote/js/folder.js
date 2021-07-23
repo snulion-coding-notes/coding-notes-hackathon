@@ -210,20 +210,20 @@ const hideButton = (noteId) => {
   }
 };
 
-const onClickViewButton = (event) => {
-  //click한 마우스 커서 위치에 따라 view 이미지 변경
-  const img = document.getElementById('view-select');
-  const imgWidth = img.offsetWidth;
-  const x = event.pageX - img.offsetLeft;
-  const listOn = () => {
-    console.log('리스트');
-    document.getElementById('list-view').classList.remove('hide');
-    document.getElementById('card-view').classList.add('hide');
-  };
-  const cardOn = () => {
-    console.log('카드');
-    document.getElementById('list-view').classList.add('hide');
-    document.getElementById('card-view').classList.remove('hide');
-  };
-  x < imgWidth / 2 ? listOn() : cardOn();
-};
+// const onClickViewButton = (event) => {
+//   //click한 마우스 커서 위치에 따라 view 이미지 변경
+//   const img = document.getElementById('view-select');
+//   const imgWidth = img.offsetWidth;
+//   const x = event.pageX - img.offsetLeft;
+//   const listOn = () => {
+//     console.log('리스트');
+//     document.getElementById('list-view').classList.remove('hide');
+//     document.getElementById('card-view').classList.add('hide');
+//   };
+//   const cardOn = () => {
+//     console.log('카드');
+//     document.getElementById('list-view').classList.add('hide');
+//     document.getElementById('card-view').classList.remove('hide');
+//   };
+//   x < imgWidth / 2 ? listOn() : cardOn();
+// };

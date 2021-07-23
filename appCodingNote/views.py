@@ -251,10 +251,12 @@ class Bookmarking:
 
 class Tagging:
     def create_tag(request):
-        tagMass=request.POST['tag']
-        list_tag=tagMass.split(' ')
+        tag_mass = request.POST['tag']
+        list_tag = tag_mass.split(' ')
+        trimmed_list = list(filter(None, list_tag))
+
         returnTag=Tag.objects.none()
-        for tag in list_tag:
+        for tag in trimmed_list:
             if Tag.objects.filter(tag_name=tag).exists():
                 returnTag=returnTag.union(Tag.objects.filter(tag_name=tag))
             else:

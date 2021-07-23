@@ -93,20 +93,27 @@ const updateNote = async (folderId, noteId) => {
   const editCommentElement = document.getElementById(`edit-comment-${noteId}`);
   const editLinkElement = document.getElementById(`edit-link-${noteId}`);
   const editTagElement = document.getElementById(`edit-tag-${noteId}`);
-
-  let data = new FormData();
-  data.append('noteName', editNameElement.value);
-  data.append('noteComment', editCommentElement.value);
-  data.append('noteLink', editLinkElement.value);
-  // TODO : 태그 input이 비어있지 않을 때만 데이터 보내도록 하기
-  data.append('tag', editTagElement.value);
-
-  await axios.post(
-    `/dashboard/${folderId}/${noteId}/updatenote/`,
-    data
-  );
-
-  window.location.reload();
+  if (editNameElement.value === ''){
+    alert('노트 이름을 필수로 입력해주세요.');
+  }
+  const reg_editurl=/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|www\.)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/;
+  if(reg_editurl.test(editLinkElement.value)){
+    let data = new FormData();
+      data.append('noteName', editNameElement.value);
+      data.append('noteComment', editCommentElement.value);
+      data.append('noteLink', editLinkElement.value);
+      // TODO : 태그 input이 비어있지 않을 때만 데이터 보내도록 하기
+      data.append('tag', editTagElement.value);
+    try{
+      await axios.post(`/dashboard/${folderId}/${noteId}/updatenote/`,data);
+      window.location.reload();
+    } catch(e){
+      alert('유효한 url을 입력해주세요.');
+    }
+  }
+  else{
+    alert('유효한 url을 입력해주세요.');
+  }
 };
 
 const deleteNote = async (folderId, noteId) => {
@@ -178,25 +185,25 @@ const saveNote = async (folderId) => {
     `table-website-${folderId}`
   );
   const newTagElement = document.getElementById(`table-tag-${folderId}`);
-  if (newNameElement.value === ''){
+  if (newNameElement.value === '') {
     alert('노트 이름을 필수로 입력해주세요.');
   }
-  const reg_url=/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|www\.)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/;
-  if(reg_url.test(newWebsiteElement.value)){
+  const reg_url =
+    /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|www\.)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/;
+  if (reg_url.test(newWebsiteElement.value)) {
     let data = new FormData();
-      data.append('noteName', newNameElement.value);
-      data.append('noteComment', newCommentElement.value);
-      data.append('noteLink', newWebsiteElement.value);
-      data.append('tag', newTagElement.value);
-    try{
-      await axios.post(`/dashboard/${folderId}/createnote/`,data);
-      
+    data.append('noteName', newNameElement.value);
+    data.append('noteComment', newCommentElement.value);
+    data.append('noteLink', newWebsiteElement.value);
+    data.append('tag', newTagElement.value);
+    try {
+      await axios.post(`/dashboard/${folderId}/createnote/`, data);
+
       window.location.reload();
-    } catch(e){
+    } catch (e) {
       alert('유효한 url을 입력해주세요.');
     }
-  }
-  else{
+  } else {
     alert('유효한 url을 입력해주세요.');
   }
 };

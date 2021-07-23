@@ -12,19 +12,6 @@ const hideTitleActionBtns = () => {
   });
 };
 
-// const updateFolder = (folderId) => {
-//   const folderNameElement = document.getElementById('folder-new-name');
-
-//   let data = new FormData();
-//   data.append('folderName', folderNameElement.value);
-//   axios.post(`/codingnote/dashboard/${folderId}/updatefolder/`, data);
-//   let pastFolderNameElement = document.getElementById('folder-name');
-//   pastFolderNameElement.innerHTML = folderNameElement.value;
-//   document.getElementById('folder-edit-btn').classList.remove('hide');
-//   document.getElementById('folder-delete-btn').classList.remove('hide');
-//   document.getElementById('folder-update-btn').classList.add('hide');
-// };
-
 const editFolder = (folderName) => {
   const tagNameElement = document.getElementById('tag-name');
   const newInputElement = document.createElement('input');

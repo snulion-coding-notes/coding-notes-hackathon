@@ -22,7 +22,7 @@
 }
 
 #saveFolder select{
-    width: 195px;
+    width: 200px;
     height: 37px;
     background: #9B9898;
     border-radius: 7px;
@@ -42,4 +42,12 @@
     font-family: 'Noto Sans KR', sans-serif;
     font-weight: bold;
     font-size: 20px;
+}
+
+#header{
+    font-family: 'Noto Sans KR', sans-serif;
+    font-weight: bolder;
+    font-size: 14px;
+    line-height: 15px;
+    color: #FFFFFF;
 }

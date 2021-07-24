@@ -113,14 +113,12 @@ const updateNote = async (folderId, noteId) => {
   const editCommentElement = document.getElementById(`edit-comment-${noteId}`);
   const editLinkElement = document.getElementById(`edit-link-${noteId}`);
   const editTagElement = document.getElementById(`edit-tag-${noteId}`);
-
+  const reg_editUrl =
+  /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|www\.)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/;
+  
   if (editNameElement.value === '') {
     alert('노트 이름을 필수로 입력해주세요.');
-  }
-  const reg_editUrl =
-    /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/|www\.)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/;
-
-  if (reg_editUrl.test(editLinkElement.value)) {
+  } else if (reg_editUrl.test(editLinkElement.value)) {
     let data = new FormData();
     data.append('noteName', editNameElement.value);
     data.append('noteComment', editCommentElement.value);

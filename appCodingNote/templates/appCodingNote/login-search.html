@@ -36,7 +36,7 @@
             </div>
         <div class="title-header">
             <div id="tag-title" class="tag-title" onmouseover="showTitleActionBtns()" onmouseout="hideTitleActionBtns()">
-                <h2 id="tag-name">내 노트</h2>
+                <h2 id="tag-name">내가 저장한 노트</h2>
             </div>
         </div>
         <div id="card-container" class="card-container">
@@ -68,7 +68,13 @@
         </div>
         <div class="title-header">
             <div id="tag-title" class="tag-title" onmouseover="showTitleActionBtns()" onmouseout="hideTitleActionBtns()">
-                <h2 id="tag-name">전체 검색 결과</h2>
+                <h2 id="tag-name">
+                    {% if otherNote.count %}
+                    다른 사람이 저장한 노트
+                    {%else%}
+                    <Br><Br>다른 사람이 저장한 노트<Br><Br><Br>
+                    {%endif%}
+                </h2>
             </div>
         </div>
         <div id="card-container" class="card-container">

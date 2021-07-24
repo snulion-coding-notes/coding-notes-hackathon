@@ -52,101 +52,100 @@
         <div class="content-note-num">
           <span id="content-note-num">{{ notes.count }} notes</span>
         </div>
-      </div>
-      <table class="table data">
-        <thead>
-          <tr>
-            <th class="thead-name">노트 제목</th>
-            <th class="thead-comment">코멘트</th>
-            <th class="thead-website">웹사이트</th>
-            <th class="thead-tag">태그</th>
-            <th class="thead-action">
-            </th>
-          </tr>
-        </thead>
-        <tbody id="table-body">
-          {% for note in notes %}
-            <tr id="each-note-{{note.id}}" onmouseover="showNoteActionBtns({{ note.id }})" onmouseout="hideNoteActionBtns({{ note.id }})">
-              <td id="note-name-{{note.id}}" class="col-1">{{ note.note_name }}</td>
-              <td id="note-comment-{{note.id}}" class="col-2">{{ note.note_comment }}</td>
-              <td id="note-link-{{note.id}}" class="col-3">
-                <a class="link-anchor" href="{{ note.note_link }}" target="_blank">
-                  <p>{{ note.note_link_title }}</p>
-                </a>
-              </td>
-              <td id="note-tag-{{ note.id }}" class="col-4">
-                {% for tag in note.tags.all %}
-                  <span class="tag-style tag-span-{{ note.id }}">{{ tag.tag_name }}</span>
-                {% endfor %}
-              </td>
-              <td id="note-action-{{ note.id }}" class="note-action">
-                <div style="display: flex">
-                  <button
-                  class="edit no-visibility"
-                  id="{{ note.id }}-edit-btn"
-                  onclick="editNote({{folder.id}}, {{ note.id }},'{{ note.note_name }}','{{ note.note_comment }}','{{ note.note_link }}')"
-                >
-                  <img class="edit-img" src="{% static 'img/edit.svg' %}" />
-                </button>
-                <button
-                  class="delete no-visibility"
-                  id="{{ note.id }}-delete-btn"
-                  onclick="deleteNote({{ folder.id }}, {{ note.id }})"
-                >
-                  <img class="delete-img" src="{% static 'img/delete.svg' %}" />
-                </button>
-                <button id="{{ note.id }}-overflow-btn" class="no-visibility" onclick="window.open('{{ note.note_overflow_link }}')">
-                  <img class="overflow-img" src="{% static 'img/stack-overflow.png' %}" alt="stackoverflow logo">
-                </button>
-                <button id="{{ note.id }}-update-btn" class="update no-display" onclick="updateNote({{ note.folder.id }}, {{ note.id }})">
-                  <img class="update-img" src="{% static 'img/save-update.svg' %}"/>
-                </button>
-                </div>
-              </td>
+        <table class="table data">
+          <thead>
+            <tr>
+              <th class="thead-name">노트 제목</th>
+              <th class="thead-comment">코멘트</th>
+              <th class="thead-website">웹사이트</th>
+              <th class="thead-tag">태그</th>
+              <th class="thead-action">
+              </th>
             </tr>
-          {% endfor %}
-        </tbody>
-        <tfoot>
-          <tr id="new-btn-row">
-            <td>
-              <span id="add-note-btn" class="add" onclick="addNote({{ folder.id }})">
-              + New
-              </span>
-            </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
-    <div id="card-container" class="card-container no-display">
-      {% for note in notes %}
-        <section class="card-content">
-          <div class="bookmark-section">
-            <button id="bookmark-star-btn" class="bookmark-btn" onclick="createBookmark({{ note.id }})">
-              {% if user in note.bookmark_users.all %}
-                <img id="bookmark-star-{{ note.id }}" src="{% static 'img/star-fill.png' %}" alt="bookmark">
-              {% else %}
-                <img id="bookmark-star-{{ note.id }}" src="{% static 'img/star-empty.png' %}" alt="bookmark">
-              {% endif %}
-            </button>
-          </div>
-          <a class="note-image" href={{ note.note_link }} target="_blank">
-            <img src={{ note.note_link_image }} alt="note image">
-          </a>
-          <div class="note-info">
-            <p class="note-name">{{ note.note_name }}</p>
-            <p class="note-comment">{{ note.note_comment }}</p>
-            <div class="note-tag">
-              {% for tag in note.tags.all %}
-                <span class="tag-style">{{ tag.tag_name }}</span>
-              {% endfor %}
+          </thead>
+          <tbody id="table-body">
+            {% for note in notes %}
+              <tr id="each-note-{{note.id}}" onmouseover="showNoteActionBtns({{ note.id }})" onmouseout="hideNoteActionBtns({{ note.id }})">
+                <td id="note-name-{{note.id}}" class="col-1">{{ note.note_name }}</td>
+                <td id="note-comment-{{note.id}}" class="col-2">{{ note.note_comment }}</td>
+                <td id="note-link-{{note.id}}" class="col-3">
+                  <a class="link-anchor" href="{{ note.note_link }}" target="_blank">
+                    <p>{{ note.note_link_title }}</p>
+                  </a>
+                </td>
+                <td id="note-tag-{{ note.id }}" class="col-4">
+                  {% for tag in note.tags.all %}
+                    <span class="tag-style tag-span-{{ note.id }}">{{ tag.tag_name }}</span>
+                  {% endfor %}
+                </td>
+                <td id="note-action-{{ note.id }}" class="note-action">
+                  <div style="display: flex">
+                    <button
+                    class="edit no-visibility"
+                    id="{{ note.id }}-edit-btn"
+                    onclick="editNote({{folder.id}}, {{ note.id }},'{{ note.note_name }}','{{ note.note_comment }}','{{ note.note_link }}')"
+                  >
+                    <img class="edit-img" src="{% static 'img/edit.svg' %}" />
+                  </button>
+                  <button
+                    class="delete no-visibility"
+                    id="{{ note.id }}-delete-btn"
+                    onclick="deleteNote({{ folder.id }}, {{ note.id }})"
+                  >
+                    <img class="delete-img" src="{% static 'img/delete.svg' %}" />
+                  </button>
+                  <button id="{{ note.id }}-overflow-btn" class="no-visibility" onclick="window.open('{{ note.note_overflow_link }}')">
+                    <img class="overflow-img" src="{% static 'img/stack-overflow.png' %}" alt="stackoverflow logo">
+                  </button>
+                  <button id="{{ note.id }}-update-btn" class="update no-display" onclick="updateNote({{ note.folder.id }}, {{ note.id }})">
+                    <img class="update-img" src="{% static 'img/save-update.svg' %}"/>
+                  </button>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr id="new-btn-row">
+              <td>
+                <span id="add-note-btn" class="add" onclick="addNote({{ folder.id }})">
+                + New
+                </span>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      <div id="card-container" class="card-container no-display">
+        {% for note in notes %}
+          <section class="card-content">
+            <div class="bookmark-section">
+              <button id="bookmark-star-btn" class="bookmark-btn" onclick="createBookmark({{ note.id }})">
+                {% if user in note.bookmark_users.all %}
+                  <img id="bookmark-star-{{ note.id }}" src="{% static 'img/star-fill.png' %}" alt="bookmark">
+                {% else %}
+                  <img id="bookmark-star-{{ note.id }}" src="{% static 'img/star-empty.png' %}" alt="bookmark">
+                {% endif %}
+              </button>
             </div>
-          </div>
-        </section>
-      {% endfor %}
-    </div>
+            <a class="note-image" href={{ note.note_link }} target="_blank">
+              <img src={{ note.note_link_image }} alt="note image">
+            </a>
+            <div class="note-info">
+              <p class="note-name">{{ note.note_name }}</p>
+              <p class="note-comment">{{ note.note_comment }}</p>
+              <div class="note-tag">
+                {% for tag in note.tags.all %}
+                  <span class="tag-style">{{ tag.tag_name }}</span>
+                {% endfor %}
+              </div>
+            </div>
+          </section>
+        {% endfor %}
+      </div>
   </main>
 {% endblock %}

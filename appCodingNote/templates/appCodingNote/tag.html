@@ -80,14 +80,14 @@
                   <button
                     class="edit no-visibility"
                     id="{{ note.id }}-edit-btn"
-                    onclick="editNote({{ note.id }},'{{ note.note_name }}','{{ note.note_comment }}','{{ note.note_link }}')"
+                    onclick="editNote({{note.folder.id}},{{ note.id }},'{{ note.note_name }}','{{ note.note_comment }}','{{ note.note_link }}')"
                   >
                     <img class="edit-img" src="{% static 'img/edit.svg' %}" />
                   </button>
                   <button
                     class="delete no-visibility"
                     id="{{ note.id }}-delete-btn"
-                    onclick="deleteNote({{ folder.id }}, {{ note.id }})"
+                    onclick="deleteNote({{ note.folder.id }}, {{ note.id }})"
                   >
                     <img class="delete-img" src="{% static 'img/delete.svg' %}" />
                   </button>

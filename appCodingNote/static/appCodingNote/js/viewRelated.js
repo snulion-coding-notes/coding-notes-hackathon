@@ -141,13 +141,9 @@ const updateNote = async (folderId, noteId) => {
 const deleteNote = async (folderId, noteId) => {
   const alert = window.confirm('해당 노트를 삭제하시겠습니까?');
   if (alert) {
-    const response = await axios.delete(
-      `/dashboard/${folderId}/${noteId}/deletenote`
-    );
-    document.getElementById(`each-note-${noteId}`).remove();
-    document.getElementById(
-      'content-note-num'
-    ).innerHTML = `${response.data.notesNum}개`;
+    await axios.delete(`/dashboard/${folderId}/${noteId}/deletenote`);
+
+    window.location.reload();
   }
 };
 

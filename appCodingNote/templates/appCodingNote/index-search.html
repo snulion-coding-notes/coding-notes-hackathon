@@ -27,6 +27,7 @@
       <div id="card-container" class="card-container">
         {% for note in notes %}
           <section class="card-content">
+            <div class="bookmark-section no-visibility"></div>
             <a class="note-image" href={{ note.note_link }} target="_blank">
               <img src={{ note.note_link_image }} alt="note image">
             </a>

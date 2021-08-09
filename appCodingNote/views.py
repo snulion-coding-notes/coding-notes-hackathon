@@ -118,28 +118,33 @@ class NoteCRUD:
                 note_link = 'https://' + note_link
 
             # note_link로 부터 데이터 쌓기
-            headers = {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
-            data = requests.get(note_link, headers=headers)
-            soup = BeautifulSoup(data.text, 'html.parser')
+            try : 
+                headers = {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
+                data = requests.get(note_link, headers=headers)
+                soup = BeautifulSoup(data.text, 'html.parser')
 
-            if soup.select_one('meta[property="og:title"]') is not None:
-                og_title = soup.select_one('meta[property="og:title"]')
-                note_link_title = og_title['content']
-            else:
-                note_link_title = note_link
+                if soup.select_one('meta[property="og:title"]') is not None:
+                    og_title = soup.select_one('meta[property="og:title"]')
+                    note_link_title = og_title['content']
+                else:
+                    note_link_title = note_link
 
-            if soup.select_one('meta[property="og:image"]') is not None:
-                og_image = soup.select_one('meta[property="og:image"]')
-                note_link_image = og_image['content']
-                try : 
-                    is_error = note_link_image.getcode()
-                    if is_error == 400 or is_error == 404 :
-                        note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
-                except:
+                if soup.select_one('meta[property="og:image"]') is not None:
+                    og_image = soup.select_one('meta[property="og:image"]')
                     note_link_image = og_image['content']
-            else:
+                    try : 
+                        is_error = note_link_image.getcode()
+                        if is_error == 400 or is_error == 404 :
+                            note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
+                    except:
+                        note_link_image = og_image['content']
+                else:
+                    note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
+            except :
+                note_link_title = note_link
                 note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
+
             stackoverflow_search_result = Crawl.stackoverflow_search_result(request, note_name)
             new_note = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user, note_overflow_link=stackoverflow_search_result)
             tagMass = Tagging.create_tag(request)

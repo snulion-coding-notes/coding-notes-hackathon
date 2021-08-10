@@ -23,8 +23,8 @@
     {% block side_style %}{% endblock side_style %}
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
-    <script src="{% static 'appCodingNote/js/base.js' %}"></script>
-    <script src="{% static 'appCodingNote/js/index.js' %}"></script>
+    <script async src="{% static 'appCodingNote/js/base.js' %}"></script>
+    <script async src="{% static 'appCodingNote/js/index.js' %}"></script>
     <script defer src="{% static 'appCodingNote/js/signup.js' %}"></script>
     {% block js %}{% endblock js %}
     {% block side_js %}{% endblock side_js %}
@@ -32,9 +32,25 @@
   <body>
     {% if not user.is_authenticated %}
       <header>
-        <a href="/dashboard/">
-          <img src="{% static 'img/logo-black.png' %}" alt="Coding Notes Logo">
-        </a>
+        <div class="header-front">
+          <a href="/dashboard/">
+            <img src="{% static 'img/logo-black.png' %}" alt="Coding Notes Logo">
+          </a>
+          <form action="{% url 'appCodingNote:result' %}" method="POST" class="login-search-container" id="header-search-container">
+            <div class="search-bar">
+              {% csrf_token %}
+              <select name="search-option" class="search-option">
+                <option value="name-and-tag">제목 + 태그</option>
+                <option value="name">제목</option>
+                <option value="tag">태그</option>
+              </select>
+              <input name="keyword" id="keyword" type="text" placeholder="검색어를 입력하세요">
+              <button value="submit" type="submit">
+                <img src="{% static 'img/search.png' %}" alt="search icon">
+              </button>
+            </div>
+          </form>
+        </div>
         <div class="header-button-container">
           <button onclick="openTab('signin')">Sign In</button>
           <button onclick="openTab('signup')">Sign Up</button>

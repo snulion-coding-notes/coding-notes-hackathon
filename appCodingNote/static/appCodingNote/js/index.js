@@ -3,31 +3,32 @@ const openTab = (tabName) => {
   const rightContainers = document.getElementsByClassName('right-container');
   [...rightContainers].forEach((tab) => {
     tab.style.right = '0';
-  })
+  });
   document.getElementById(`${hiddenTab}-section`).classList.add('no-display');
   document.getElementById('tab-shadow').classList.remove('no-display');
-}
+};
 
 const closeTab = (tabName) => {
   const hiddenTab = tabName === 'signin' ? 'signup' : 'signin';
   const rightContainers = document.getElementsByClassName('right-container');
   [...rightContainers].forEach((tab) => {
     tab.style.right = '-550px';
-  })
-  document.getElementById(`${hiddenTab}-section`).classList.remove('no-display');
+  });
+  document
+    .getElementById(`${hiddenTab}-section`)
+    .classList.remove('no-display');
   document.getElementById('tab-shadow').classList.add('no-display');
-
-}
+};
 
 const switchTab = (tabName) => {
   const hiddenTab = tabName === 'signin' ? 'signup' : 'signin';
   document.getElementById(`${tabName}-section`).classList.remove('no-display');
   document.getElementById(`${hiddenTab}-section`).classList.add('no-display');
-}
+};
 
 const signup = async () => {
-  const response = await axios.post('/')
-}
+  const response = await axios.post('/');
+};
 
 const signin = async () => {
   const signinUsernameInputElement = document.getElementById('signin-username');
@@ -39,5 +40,9 @@ const signin = async () => {
     const response = await axios.post('/accounts/signin', data);
     console.log(response);
   }
-}
+};
 
+const headerSearch = document.getElementById('header-search-container');
+if (window.location.pathname != '/dashboard/result/') {
+  headerSearch.style.display = 'none';
+}

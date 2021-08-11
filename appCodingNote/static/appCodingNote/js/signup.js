@@ -20,9 +20,6 @@ const getPasswords = (tabName) => {
 };
 
 /*회원가입 검증*/
-const signupForm = document.getElementById('signup-form');
-signupForm.onsubmit = (e) => handleSignup(e);
-
 const handleSignup = async (e) => {
   e.preventDefault();
   username = getUsername();
@@ -127,7 +124,7 @@ const validatePassword = (passwords) => {
   return isSamePasswords(passwords) && isValidFormatPassword(passwords);
 };
 
-/*로그인 검증*/
+/*로그인 하기*/
 /*아이디, 비밀번호 정보 받기*/
 const getSigninUsername = () => {
   return document.querySelector('input[name=signin-username]').value;
@@ -137,9 +134,6 @@ const getSigninPassword = () => {
 };
 
 /*로그인 검증 함수 호출*/
-const signinForm = document.getElementById('signin-form');
-signinForm.onsubmit = (e) => handleSignin(e);
-
 const handleSignin = async (e) => {
   e.preventDefault();
   signinUsername = getSigninUsername();
@@ -164,8 +158,6 @@ const dismissSignIn = () => {
 };
 
 /*비밀번호 변경 - 유저 validation*/
-const findpwForm = document.getElementById('findpw-form');
-findpwForm.onsubmit = (e) => handleFindpw(e);
 
 const handleFindpw= async(e) => {
   e.preventDefault();
@@ -190,9 +182,6 @@ const getCheckEmail=()=>{
 }
 
 /*비밀번호 변경 - new pw 입력*/
-const resetpwForm = document.getElementById('resetpw-form');
-resetpwForm.onsubmit = (e) => handleResetpw(e);
-
 const handleResetpw = async (e) => {
   e.preventDefault();
   checkEmail = getEmail('findpw');

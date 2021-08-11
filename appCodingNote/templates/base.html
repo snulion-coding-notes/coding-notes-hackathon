@@ -25,9 +25,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
     <script async src="{% static 'appCodingNote/js/base.js' %}"></script>
     <script async src="{% static 'appCodingNote/js/index.js' %}"></script>
-    <script defer src="{% static 'appCodingNote/js/signup.js' %}"></script>
     {% block js %}{% endblock js %}
     {% block side_js %}{% endblock side_js %}
+    <script defer src="{% static 'appCodingNote/js/signup.js' %}"></script>
   </head>
   <body>
     {% if not user.is_authenticated %}
@@ -65,7 +65,7 @@
             <input id="signin-username" name="signin-username" type="text" placeholder="Username" autocomplete="on">
             <input id="signin-password" name="signin-password" type="password" placeholder="Password" autocomplete="on">
             <div id="signin-error-notice"></div>
-            <button class="submit-button" type="submit">Sign In</button>
+            <button class="submit-button" type="submit" onsubmit="handleSignin()">Sign In</button>
           </form>
           <div class="tab-button-container">
             <button onclick="switchTab('forgotpw')">Forgot pw</button>
@@ -77,7 +77,7 @@
         <button class="tab-close" onclick="closeTab('signup')"><img src="{% static 'img/close.png' %}" alt="close button"></button>
         <section>
           <p>Sign Up</p>
-          <form id="signup-form" method="POST" action="{%url 'signup' %}">
+          <form method="POST" action="{%url 'signup' %}" id="signup-form" >
             {% csrf_token %}
             <input id="username" name="signup-username" type="text" placeholder="Username" autocomplete="on" oninput="prevalidateUsername()">
             <div id="signup-username-notice"></div>
@@ -85,7 +85,7 @@
             <input name="signup-password1" type="password" placeholder="Password" autocomplete="on">
             <input name="signup-password2" type="password" placeholder="Check Password" autocomplete="on">
             <div id="signup-error-notice"></div>
-            <button class="submit-button" type="submit">Sign Up</button>
+            <button class="submit-button" type="submit" onsubmit="handleSignup()">Sign Up</button>
           </form>
           <div class="tab-button-container">
             <button onclick="switchTab('signin')">Sign In</button>
@@ -101,7 +101,7 @@
             <input id="findpw-email" name="findpw-email" type="text" placeholder="Your Email">
             <input id="findpw-username" name="findpw-username" type="text" placeholder="Your Username" autocomplete="on">
             <div id="findpw-error-notice"></div>
-            <button class="submit-button" type="submit">Validate User</button>
+            <button class="submit-button" type="submit" onsubmit="handleFindpw()">Validate User</button>
           </form>
           <div class="tab-button-container">
             <button onclick="switchTab('signin')">Sign In</button>
@@ -118,7 +118,7 @@
             <input name="resetpw-password1" type="password" placeholder="New Password" autocomplete="on">
             <input name="resetpw-password2" type="password" placeholder="Check Password" autocomplete="on">
             <div id="resetpw-error-notice"></div>
-            <button class="submit-button" type="submit">Reset</button>
+            <button class="submit-button" type="submit" onsubmit="handleResetpw()">Reset</button>
           </form>
           <div class="tab-button-container">
             <button onclick="switchTab('signin')">Sign In</button>

@@ -50,6 +50,6 @@ const signin = async () => {
 };
 
 const headerSearch = document.getElementById('header-search-container');
-if (window.location.pathname != '/dashboard/result/') {
+if (window.location.pathname != '/dashboard/result/'&&headerSearch) {
   headerSearch.style.display = 'none';
 }

@@ -1,18 +1,21 @@
 // console.log("signup연결");
 /*아이디, 이메일, 비밀번호 정보 받기*/
 let usernameCheckResult;
-const getUsername = () => {
-  return document.querySelector('input[name=username]').value;
+const getUsername = (tabName) => {
+  return document.querySelector(`input[name=${tabName}-username]`).value;
 };
-const getEmail = () => {
-  return document.querySelector('input[name=email]').value;
+const getEmail = (tabName) => {
+  let email='';
+  email = document.querySelector(`input[name=${tabName}-email]`).value;
+  return email;
 };
-const getPasswords = () => {
+const getPasswords = (tabName) => {
   let passwords = [];
-  const password1 = document.querySelector('input[name=password1]').value;
-  const password2 = document.querySelector('input[name=password2]').value;
+  const password1 = document.querySelector(`input[name=${tabName}-password1]`).value;
+  const password2 = document.querySelector(`input[name=${tabName}-password2]`).value;
   passwords.push(password1);
   passwords.push(password2);
+  console.log(passwords);
   return passwords;
 };
 
@@ -159,3 +162,59 @@ const dismissSignIn = () => {
   const signinErrorNotice = document.getElementById('signin-error-notice');
   signinErrorNotice.innerHTML = '&#128557 아이디/비밀번호가 올바르지 않습니다.';
 };
+
+/*비밀번호 변경 - 유저 validation*/
+const findpwForm = document.getElementById('findpw-form');
+findpwForm.onsubmit = (e) => handleFindpw(e);
+
+const handleFindpw= async(e) => {
+  e.preventDefault();
+  checkEmail = getEmail('findpw');
+  checkUsername = getUsername('findpw');
+  let data = new FormData();
+  data.append('findpw-email', checkEmail);
+  data.append('findpw-username', checkUsername);
+  const response = await axios.post('/accounts/findpw/',data);
+  console.log(response.data.result);
+  if(response.data.result){
+    document.getElementById('forgotpw-section').classList.add('no-display');
+    document.getElementById('resetpw-section').classList.remove('no-display');
+  }
+  else{
+    alert("이메일 혹은 아이디가 유효하지 않습니다.");
+  }
+}
+
+const getCheckEmail=()=>{
+  return document.querySelector('input[name=check-email]').value;
+}
+
+/*비밀번호 변경 - new pw 입력*/
+const resetpwForm = document.getElementById('resetpw-form');
+resetpwForm.onsubmit = (e) => handleResetpw(e);
+
+const handleResetpw = async (e) => {
+  e.preventDefault();
+  checkEmail = getEmail('findpw');
+  checkUsername = getUsername('findpw');
+  passwords = getPasswords('resetpw');
+  errorNotice = document.getElementById('resetpw-error-notice');
+  if(validatePassword(passwords)){
+    let data = new FormData();
+    data.append('findpw-email',checkEmail);
+    data.append('findpw-username',checkUsername);
+    data.append('resetpw-password',passwords[0]);
+    const response = await axios.post('/accounts/resetpw/',data);
+      if(response.data.result){
+        document.getElementById('resetpw-section').classList.add('no-display');
+        document.getElementById('signin-section').classList.remove('no-display');
+        alert('비밀번호가 변경되었습니다.');
+      }
+  }
+  else if (!isValidFormatPassword(passwords)) {
+    errorNotice.innerHTML =
+      '&#128557 숫자, 특수문자를 포함한 6글자 이상의 비밀번호를 입력해주세요.';
+  } else if (!isSamePasswords(passwords)) {
+    errorNotice.innerHTML = '&#128557 비밀번호가 일치하지 않습니다.';
+  }
+}

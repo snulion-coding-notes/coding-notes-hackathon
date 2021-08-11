@@ -9,20 +9,6 @@
 
 {% block content %}
   <main id="main">
-    <form action="{% url 'appCodingNote:result' %}" method="POST" class="login-search-container">
-      <div class="search-bar">
-        {% csrf_token %}
-        <select name="search-option" class="search-option">
-          <option value="name-and-tag">제목 + 태그</option>
-          <option value="name">제목</option>
-          <option value="tag">태그</option>
-        </select>
-        <input name="keyword" id="keyword" type="text" placeholder="검색어를 입력하세요">
-        <button value="submit" type="submit">
-          <img src="{% static 'img/search.png' %}" alt="search icon">
-        </button>
-      </div>
-    </form>
     {% if notes %}
       <div id="card-container" class="card-container">
         {% for note in notes %}
@@ -33,7 +19,6 @@
             </a>
             <div class="note-info">
               <p class="note-name">{{ note.note_name }}</p>
-              <p class="note-comment">{{ note.note_comment }}</p>
               <div class="note-tag">
                 {% for tag in note.tags.all %}
                   <span class="tag-style">{{ tag.tag_name }}</span>

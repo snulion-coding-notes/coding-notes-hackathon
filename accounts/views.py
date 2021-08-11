@@ -1,3 +1,4 @@
+from json.encoder import JSONEncoder
 from re import M
 from django.core.checks import messages
 from django.http.response import HttpResponse, JsonResponse
@@ -5,6 +6,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import auth
 from django import forms
+from django.urls import reverse
 
 
 # Create your views here.
@@ -46,3 +48,22 @@ def signout(request):
     if request.method == "GET":
         auth.logout(request)
         return redirect('/')
+
+def findpw(request):
+    print(request.POST['findpw-email'])
+    result = User.objects.filter(email = request.POST['findpw-email'], username = request.POST['findpw-username']).exists()
+    return JsonResponse({'result':result})
+
+# def pw(request):
+#     if request.method == "POST":
+#         try: 
+#             User.objects.get(email=request.POST['check-email'], username=request.POST['check-username'])
+#             return JsonResponse({'result':True})
+#         except:
+#             return JsonResponse({'result':False})
+
+def resetpw(request): 
+    user = User.objects.get(email=request.POST['findpw-email'], username=request.POST['findpw-username'])
+    user.set_password(request.POST['resetpw-password'])
+    user.save()
+    return JsonResponse({'result':True})

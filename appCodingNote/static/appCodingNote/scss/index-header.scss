@@ -1,4 +1,4 @@
-@import "./colors.scss";
+@import './colors.scss';
 
 header {
   width: 100%;
@@ -12,6 +12,11 @@ header {
     width: 150px;
     margin-left: 60px;
   }
+}
+
+.header-front {
+  display: flex;
+  align-items: center;
 }
 
 .header-button-container {
@@ -62,6 +67,8 @@ header {
       margin-top: 10px;
       padding-left: 20px;
       font-size: 15px;
+      &:focus::-webkit-input-placeholder {color:transparent; }; //input focus시 placeholder 사라짐
+
     }
 
     input::placeholder {
@@ -71,14 +78,14 @@ header {
   }
 }
 
-#signup-error-notice, #signin-error-notice{
+#signup-error-notice, #signin-error-notice, #findpw-error-notice, #resetpw-error-notice{
   color:$orange;
   margin-bottom:5px;
 }
 
-#signup-username-notice{
-  color:$orange;
-  font-size:14px;
+#signup-username-notice {
+  color: $orange;
+  font-size: 14px;
 }
 
 .submit-button {
@@ -129,4 +136,57 @@ header {
   height: 100%;
   background: rgba(0, 0, 0, 0.25);
   z-index: 8;
+}
+
+.login-search-container {
+  display: flex;
+  margin-left: 70px;
+  height: 100px;
+
+  .search-bar {
+    display: flex;
+    justify-content: space-between;
+    width: 27vw;
+    min-width: 500px;
+    height: 70%;
+    margin: auto;
+    padding-left: 18px;
+    border: none;
+    border-radius: 10px;
+    background-color: #f2f2f2;
+  }
+
+  select {
+    border: none;
+    background: none;
+    font-size: 18px;
+    color: $medium-gray;
+    margin-right: 15px;
+    overflow: visible !important;
+    width: 170px;
+  }
+
+  select:focus {
+    outline: none;
+  }
+
+  input {
+    font-size: 18px;
+    width: 80%;
+    border: none;
+    background: none;
+  }
+
+  input::placeholder {
+    color: $medium-gray;
+  }
+
+  button {
+    margin-right: 10px;
+
+    img {
+      width: 25px;
+      margin: 10px;
+    }
+  }
 }

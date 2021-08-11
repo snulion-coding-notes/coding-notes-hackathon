@@ -25,6 +25,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', appCodingNote.views.index, name='index'),
     path('extension/', appCodingNote.views.chromeExtension.create_note, name='chrome_extension'),
+    path('download/', appCodingNote.views.download, name='download'),
+    path('download2/', appCodingNote.views.download2, name='download'),
     path('dashboard/', include('appCodingNote.urls', namespace='appCodingNote')),
     path('accounts/', include('accounts.urls')),
     path('accounts/signup/', accounts.views.signup, name='signup'),

@@ -1,3 +1,4 @@
+from django.conf import Settings
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from .models import Folder, Note, Bookmark, Tag
@@ -8,7 +9,7 @@ import os
 import sys
 import urllib.request
 import ssl
-
+import mimetypes
 
 def index(request):
     cur_user = request.user
@@ -16,6 +17,17 @@ def index(request):
         return redirect('/dashboard')
     else:
         return render(request, 'appCodingNote/index.html')
+
+def download(request):
+    return render(request, 'appCodingNote/download.html')
+
+def download2(request):
+    file_path ='appCodingNote/static/zip/chromeextension.zip'
+    if os.path.exists(file_path):
+        with open(file_path, 'rb') as fh:
+            response = HttpResponse(fh.read(), content_type="application/force_download")
+            response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+            return response
 
 
 @csrf_exempt

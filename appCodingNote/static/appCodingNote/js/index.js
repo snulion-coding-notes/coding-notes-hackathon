@@ -1,30 +1,37 @@
 const openTab = (tabName) => {
-  const hiddenTab = tabName === 'signin' ? 'signup' : 'signin';
+  const Tabs=['signin', 'signup', 'forgotpw', 'resetpw'];
+  const hiddenTabs = Tabs.filter((element)=>element !== tabName);
   const rightContainers = document.getElementsByClassName('right-container');
   [...rightContainers].forEach((tab) => {
     tab.style.right = '0';
-  });
-  document.getElementById(`${hiddenTab}-section`).classList.add('no-display');
+  })
+  document.getElementById(`${hiddenTabs[0]}-section`).classList.add('no-display');
+  document.getElementById(`${hiddenTabs[1]}-section`).classList.add('no-display');
+  document.getElementById(`${hiddenTabs[2]}-section`).classList.add('no-display');
   document.getElementById('tab-shadow').classList.remove('no-display');
 };
 
 const closeTab = (tabName) => {
-  const hiddenTab = tabName === 'signin' ? 'signup' : 'signin';
+  const Tabs=['signin', 'signup', 'forgotpw', 'resetpw'];
+  const hiddenTabs = Tabs.filter((element)=>element !== tabName);
   const rightContainers = document.getElementsByClassName('right-container');
   [...rightContainers].forEach((tab) => {
     tab.style.right = '-550px';
-  });
-  document
-    .getElementById(`${hiddenTab}-section`)
-    .classList.remove('no-display');
+  })
+  document.getElementById(`${hiddenTabs[0]}-section`).classList.remove('no-display');
+  document.getElementById(`${hiddenTabs[1]}-section`).classList.remove('no-display');
+  document.getElementById(`${hiddenTabs[2]}-section`).classList.add('no-display');
   document.getElementById('tab-shadow').classList.add('no-display');
 };
 
 const switchTab = (tabName) => {
-  const hiddenTab = tabName === 'signin' ? 'signup' : 'signin';
+  const Tabs=['signin', 'signup', 'forgotpw', 'resetpw'];
+  const hiddenTabs = Tabs.filter((element)=>element !== tabName);
   document.getElementById(`${tabName}-section`).classList.remove('no-display');
-  document.getElementById(`${hiddenTab}-section`).classList.add('no-display');
-};
+  document.getElementById(`${hiddenTabs[0]}-section`).classList.add('no-display');
+  document.getElementById(`${hiddenTabs[1]}-section`).classList.add('no-display');
+  document.getElementById(`${hiddenTabs[2]}-section`).classList.add('no-display');
+}
 
 const signup = async () => {
   const response = await axios.post('/');

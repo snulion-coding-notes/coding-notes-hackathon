@@ -16,9 +16,9 @@ def checkusername(request):
 
 def signup(request):
     if request.method == 'POST':
-        if request.POST['password1'] == request.POST['password2']:
+        if request.POST['signup-password1'] == request.POST['signup-password2']:
             user = User.objects.create_user(
-                username=request.POST['username'], password=request.POST['password1'], email=request.POST['email'])
+                username=request.POST['signup-username'], password=request.POST['signup-password1'], email=request.POST['signup-email'])
             auth.login(request, user)
             return redirect('/dashboard')
     return render(request, 'appCodingNote/index.html')
@@ -27,11 +27,11 @@ def signup(request):
 def checksignin(request):
     if request.method == "POST":
         try:
-            user = User.objects.get(username=request.POST['username'])
+            user = User.objects.get(username=request.POST['signin-username'])
         except:
             user = None
         if user:
-            result = user.check_password(request.POST['password'])
+            result = user.check_password(request.POST['signin-password'])
             return JsonResponse({'result':result})
         else:
             return JsonResponse({'result':False})
@@ -50,7 +50,6 @@ def signout(request):
         return redirect('/')
 
 def findpw(request):
-    print(request.POST['findpw-email'])
     result = User.objects.filter(email = request.POST['findpw-email'], username = request.POST['findpw-username']).exists()
     return JsonResponse({'result':result})
 

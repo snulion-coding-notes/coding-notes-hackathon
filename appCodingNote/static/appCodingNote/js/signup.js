@@ -15,16 +15,14 @@ const getPasswords = (tabName) => {
   const password2 = document.querySelector(`input[name=${tabName}-password2]`).value;
   passwords.push(password1);
   passwords.push(password2);
-  console.log(passwords);
   return passwords;
 };
 
 /*회원가입 검증*/
 const handleSignup = async (e) => {
-  e.preventDefault();
-  username = getUsername();
-  email = getEmail();
-  passwords = getPasswords();
+  username = getUsername('signup');
+  email = getEmail('signup');
+  passwords = getPasswords('signup');
   usernameCheckResult = await validateUsername(username);
   if (
     usernameCheckResult &&
@@ -32,7 +30,7 @@ const handleSignup = async (e) => {
     validatePassword(passwords)
   ) {
     // console.log("Valid Signup form!");
-    submitTarget(e);
+    submitTarget('signup');
   } else {
     // console.log("Invalid Signup form!");
     dismissSignup();
@@ -40,8 +38,8 @@ const handleSignup = async (e) => {
 };
 
 /*회원가입 submit 보내기*/
-const submitTarget = (e) => {
-  e.target.submit();
+const submitTarget = (tabName) => {
+  document.getElementById(`${tabName}-form`).submit();
 };
 
 /*회원가입 block*/
@@ -68,7 +66,7 @@ const showErrorNotice = async () => {
 const signupUsername = document.getElementById('username');
 const prevalidateUsername = async () => {
   const usernameCheckNotice = document.getElementById('signup-username-notice');
-  username = getUsername();
+  username = getUsername('signup');
   const isFilledUsername = (username) => {
     const reg_username = /^[A-Za-z]{3,}$/;
     return reg_username.test(username);
@@ -134,20 +132,20 @@ const getSigninPassword = () => {
 };
 
 /*로그인 검증 함수 호출*/
-const handleSignin = async (e) => {
-  e.preventDefault();
+const handleSignin = async (e) => { 
+  console.log('js 연결');
   signinUsername = getSigninUsername();
   signinPassword = getSigninPassword();
   let data = new FormData();
-  data.append('username', signinUsername);
-  data.append('password', signinPassword);
+  data.append('signin-username', signinUsername);
+  data.append('signin-password', signinPassword);
   const response = await axios.post('/accounts/checksignin/', data);
-
+  console.log(response.data.result);
   if (response.data.result) {
-    // console.log("Valid Signup form!");
-    submitTarget(e);
+    console.log("Valid Signin form!");
+    submitTarget('signin');
   } else {
-    // console.log("Invalid Signup form!");
+    // console.log("Invalid Signin form!");
     dismissSignIn();
   }
 };
@@ -160,7 +158,6 @@ const dismissSignIn = () => {
 /*비밀번호 변경 - 유저 validation*/
 
 const handleFindpw= async(e) => {
-  e.preventDefault();
   checkEmail = getEmail('findpw');
   checkUsername = getUsername('findpw');
   let data = new FormData();
@@ -183,7 +180,6 @@ const getCheckEmail=()=>{
 
 /*비밀번호 변경 - new pw 입력*/
 const handleResetpw = async (e) => {
-  e.preventDefault();
   checkEmail = getEmail('findpw');
   checkUsername = getUsername('findpw');
   passwords = getPasswords('resetpw');

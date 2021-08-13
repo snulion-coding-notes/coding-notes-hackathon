@@ -62,10 +62,10 @@
           <p>Sign In</p>
           <form method="POST" action="{% url 'signin' %}" id="signin-form">
             {% csrf_token %}
-            <input id="signin-username" name="signin-username" type="text" placeholder="Username" autocomplete="on">
-            <input id="signin-password" name="signin-password" type="password" placeholder="Password" autocomplete="on">
+            <input id="signin-username" name="signin-username" type="text" placeholder="Username" autocomplete="on" onkeydown="javascript:if(event.keyCode==13) {handleSignin()}">
+            <input id="signin-password" name="signin-password" type="password" placeholder="Password" autocomplete="on" onkeydown="javascript:if(event.keyCode==13) {handleSignin()}">
             <div id="signin-error-notice"></div>
-            <button class="submit-button" type="submit" onsubmit="handleSignin()">Sign In</button>
+            <button class="submit-button" type="button" onclick="handleSignin()">Sign In</button>
           </form>
           <div class="tab-button-container">
             <button onclick="switchTab('forgotpw')">Forgot pw</button>
@@ -79,13 +79,13 @@
           <p>Sign Up</p>
           <form method="POST" action="{%url 'signup' %}" id="signup-form" >
             {% csrf_token %}
-            <input id="username" name="signup-username" type="text" placeholder="Username" autocomplete="on" oninput="prevalidateUsername()">
+            <input id="username" name="signup-username" type="text" placeholder="Username" autocomplete="on" oninput="prevalidateUsername()" onkeydown="javascript:if(event.keyCode==13) {handleSignup()}">
             <div id="signup-username-notice"></div>
-            <input name="signup-email" type="text" placeholder="Email" autocomplete="on">
-            <input name="signup-password1" type="password" placeholder="Password" autocomplete="on">
-            <input name="signup-password2" type="password" placeholder="Check Password" autocomplete="on">
+            <input name="signup-email" type="text" placeholder="Email" autocomplete="on" onkeydown="javascript:if(event.keyCode==13) {handleSignup()}">
+            <input name="signup-password1" type="password" placeholder="Password" autocomplete="on" onkeydown="javascript:if(event.keyCode==13) {handleSignup()}">
+            <input name="signup-password2" type="password" placeholder="Check Password" autocomplete="on" onkeydown="javascript:if(event.keyCode==13) {handleSignup()}">
             <div id="signup-error-notice"></div>
-            <button class="submit-button" type="submit" onsubmit="handleSignup()">Sign Up</button>
+            <button class="submit-button" type="button" onclick="handleSignup()">Sign Up</button>
           </form>
           <div class="tab-button-container">
             <button onclick="switchTab('signin')">Sign In</button>
@@ -98,10 +98,10 @@
           <p>Forgot Password</p>
           <form id="findpw-form" method="POST" action="{%url 'findpw'%}">
             {% csrf_token %}
-            <input id="findpw-email" name="findpw-email" type="text" placeholder="Your Email">
-            <input id="findpw-username" name="findpw-username" type="text" placeholder="Your Username" autocomplete="on">
+            <input id="findpw-email" name="findpw-email" type="text" placeholder="Your Email" onkeydown="javascript:if(event.keyCode==13) {handleFindpw()}">
+            <input id="findpw-username" name="findpw-username" type="text" placeholder="Your Username" autocomplete="on" onkeydown="javascript:if(event.keyCode==13) {handleFindpw()}">
             <div id="findpw-error-notice"></div>
-            <button class="submit-button" type="submit" onsubmit="handleFindpw()">Validate User</button>
+            <button class="submit-button" type="button" onclick="handleFindpw()">Validate User</button>
           </form>
           <div class="tab-button-container">
             <button onclick="switchTab('signin')">Sign In</button>
@@ -115,10 +115,10 @@
           <p>New Password</p>
           <form id="resetpw-form" method="POST" action="{%url 'resetpw'%}">
             {% csrf_token %}
-            <input name="resetpw-password1" type="password" placeholder="New Password" autocomplete="on">
-            <input name="resetpw-password2" type="password" placeholder="Check Password" autocomplete="on">
+            <input name="resetpw-password1" type="password" placeholder="New Password" autocomplete="on" onkeydown="javascript:if(event.keyCode==13) {handleResetpw()}">
+            <input name="resetpw-password2" type="password" placeholder="Check Password" autocomplete="on" onkeydown="javascript:if(event.keyCode==13) {handleResetpw()}">
             <div id="resetpw-error-notice"></div>
-            <button class="submit-button" type="submit" onsubmit="handleResetpw()">Reset</button>
+            <button class="submit-button" type="button" onclick="handleResetpw()">Reset</button>
           </form>
           <div class="tab-button-container">
             <button onclick="switchTab('signin')">Sign In</button>

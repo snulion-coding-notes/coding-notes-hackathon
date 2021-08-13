@@ -3,7 +3,7 @@
 {% load static %}
 {% load sass_tags %}
 {% block style %}
-  <link rel="stylesheet" type="text/css" href="{% static 'appCodingNote/scss/download.scss' %}">
+  <link rel="stylesheet" type="text/css" href="{% sass_src 'appCodingNote/scss/download.scss' %}">
 {% endblock style %}
 {% block js %}
   <script src="{% static 'appCodingNote/js/download.js' %}"></script>

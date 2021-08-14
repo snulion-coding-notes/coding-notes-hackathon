@@ -1,7 +1,7 @@
 const fileDownload = () => {
-  if (!localStorage.getItem('isDownloaded')) {
+  if (!sessionStorage.getItem('isDownloaded')) {
     window.location.assign('/download2/');
-    localStorage.setItem('isDownloaded', 'true');
+    sessionStorage.setItem('isDownloaded', 'true');
   }
 };
 

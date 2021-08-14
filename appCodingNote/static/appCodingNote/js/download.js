@@ -1,5 +1,8 @@
-const fileDownload = () =>{
-  window.location.assign("/download2/");
-}
+const fileDownload = () => {
+  if (!localStorage.getItem('isDownloaded')) {
+    window.location.assign('/download2/');
+    localStorage.setItem('isDownloaded', 'true');
+  }
+};
 
-window.onload=fileDownload;
+window.onload = fileDownload;

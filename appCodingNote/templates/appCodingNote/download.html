@@ -11,6 +11,9 @@
 
 {% block content %}
   <main onload="fileDownload()">
+  {% if user.is_authenticated%}
+    <a href="/dashboard"><img id="back-arrow" src="{%static 'img/back.png'%}" alt="go back"></img><a>
+  {%endif%}
     <div class="main-wrap">
     <div class="text-all">
       <dl class="main-text">

@@ -54,6 +54,19 @@
 .signout-button {
   position: fixed;
   width: 250px;
+  bottom: 65px;
+  display: flex;
+  justify-content: center;
+
+  a {
+    font-size: 18px;
+    text-decoration: underline;
+    color: white;
+  }
+}
+.extensions-button {
+  position: fixed;
+  width: 250px;
   bottom: 20px;
   display: flex;
   justify-content: center;
@@ -62,6 +75,7 @@
     font-size: 18px;
     text-decoration: underline;
     color: white;
+    cursor:pointer;
   }
 }
 

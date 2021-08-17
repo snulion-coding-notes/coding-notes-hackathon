@@ -149,14 +149,14 @@ class NoteCRUD:
                     try : 
                         is_error = note_link_image.getcode()
                         if is_error == 400 or is_error == 404 :
-                            note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
+                            note_link_image = 'https://raw.githubusercontent.com/snulion-coding-notes/coding-notes-hackathon/main/appCodingNote/static/img/default-image.png'
                     except:
                         note_link_image = og_image['content']
                 else:
-                    note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
+                    note_link_image = 'https://raw.githubusercontent.com/snulion-coding-notes/coding-notes-hackathon/main/appCodingNote/static/img/default-image.png'
             except :
                 note_link_title = note_link
-                note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
+                note_link_image = 'https://raw.githubusercontent.com/snulion-coding-notes/coding-notes-hackathon/main/appCodingNote/static/img/default-image.png'
 
             stackoverflow_search_result = Crawl.stackoverflow_search_result(request, note_name)
             new_note = Note.objects.create(folder_id=fid, note_name=note_name, note_link=note_link, note_link_title=note_link_title, note_link_image=note_link_image, note_comment=note_comment, author=request.user, note_overflow_link=stackoverflow_search_result)
@@ -212,11 +212,11 @@ class NoteCRUD:
                 try : 
                     is_error = note_link_image.getcode()
                     if is_error == 400 or is_error == 404 :
-                        note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
+                        note_link_image = 'https://raw.githubusercontent.com/snulion-coding-notes/coding-notes-hackathon/main/appCodingNote/static/img/default-image.png'
                 except:
                     note_link_image = og_image['content']
             else:
-                note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
+                note_link_image = 'https://raw.githubusercontent.com/snulion-coding-notes/coding-notes-hackathon/main/appCodingNote/static/img/default-image.png'
             stackoverflow_search_result = Crawl.stackoverflow_search_result(request, note_name)
             note.update(note_name=note_name,
                         note_link=note_link, note_link_title=note_link_title, note_comment=request.POST['noteComment'], 
@@ -387,7 +387,7 @@ class chromeExtension:
                 og_image = soup.select_one('meta[property="og:image"]')
                 note_link_image = og_image['content']
             else:
-                note_link_image = 'https://raw.githubusercontent.com/bewisesh91/SNULION-django-hackaton/main/appCodingNote/static/img/default-image.png'
+                note_link_image = "https://raw.githubusercontent.com/snulion-coding-notes/coding-notes-hackathon/main/appCodingNote/static/img/default-image.png"
             
             stackoverflow_search_result = Crawl.stackoverflow_search_result(request, note_name)
             tagMass=Tagging.create_tag(request)

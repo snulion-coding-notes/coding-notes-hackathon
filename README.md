@@ -4,6 +4,7 @@
 멋쟁이 사자처럼 서울대 9기 해커톤
 
 <img src="https://raw.githubusercontent.com/snulion-coding-notes/coding-notes-hackathon/main/appCodingNote/static/img/coding-notes-main.png" width="700">
+
 </br>
 
 ## ✏️ 기획의도
@@ -11,6 +12,7 @@
 코딩을 하면서 “아… 이거 그때 어떻게 해결했더라?” 한 적 혹시 없으신가요?
 코딩을 하다보면 구글링을 통해 문제를 해결하는 일이 많습니다.
 많은 자료들 속에서 열심히 찾았던 그 해결책. 정리해두지 않으면 잊기 쉽고 다시 찾기는 어렵습니다. 이 자료들을 한 곳에 모아놓을 수는 없을까요? 자료들을 다시 찾으려고 시간 낭비할 필요 없이, 코딩에 최적화하여 정리할 수 있는 사이트를 만들고 싶었습니다.
+
 </br>
 
 ## ✏️ 주요 기능
@@ -19,11 +21,12 @@
 2. 저장한 페이지들을 정리할 수 있는 폴더, 태그, 코멘트 기능
 3. 버튼 한번으로 저장한 사이트의 제목을 번역하여 stackoverflow에 검색해주는 기능
 4. 다른 사람들은 어떤 사이트를 참고하여 그 문제를 해결했는지 알려주는 검색 기능
-   </br>
+</br>
 
 ## 🔗 배포 사이트
 
 <a href="http://codingnotes.kr:8000">http://codingnotes.kr</a>
+
 </br>
 
 ## 🙆‍♀️ 로컬에서 실행하기
@@ -35,8 +38,8 @@ pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver
 ```
-
 </br>
+
 ## 🔥 개발 후기
 
 - 성호

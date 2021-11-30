@@ -1,6 +1,6 @@
 # Coding Notes
 
-개발자를 위한 최고의 지식 저장소 👩🏻‍💻🧑🏻‍💻
+개발자를 위한 최고의 지식 저장소 👩🏻‍💻🧑🏻‍💻  
 멋쟁이 사자처럼 서울대 9기 해커톤
 
 <img src="https://raw.githubusercontent.com/snulion-coding-notes/coding-notes-hackathon/main/appCodingNote/static/img/coding-notes-main.png" width="700">
